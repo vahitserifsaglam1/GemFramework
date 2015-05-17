@@ -1,0 +1,21 @@
+{
+  "name": "GemFramework",
+  "type": "library",
+  "version": "1.0.0",
+  "description": "GemFramework - php 5.6 ın gücüyle yazılan tek framework",
+  "autoload": {
+    "psr-4": {
+      
+      "Gem\\Components\\": "application/library/"
+      
+    },
+    
+     "classmap" : [
+      "Vendor"
+    ]
+    
+  },
+   "require": {
+                "php": ">=5.6"
+            }
+}
