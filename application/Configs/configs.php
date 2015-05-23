@@ -1,7 +1,6 @@
 <?php
 
 return [
-		
-		'url' => 'http://localhost/GemFramework/'
-		
+
+    'url' => 'http://localhost/GemFramework/'
 ];

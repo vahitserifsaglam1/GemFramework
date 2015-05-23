@@ -1,36 +1,28 @@
 <?php
 
-
 use Gem\Components\View;
 use Gem\Components\Captcha;
 use Gem\Components\Crypt;
 use Gem\Components\Gem\Components;
 
+## gï¿½rï¿½ntï¿½ dosyasï¿½ oluï¿½turur
 
-## görüntü dosyasý oluþturur
-function view($path, $variables = [],$language = [],$autoload = true)
-{
-	$view = new View();
-	$view->make($path, $variables)->language($language)->autoload($autoload)->execute();
-	
+function view($path, $variables = [], $language = [], $autoload = true) {
+    $view = new View();
+    $view->make($path, $variables)->language($language)->autoload($autoload)->execute();
 }
 
 ##captcha_create
 
-function captcha($options = [])
-{
-	
-	$captcha = new Captcha($options);
-	return $captcha;
-	
+function captcha($options = []) {
+
+    $captcha = new Captcha($options);
+    return $captcha;
 }
 
+## captchanï¿½n doï¿½ru olup olmadï¿½ï¿½ï¿½na bakar
 
-## captchanýn doðru olup olmadýðýna bakar
-function captchaCheck($string = '')
-{
-	
-	return Captcha::check($string);
-	
+function captchaCheck($string = '') {
+
+    return Captcha::check($string);
 }
-

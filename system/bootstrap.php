@@ -1,34 +1,33 @@
 <?php
 
+## uygulama klasï¿½rï¿½nï¿½n sabiti
 
-## uygulama klasörünün sabiti
+define('APP', 'application/');
 
-define('APP' ,'application/');
+## gï¿½rï¿½ntï¿½ klasï¿½rï¿½nï¿½n sabiti
+define('VIEW', APP . 'Views/');
 
-## görüntü klasörünün sabiti
-define('VIEW' ,APP.'Views/');
+## model lerin tutulduÄŸu klasÃ¶r sabiti
+define('MODEL', APP . 'Models/');
 
-## model lerin tutulduðu klasör sabiti
-define('MODEL' ,APP.'Models/');
+## controller tutulduÄŸu klasÃ¶r sabiti
+define('CONTROLLER', APP . 'Controllers');
 
-## controller larýn olduðu klasör
-define('CONTROLLER' ,APP.'Controllers');
-
-## ayarlarýn olduðu klasör
-define('CONFIG_PATH',APP.'Configs/');
+## ayarlarÄ±n ulduÄŸu klasÃ¶r sabiti
+define('CONFIG_PATH', APP . 'Configs/');
 
 
-## sistem klasörü
-define('SYSTEM','system/');
+## sistemin ulduÄŸu klasÃ¶r sabiti
+define('SYSTEM', 'system/');
 
-## dil dosyalarýnýn olduðu klasör
+## dil dosyalarï¿½nï¿½n olduï¿½u klasï¿½r
 define('LANG', 'language/');
 
 
-include APP.'libs/Functions.php';
+include APP . 'libs/Functions.php';
 
-## baþlatma iþlemi
-include SYSTEM.'run.php';
+## baÅŸlatma dosyasÄ±
+include SYSTEM . 'run.php';
 
 
 

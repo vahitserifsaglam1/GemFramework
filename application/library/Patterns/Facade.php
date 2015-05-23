@@ -1,137 +1,115 @@
 <?php
+
 /**
  * 
- *  GemFramework Facade Desing Pattern S�n�f�, 
+ *  GemFramework Facade Desing Pattern  
  *  
- *  @package Gem\Co�ponents\Patterns
+ *  @package Gem\Co�ponents\Patterns
  *  @author vahitserifsaglam1 <vahit.serif119@gmail.com>
  * 
  */
 
- namespace Gem\Components\Patterns;
- 
- use Gem\Components\Singleton;
- use Exception;
- 
- 
-  class Facade{
+namespace Gem\Components\Patterns;
 
-       public static $instance = array();
+use Gem\Components\Singleton;
+use Exception;
 
-      /**
-       * @return mixed
-       *  Classı almak için kullanılan method
-       */
-       protected static function getFacedeRoot()
-       {
+class Facade {
 
-           if( $root = static::resolveFacede() ) return $root;
+    public static $instance = array();
 
-       }
+    /**
+     * @return mixed
+     *  Classı almak için kullanılan method
+     */
+    protected static function getFacedeRoot() {
 
-      /**
-       * @return mixed
-       * @throws \Exception
-       *
-       *   Sınıfı KOntrol eder
-       */
-      protected static function resolveFacede()
-      {
+        if ($root = static::resolveFacede())
+            return $root;
+    }
 
-          return static::resolveFacedeClassName(static::getFacadeClass());
+    /**
+     * @return mixed
+     * @throws \Exception
+     *
+     *   Sınıfı Kontrol eder
+     */
+    protected static function resolveFacede() {
 
-      }
+        return static::resolveFacedeClassName(static::getFacadeClass());
+    }
 
-      /**
-       * @throws \Exception
-       *  Alt sınıflarda sınıfın ismini döndürmesi için kullanılır
-       */
-      protected  static function getFacadeClass(){
+    /**
+     * @throws \Exception
+     *  Alt sınıflarda sınıfın ismini döndürmesi için kullanılır
+     */
+    protected static function getFacadeClass() {
 
-          throw new Exception("Facede kendi kendini cagiramaz");
+        throw new Exception("Facede kendi kendini cagiramaz");
+    }
 
-      }
+    /**
+     * @param $name
+     *
+     *  Sınıfın olup olmadığını kontrol ediyor
+     */
+    protected static function resolveFacedeClassName($name) {
 
-      /**
-       * @param $name
-       *
-       *  Sınıfın olup olmadığını kontrol ediyor
-       */
 
-      protected static function resolveFacedeClassName($name)
-      {
+        if (is_object($name))
+            return $name;
 
-         
-       if( is_object($name) ) return $name;
+        if (isset(static::$instance[$name])) {
 
-          if( isset(static::$instance[$name] ) )
-          {
-              
-              return static::$instance[$name];
+            return static::$instance[$name];
+        }
+    }
 
-          }
+    /**
+     * Tüm sınıfları temizler
+     */
+    public static function clearFacades() {
 
-      }
+        static::$instance = array();
+    }
 
-      /**
-       * Tüm sınıfları temizler
-       */
+    /**
+     * @param $name
+     *
+     *  İsme göre temizleme işlemi
+     */
+    public static function clearFacade($name) {
 
-      public static function clearFacades()
-      {
+        if (isset(static::$instance[$name])) {
+            static::$instance[$name] = $name;
+        }
+    }
 
-          static::$instance = array();
-
-      }
-
-      /**
-       * @param $name
-       *
-       *  İsme göre temizleme işlemi
-       */
-
-      public static function clearFacade($name)
-      {
-
-          if(isset(static::$instance[$name])){
-              static::$instance[$name] = $name;
-          }
-
-      }
-
-      /**
-       * @param $method
-       * @param $parametres
-       * @return mixed
-       *  Dönen sınıfdan istediğimiz methodu static olarak çağırmaya yarar
-       */
-      public static function __callStatic( $method, $parametres )
-      {
+    /**
+     * @param $method
+     * @param $parametres
+     * @return mixed
+     *  Dönen sınıfdan istediğimiz methodu static olarak çağırmaya yarar
+     */
+    public static function __callStatic($method, $parametres) {
 
 
 
-           $instanceName = static::getFacedeRoot();
+        $instanceName = static::getFacedeRoot();
 
-   
-           if(!is_object($instanceName))
-           {
-               
-               $instance = Singleton::make($instanceName);
-               
-               static::$instance[$instanceName] = $instance;
-               
-               
-           }else{
-               
-               $instance = $instanceName;
-               
-           }
-           
-           
-           return call_user_func_array([$instance,$method], $parametres);
-           
 
-      }
+        if (!is_object($instanceName)) {
 
-  }
+            $instance = Singleton::make($instanceName);
 
+            static::$instance[$instanceName] = $instance;
+        } else {
+
+            $instance = $instanceName;
+        }
+
+
+        return call_user_func_array([$instance, $method], $parametres);
+    }
+
+}

@@ -1,293 +1,352 @@
 <?php
+
 /**
- * Bu dosya GemFramework un baþlangýç sýnýfýna ait dosyadýr
- * Framework le ilgili olaylar ilk olarak bu sýnýfta gerçekleþir
+ * Bu dosya GemFramework un baï¿½langï¿½ï¿½ sï¿½nï¿½fï¿½na ait dosyadï¿½r
+ * Framework le ilgili olaylar ilk olarak bu sï¿½nï¿½fta gerï¿½ekleï¿½ir
  * 
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
  * @version 1.0.0
  * @package Gem\Components
  */
- 
- namespace Gem\Components;
- 	
- 	use Gem\Components\Patterns\Singleton;
- 	use Gem\Components\Route;
- 	use Gem\Components\Patterns\Facade;
- 	use Exception;
- 	use Composer\Autoload\ClassLoader;
- 	
- 	/**
- 	 * 
- 	 * @class Application
- 	 * 
- 	 */
- 	
- 	class Application
- 	{
- 		
- 		/**
- 		 * 
- 		 * @var String -> framework un adý
- 		 * @var Float  -> framework un versiyonu
- 		 * @access private
- 		 * 
- 		 */
- 		private $framework_name, $framework_version,
- 		 $router,$alias = [];
- 		
- 
- 		
- 		function __construct($framework_name = 'Gem', $framework_version = 1.0)
- 		{
- 			
- 			$this->framework_name = $framework_name;
- 			$this->framework_version = $framework_version;
- 			$this->router = $this->singleton( new Route() );
- 			$this->autoloader = new ClassLoader();
- 			
- 			$this->autoloader->register();
- 		}
- 		
- 		
- 		private function addAutoload($autoload = [])
- 		{
- 			
- 			foreach($autoload as $key => $value)
- 			{
- 				
- 				$this->autoloader->add($key, $value);
- 					
- 				
- 			}
- 			
- 			
- 		}
- 		
- 		/**
- 		 * Yeni bir singleton objesi oluþturur
- 		 * @param mixed $instance
- 		 * @param mixed ...$parameters
- 		 * @return Object
- 		 * 
- 		 */
- 		function singleton($instance, ...$parameters)
- 		{
- 			
- 			return Singleton::make($instance, $parameters);
- 			
- 		}
- 		
- 		/**
- 		 * Dosyadaki içeriði çeker
- 		 * @param string $filePath
- 		 * @return \Gem\Components\Application
- 		 */
- 		function routesFromFile($filePath)
- 		{
- 			
- 			if(file_exists($filePath))
- 			{
- 				
- 				$app = $this;
- 				$inc = include $filePath;
- 				
- 				if($inc instanceof Application)
- 				{
- 					
- 					$this->setCollections($inc->getCollections());
- 					
- 				}
- 					
- 				
- 			}
- 			else{
 
- 				throw new Exception(sprintf("arandýðýnýz %s dosyasý bulunamadý", $filePath));
- 				
- 			}
- 			
- 			return $this;
- 		}
- 		
- 		/**
- 		 * 
- 		 * Get isteklerini yakalar
- 		 * 
- 		 * @param string $url
- 		 * @param mixed $use
- 		 */
- 		
- 		function get($url, $use)
- 		{
- 			
- 			 $this->router->add('get', func_get_args());
- 			 return $this;
- 		}
- 		
- 		/**
- 		 *
- 		 * Post isteklerini yakalar
- 		 *
- 		 * @param string $url
- 		 * @param mixed $use
- 		 */
- 		
- 		function post($url, $use)
- 		{
- 		
- 			 $this->router->add('post', func_get_args());
- 			 return $this;
- 		}
- 			
- 		/**
- 		 *
- 		 * Delete isteklerini yakalar
- 		 *
- 		 * @param string $url
- 		 * @param mixed $use
- 		 */
- 			
- 		function delete($url, $use)
- 		{
- 				
- 		     $this->router->add('delete', func_get_args());
- 			return $this;
- 		}
- 		
- 		/**
- 		 *
- 		 * Put isteklerini yakalar
- 		 *
- 		 * @param string $url
- 		 * @param mixed $use
- 		 */
- 			
- 		function put($url, $use)
- 		{
- 				
- 			 $this->router->add('put', func_get_args());
- 			 return $this;
- 				
- 		}
- 		
- 		/**
- 		 *
- 		 * Tüm isteklerini yakalar
- 		 *
- 		 * @param string $url
- 		 * @param mixed $use
- 		 */
- 			
- 		function any($url, $use)
- 		{
- 				
- 			 $this->router->match( $this->router->getTypes(), func_get_args());
- 			 return $this;
- 		}
- 		
- 		/**
- 		 * Array a göre istekleri ekler
- 		 * @param array $types
- 		 * @param string $url
- 		 * @param mixed $use
- 		 * @return \Gem\Components\Application
- 		 * @access public
- 		 * 
- 		 */
- 		
- 		function match($types = [], $url, $use)
- 		{
- 			
- 			$type = $types;
- 			$args = func_get_args();
- 			unset($args[0]);
- 			$this->router->match($type, $args);;
- 			return $this;
- 			
- 		}
- 		
- 		/**
- 		 * Koleksiyonlarý döndürür
- 		 */
- 		function getCollections()
- 		{
- 			
- 			return $this->router->getCollections();
- 			
- 		}
- 		
- 		function setCollections(array $collections = [])
- 		{
- 			
- 			$this->router->setCollections($collections);
- 			
- 		}
- 		/**
- 		 * 
- 		 * @param string $filter
- 		 * @param string $pattern
- 		 * @return \Gem\Components\Application
- 		 * @access public 
- 		 */
- 		
- 		function filter($filter, $pattern)
- 		{
- 			
- 			$this->router->filter($filter,$pattern);
- 			return $this;
- 			
- 		}
- 		
- 		
- 		## tetikleyici
- 		function run()
- 		{
- 			
- 			if(count($this->alias) > 0)
- 			{
- 				
- 				$this->runFacades();
- 				
- 			}
- 			
- 			## url yönetimi
- 			$this->getUrlChecker();
- 			
- 			## rötalandýrmanýn baþlamasý
- 			$this->router->run();
- 			
- 		}
- 		
- 		private function getUrlChecker()
- 		{
- 			
- 			if(!isset($_GET['url']) || !$_GET['url'])
- 				 $_GET['url'] = '/';
- 			
- 		
- 		}
- 		
- 		private function runFacades()
- 		{
- 			
- 			Facade::$instance = $this->alias;
- 			
- 		}
- 		
- 		/**
- 		 * 
- 		 * @param array $facedes
- 		 * @return \Gem\Components\Application
- 		 */
- 		
- 		function register($facedes = [])
- 		{
- 			
- 			$this->alias = $facedes;
- 			return $this;
- 			
- 		}
- 		
- 		
- 	}
- 	
+namespace Gem\Components;
+
+use Gem\Components\Patterns\Singleton;
+use Gem\Components\Route;
+use Gem\Components\Patterns\Facade;
+use Exception;
+use Composer\Autoload\ClassLoader;
+use InvalidArgumentException;
+
+/**
+ * 
+ * @class Application
+ * 
+ */
+class Application {
+
+    const ROUTEFILE = APP . '/routes.php';
+
+    /**
+     * 
+     * @var String -> framework un adï¿½
+     * @var Float  -> framework un versiyonu
+     * @access private
+     * 
+     */
+    private $framework_name;
+    private $framework_version;
+    private $router;
+    private $alias = [];
+    private $provider = [];
+
+    function __construct($framework_name = 'Gem', $framework_version = 1.0) {
+
+        $this->framework_name = $framework_name;
+        $this->framework_version = $framework_version;
+        $this->router = $this->singleton(new Route());
+        $this->autoloader = new ClassLoader();
+
+        $this->autoloader->register();
+    }
+
+    public function addAutoload($autoload = []) {
+
+        foreach ($autoload as $key => $value) {
+
+            $this->autoloader->add($key, $value);
+        }
+    }
+
+    /**
+     * Yeni bir singleton objesi oluÅŸturur
+     * @param mixed $instance
+     * @param mixed ...$parameters
+     * @return Object
+     * 
+     */
+    function singleton($instance, array $parameters = []) {
+
+        return Singleton::make($instance, $parameters);
+    }
+
+    /**
+     * Dosyadaki iï¿½eriï¿½i ï¿½eker
+     * @param string $filePath
+     * @return \Gem\Components\Application
+     */
+    function routesFromFile($filePath = self::ROUTEFILE) {
+
+        if (file_exists($filePath)) {
+
+            $app = $this;
+            $inc = include $filePath;
+        } else {
+
+            throw new Exception(sprintf("girmiÅŸ olduÄŸunuz %s dosyasÄ± bulunmadÄ±", $filePath));
+        }
+
+        return $this;
+    }
+
+    /**
+     * 
+     * Get isteklerini yakalar
+     * 
+     * @param string $url
+     * @param mixed $use
+     */
+    function get($url, $use) {
+
+        $this->router->add('get', func_get_args());
+        return $this;
+    }
+
+    /**
+     *
+     * Post isteklerini yakalar
+     *
+     * @param string $url
+     * @param mixed $use
+     */
+    function post($url, $use) {
+
+        $this->router->add('post', func_get_args());
+        return $this;
+    }
+
+    /**
+     *
+     * Delete isteklerini yakalar
+     *
+     * @param string $url
+     * @param mixed $use
+     */
+    function delete($url, $use) {
+
+        $this->router->add('delete', func_get_args());
+        return $this;
+    }
+
+    /**
+     *
+     * Put isteklerini yakalar
+     *
+     * @param string $url
+     * @param mixed $use
+     */
+    function put($url, $use) {
+
+        $this->router->add('put', func_get_args());
+        return $this;
+    }
+
+    /**
+     *
+     * TÃ¼m isteklerini yakalar
+     *
+     * @param string $url
+     * @param mixed $use
+     */
+    function any($url, $use) {
+
+        $this->router->match($this->router->getTypes(), func_get_args());
+        return $this;
+    }
+
+    /**
+     * Array a gï¿½re istekleri ekler
+     * @param array $types
+     * @param string $url
+     * @param mixed $use
+     * @return \Gem\Components\Application
+     * @access public
+     * 
+     */
+    function match($types = [], $url, $use) {
+
+        $type = $types;
+        $args = func_get_args();
+        unset($args[0]);
+        $this->router->match($type, $args);
+        ;
+        return $this;
+    }
+
+    /**
+     * Koleksiyonlarï¿½ dï¿½ndï¿½rï¿½r
+     */
+    function getCollections() {
+
+        return $this->router->getCollections();
+    }
+
+    function setCollections(array $collections = []) {
+
+        $this->router->setCollections($collections);
+    }
+
+    /**
+     * 
+     * @param string $filter
+     * @param string $pattern
+     * @return \Gem\Components\Application
+     * @access public 
+     */
+    function filter($filter, $pattern) {
+
+        $this->router->filter($filter, $pattern);
+        return $this;
+    }
+
+    ## tetikleyici
+
+    function run() {
+
+        if (count($this->alias) > 0) {
+
+            $this->runFacades();
+        }
+
+        if (count($this->provider) > 0) {
+
+            $this->runProviders();
+        }
+        ## url yÃ¶netimi
+        $this->getUrlChecker();
+
+        ## rotalandÄ±rmanÄ±n baÅŸlamÄ±
+        $this->router->run();
+    }
+
+    public function group($befores = [], $callback = null) {
+
+        $app = $this;
+
+        if (is_string($befores)) {
+
+            $this->addGroupWithName($befores, $callback);
+            
+        } elseif (is_array($befores) && is_callable($callback)) {
+
+
+            $response = $callback($app);
+
+            if ($response instanceof Application) {
+
+                $collections = $response->getCollections();
+
+                $colls = [];
+                foreach ($collections as $key => $values) {
+
+                    foreach ($values as $valuekey => $value) {
+
+                        $colls[$key][$valuekey] = array_merge($value, ['group' => $befores]);
+                    }
+                }
+            }
+
+
+            $this->setCollections(array_merge($this->getCollections(), $colls));
+        }
+
+
+
+
+
+        return $this;
+    }
+    
+    /**
+     * 
+     * Grup ismine gÃ¶re grup atamasÄ± yapar
+     * @param string $name
+     * @param array $befores
+     * 
+     */
+    
+    private function addGroupWithName($name, $befores)
+    {
+        
+        $this->router->group($name, $befores);
+        
+        
+    }
+
+    /**
+     * 
+     * Url'i kontrol eder
+     * 
+     */
+    private function getUrlChecker() {
+
+        if (!isset($_GET['url']) || !$_GET['url'])
+            $_GET['url'] = '/';
+    }
+
+    /**
+     * 
+     * Facadeleri yÃ¼rÃ¼tÃ¼r
+     * 
+     */
+    private function runFacades() {
+
+        Facade::$instance = $this->alias;
+    }
+
+    /**
+     * 
+     * ProviderslarÄ± yÃ¼rÃ¼tÃ¼r
+     * 
+     */
+    private function runProviders() {
+
+        foreach ($this->provider as $provider) {
+
+            new $provider($this);
+        }
+    }
+
+    /**
+     * 
+     * @param array $facedes
+     * @return \Gem\Components\Application
+     */
+    function register($facedes = []) {
+
+        $this->alias = $facedes;
+        return $this;
+    }
+
+    public function before($before = []) {
+
+
+
+        if (!is_array($before)) {
+
+            $args = func_get_args();
+            $before = ['name' => $args[0], 'use' => $args[1]];
+        }
+
+        if (!isset($before['name'])) {
+
+            throw new InvalidArgumentException('before verinizde "name" index i bulunamadÄ±');
+        }
+
+        if (!isset($before['use'])) {
+
+            throw new InvalidArgumentException('before verinizde "use" index i bulunamadÄ±');
+        }
+
+        $this->router->before($before);
+
+        return $this;
+    }
+
+    public function provider($provider = []) {
+
+        $this->provider = $provider;
+        return $this;
+    }
+
+}

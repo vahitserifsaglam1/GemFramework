@@ -7,41 +7,36 @@
  *  @author vahitserifsaglam <vahit.serif119@gmail.com>
  * 
  */
+
 namespace Gem\Components;
+
 use Exception;
 
 class Crypt {
 
     private $securityKey;
-
     private $mode = MCRYPT_MODE_ECB;
-
     private $rand = MCRYPT_RAND;
-
     private $alogirtym = MCRYPT_RIJNDAEL_256;
 
-    public function __construct(){
+    public function __construct() {
 
-        if(!function_exists('mcrypt_create_iv')){
+        if (!function_exists('mcrypt_create_iv')) {
 
             throw new Exception('sunucunuzda mcrypt desteÄŸi bulunamadÄ±');
-
         }
 
         $this->securityKeyCreator();
-
     }
 
     /**
      * GÃ¼venlik anahtarÄ± oluÅŸtrucu
      */
-
-    private function securityKeyCreator(){
+    private function securityKeyCreator() {
 
         $config = Config::get('Configs');
 
-        $this->securityKey = (isset($config['key'])) ? $config['key']:md5($config['url']);
-        
+        $this->securityKey = (isset($config['key'])) ? $config['key'] : md5($config['url']);
     }
 
     /**
@@ -49,20 +44,17 @@ class Crypt {
      * @param string $value
      * @return string
      */
+    public function encode($value = '') {
 
-    public function encode($value = ''){
-
-        if(is_string($value)){
+        if (is_string($value)) {
 
             $iv = mcrypt_create_iv($this->getIvSize(), $this->getRandomizer());
 
-           $base = base64_encode(json_encode($this->payloadCreator($this->encrypt($value, $iv),$iv)));
+            $base = base64_encode(json_encode($this->payloadCreator($this->encrypt($value, $iv), $iv)));
 
 
             return $base;
-
         }
-
     }
 
     /**
@@ -72,25 +64,20 @@ class Crypt {
      *
      * Å�ifrelenmiÅŸ metin oluÅŸturur
      */
+    private function encrypt($value = '', $iv) {
 
-    private function encrypt( $value = '', $iv){
+        $value = $this->returnCleanAndHexedValue($value);
 
-        $value  = $this->returnCleanAndHexedValue($value);
-
-        return @mcrypt_encrypt($this->alogirtym,$this->securityKey, $value,$this->mode, $iv );
-
+        return @mcrypt_encrypt($this->alogirtym, $this->securityKey, $value, $this->mode, $iv);
     }
 
-    private function payloadCreator($creypted,$iv){
+    private function payloadCreator($creypted, $iv) {
 
 
         return array(
-
             'value' => base64_encode($creypted),
             'iv' => base64_encode($iv),
-
         );
-
     }
 
     /**
@@ -98,69 +85,55 @@ class Crypt {
      * @param string $value
      * @return string
      */
-    private function returnCleanAndHexedValue($value = ''){
+    private function returnCleanAndHexedValue($value = '') {
 
         $value = trim($value);
 
 
         return $value;
-
     }
 
-    private  function hexValue($value){
+    private function hexValue($value) {
 
-        if(function_exists('bin2hex')){
+        if (function_exists('bin2hex')) {
 
             return bin2hex($value);
-
-        }else{
+        } else {
 
             return $value;
-
         }
-
-
     }
 
     /**
      * Randomizer i dÃ¶ndÃ¼rÃ¼r
      * @return int
      */
+    private function getRandomizer() {
 
-    private function getRandomizer(){
-
-        if($this->rand){
+        if ($this->rand) {
 
             return $this->rand;
-
         }
-
-
     }
 
     /**
      * Iv uzunluÄŸunu DÃ¶ndÃ¼rÃ¼r
      * @return int
      */
-
-    private function getIvSize(){
+    private function getIvSize() {
 
         return mcrypt_get_iv_size($this->alogirtym, $this->mode);
-
     }
 
+    public function decode($value = '') {
 
-    public function decode($value = ''){
 
+        if (is_string($value)) {
 
-        if(is_string($value)){
+            $payload = $this->parsePayload($value);
 
-          $payload = $this->parsePayload($value);
-
-           return  $this->decrypt($payload);
-
+            return $this->decrypt($payload);
         }
-
     }
 
     /**
@@ -169,25 +142,21 @@ class Crypt {
      *
      * PayloadÄ± parÃ§alamakta kullanÄ±lÄ±r
      */
-    private function parsePayload($value){
+    private function parsePayload($value) {
 
 
         $based = (array) json_decode(base64_decode($value));
 
 
 
-        if(isset($based['value']) && isset($based['iv'])){
+        if (isset($based['value']) && isset($based['iv'])) {
 
 
             return array(
-
-              'value' => base64_decode($based['value']),
-                'iv'    => base64_decode($based['iv'])
-
+                'value' => base64_decode($based['value']),
+                'iv' => base64_decode($based['iv'])
             );
-
         }
-
     }
 
     /**
@@ -195,7 +164,7 @@ class Crypt {
      * @param array $payload
      * @return string
      */
-    private function decrypt(array $payload){
+    private function decrypt(array $payload) {
 
 
         $iv = $payload['iv'];
@@ -205,8 +174,7 @@ class Crypt {
 
         $value = $this->returnCleanAndDeHexedValue($value);
 
-        return mcrypt_decrypt($this->alogirtym,$this->securityKey, $value,$this->mode, $iv);
-
+        return mcrypt_decrypt($this->alogirtym, $this->securityKey, $value, $this->mode, $iv);
     }
 
     /**
@@ -214,32 +182,26 @@ class Crypt {
      * @return string
      * Parametreyi temizler ve hexden kurtarÄ±r
      */
+    private function returnCleanAndDeHexedValue($value) {
 
-     private function returnCleanAndDeHexedValue($value){
-
-         $value = trim($value);
+        $value = trim($value);
 
 
-         return $value;
-
-     }
+        return $value;
+    }
 
     /**
      * @param $value
      * @return string
      * Parametreyi hex halinden kurtarÄ±r
      */
-    private function deHexValue($value){
+    private function deHexValue($value) {
 
 
-        if(function_exists('hex2bin')){
+        if (function_exists('hex2bin')) {
 
             return hex2bin($value);
-
         }
-
     }
-
-
 
 }

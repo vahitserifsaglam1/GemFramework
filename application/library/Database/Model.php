@@ -2,7 +2,7 @@
 
 /**
  * 
- *  Modellerde extends edilecek sınıf, facede görevinde kullanılır
+ *  Modellerde extends edilecek sï¿½nï¿½f, facede gï¿½revinde kullanï¿½lï¿½r
  *  
  *  @package Gem\Components\Database
  *  
@@ -15,30 +15,21 @@
 namespace Gem\Components\Database;
 
 use Gem\Components\Database\Base;
-class Model
-{
-	
-	private  $instance;
-	
-	
-	public function __construct()
-	{
-		 
-		 $this->instance = new Base();
-		 
-	}
-	
-	public static function __callStatic($name , $params)
-	{
-	
-		$instance = new static();
-	
-		return call_user_func_array([$instance->instance,$name], $params);
-	
-	
-	}
-	
-	
-	
-	
+
+class BaseStatic {
+
+    private $instance;
+
+    public function __construct() {
+
+        $this->instance = new Base();
+    }
+
+    public static function __callStatic($name, $params) {
+
+        $instance = new static();
+
+        return call_user_func_array([$instance->instance, $name], $params);
+    }
+
 }

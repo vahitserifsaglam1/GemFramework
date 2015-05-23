@@ -1,108 +1,94 @@
 <?php
+
 /**
  * 
- *  Bu sýnýf GemFramework de route ve database sýnýfýna yardýmcý
- *  olmak üzere bazý fonksiyonlarý barýndýrýr
+ *  Bu sï¿½nï¿½f GemFramework de route ve database sï¿½nï¿½fï¿½na yardï¿½mcï¿½
+ *  olmak ï¿½zere bazï¿½ fonksiyonlarï¿½ barï¿½ndï¿½rï¿½r
  *  
  *  @package Gem\Components\Helpers\String
  *  @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
 
-namespace  Gem\Components\Helpers\String;
+namespace Gem\Components\Helpers\String;
 
 /**
  *
  * @trait Parser
  *
  */
+trait Parser {
 
-trait Parser
-{
-	
-	
-	/**
-	 * 
-	 * Url parçalamada kullanýlýr
-	 * @param string $url
-	 * @return multitype:array
-	 * @access public
-	 * 
-	 */
-	
-	 function urlParser($url)
-	 {
-		
-		
-		return $this->parseFromExploder($url, '/');
-		
-	}
-	
-	/**
-	 * Bir parçalayýcý yardýmýyla verileri parçalar 
-	 * @param string $string
-	 * @param string $parser
-	 * @return multitype:array
-	 * @access public
-	 * 
-	 */
-	
-	 function parseFromExploder($string, $parser = '')
-	 {
-		
-		$string = trim($string,$parser);
-		return explode($parser, $string);
-		
-	}
-	
-	/**
-	 * . larý parçalar
-	 * @param unknown $string
-	 * @return Ambigous <multitype:multitype: , multitype:>
-	 * @access public 
-	 * 
-	 */
-	
-	 function dotParser($string)
-	 {
-		
-		return $this->parseFromExploder($string,'.');
-		
-	}
-	
-	/**
-	 * Girilen preg_match deðerine göre uyumlu olup olmadýðýna bakar
-	 * @param array $parsed
-	 * @param string $preg
-	 * @return array
-	 * @access public
-	 * 
-	 */
-	
-	function matchStringFromParsed(array $parsed = [] ,$implodeWith = '', $preg = '')
-	{
-		
-		$content = implode($implodeWith, $parsed);
-		
-		foreach($parsed as $parse){
-			
-			if($preg = preg_match($preg, $parse, $find)){
-				
-				$start = strpos($find[1], $content);
-				$lenght = strlen($find[1]);
-				yield $parse => [
+    /**
+     * 
+     * Url parï¿½alamada kullanï¿½lï¿½r
+     * @param string $url
+     * @return multitype:array
+     * @access public
+     * 
+     */
+    function urlParser($url) {
 
-						'finded' => $find,
-						'find'   => $find[1],
-						'start'  => $start,
-						'lenght' => $lenght,
-						'end'    => $start + $lenght
-						 
-				];
-				
-			}
-			
-		}
-		
-	}
-	
+
+        return $this->parseFromExploder($url, '/');
+    }
+
+    /**
+     * Bir parï¿½alayï¿½cï¿½ yardï¿½mï¿½yla verileri parï¿½alar 
+     * @param string $string
+     * @param string $parser
+     * @return multitype:array
+     * @access public
+     * 
+     */
+    function parseFromExploder($string, $parser = '') {
+
+        $string = trim($string, $parser);
+        return explode($parser, $string);
+    }
+
+    /**
+     * . larï¿½ parï¿½alar
+     * @param unknown $string
+     * @return Ambigous <multitype:multitype: , multitype:>
+     * @access public 
+     * 
+     */
+    function dotParser($string) {
+
+        return $this->parseFromExploder($string, '.');
+    }
+
+    /**
+     * Girilen preg_match deï¿½erine gï¿½re uyumlu olup olmadï¿½ï¿½ï¿½na bakar
+     * @param array $parsed
+     * @param string $preg
+     * @return array
+     * @access public
+     * 
+     */
+    function matchStringFromParsed(array $parsed = [], $implodeWith = '', $preg = '') {
+
+        $content = implode($implodeWith, $parsed);
+
+        foreach ($parsed as $parse) {
+
+            if ($preg = preg_match($preg, $parse, $find)) {
+
+                $start = strpos($find[1], $content);
+                $lenght = strlen($find[1]);
+                $return = [];
+                $return[]= [ $parse => [
+
+                    'finded' => $find,
+                    'find' => $find[1],
+                    'start' => $start,
+                    'lenght' => $lenght,
+                    'end' => $start + $lenght
+                ]];
+            }
+        }
+        
+        return $return;
+    }
+
 }

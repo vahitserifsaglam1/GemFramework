@@ -1,7 +1,8 @@
 <?php
+
 /**
  * 
- *  GemFramework Veritabanı pdo instance oluşturma sınıfı 
+ *  GemFramework Veritabanï¿½ pdo instance oluï¿½turma sï¿½nï¿½fï¿½ 
  *  
  *  @package Gem\Components\Database
  *  
@@ -10,43 +11,32 @@
  *  @copyright MyfcYazilim
  * 
  */
+
 namespace Gem\Components\Database;
+
 use PDO;
 
-class Starter
-{
-	
-	
-	public function __construct($options = [])
-	{
+class Starter {
 
-		
-		$host = $options['host'] ?: '';
-		$database = $options['db'] ?: '';
-		$username = $options['username'] ?: '';
-		$password = $options['password'] ?: '';
-		$charset = $options['charset'] ?: 'utf-8';
-		
-	
-		try
-		{
-			
-			$pdo = new PDO("mysql:host=$host;dbname=$database",$username,$password);
-			$pdo->query("SET CHARSET {$charset}");
-			return $pdo;
-			
-		}catch (\PDOException $e)
-		{
-			
-			throw new \Exception($e->getMessage());
-			
-		}
-		
-		
-		
-		
-		
- 		
-	}
-	
+    public function __construct($options = []) {
+
+
+        $host = $options['host'] ? : '';
+        $database = $options['db'] ? : '';
+        $username = $options['username'] ? : '';
+        $password = $options['password'] ? : '';
+        $charset = $options['charset'] ? : 'utf-8';
+
+
+        try {
+
+            $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+            $pdo->query("SET CHARSET {$charset}");
+            return $pdo;
+        } catch (\PDOException $e) {
+
+            throw new \Exception($e->getMessage());
+        }
+    }
+
 }

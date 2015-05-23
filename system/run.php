@@ -1,21 +1,12 @@
 <?php
 
 use Gem\Components\Application;
-use Gem\Components\Database\Base;
 
+## uygulamayÄ± baÅŸlatan ana sÄ±nÄ±f
+$application = new Application('GemFramework', '1.0');
 
-## uygulamayı başlatan ana sınıf
-$application = new Application('GemFramework','1.0');
-
-
-
-
-$application->get('/',function (){
-
-  view('index',['test' => 'adsads']);
-
-})
-->run();
+$application->routesFromFile(APP . 'routes.php')
+        ->run();
 
 
 

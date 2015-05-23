@@ -1,8 +1,8 @@
 <?php
 /**
  * 
- *  GemFramework Connection Manager Trait, veritabaný baðlantýsý ve baþlatýlýp sonlandýrýl
- *  masý bu sýnýfta yapýlacak
+ *  GemFramework Connection Manager Trait, veritabanÄ± baaÄŸlantÄ±sÄ±nÄ± baÅŸlatÄ±r ve sonlandÄ±rÄ±lmasÄ±
+ *  masÄ± bu trait de gerÃ§ekleÅŸir
  *  
  *  @package  Gem\Components\Database\Traits;
  *  @author vahitserifsaglam <vahit.serif119@gmail.com>
@@ -10,58 +10,44 @@
 
 namespace Gem\Components\Database\Traits;
 
+trait ConnectionManager {
 
-trait ConnectionManager
-{
-	
-	private $connection;
-	
-	private $connectedTable;
-	
-	/**
-	 * Baðlantý sonlandýrýldý
-	 */
-	public function close()
-	{
-		
-		$this->connection = null;
-		
-	}
-	
-	
-	/**
-	 * Kullanýlacak tabloyu seçer
-	 * @param string $table
-	 */
-	
-	public function connect($table)
-	{
-		
-		$this->connectedTable = $table;
-		
-	}
-	
-	/**
-	 * Seçilen tabloyu döndürür
-	 * @return string
-	 */
-	
-	public function getTable()
-	{
-		
-		return $this->connectedTable;
-		
-	}
-	
-	/**
-	 * 
-	 * @return \PDO
-	 */
-	public function getConnection()
-	{
-		
-		return $this->connection;
-		
-	}
-	
+    private $connection;
+    private $connectedTable;
+
+    /**
+     * Baï¿½lantï¿½ sonlandï¿½rï¿½ldï¿½
+     */
+    public function close() {
+
+        $this->connection = null;
+    }
+
+    /**
+     * Kullanï¿½lacak tabloyu seï¿½er
+     * @param string $table
+     */
+    public function connect($table) {
+
+        $this->connectedTable = $table;
+    }
+
+    /**
+     * Seï¿½ilen tabloyu dï¿½ndï¿½rï¿½r
+     * @return string
+     */
+    public function getTable() {
+
+        return $this->connectedTable;
+    }
+
+    /**
+     * 
+     * @return \PDO
+     */
+    public function getConnection() {
+
+        return $this->connection;
+    }
+
 }

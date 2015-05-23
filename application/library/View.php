@@ -1,209 +1,163 @@
 <?php
+
 /**
  * 
- *  GemFramework View Sýnýfý -> Görüntü dosyalarý üretmek de kullanýlýr
+ *  GemFramework View Sï¿½nï¿½fï¿½ -> Gï¿½rï¿½ntï¿½ dosyalarï¿½ ï¿½retmek de kullanï¿½lï¿½r
  *  
  */
 
 namespace Gem\Components;
+
 use Gem\Components\Helpers\String\Parser;
 use Gem\Components\Helpers\String\Builder;
 use Exception;
 
-class View
-{
-	
-	use Parser,Builder;
+class View {
 
-	private $params,$fileName,$autoload = false;
-	
-	public function __construct()
-	{
-		
-		if(!file_exists(VIEW))
-		{
-			
-			throw new Exception(sprintf("%s dosyaniz  bulunamadi", VIEW));
-			
-		}
+    use Parser,
+        Builder;
 
-	}
-	
-	/**
-	 * Görüntü dosyasý oluþturur
-	 * @param string $fileName
-	 * @param array $variables
-	 * @throws Exception
-	 */
-	
-	public function make($fileName, $variables)
-	{
-		
-		
-		if(strstr($fileName, "."))
-		{
-			
-		
-			$fileName = $this->joinDotToUrl($fileName);
-			
-			
-		}
-		
+    private $params, $fileName, $autoload = false;
 
-		$this->fileName = $fileName;
-		$this->params = $variables;
-		
-		return $this;
-		
-		
-	}
-	
-	public function autoload($au = false)
-	{
-		
-		$this->autoload = $au;
-		return $this;
-		
-	}
-	
-	/**
-	 * 
-	 * @param array $language
-	 * @return \Gem\Components\View
-	 * 
-	 *  [ 'dil' => [
-	 *   'file1','file2'
-	 *  ]
-	 */
-	
-	public function language($language)
-	{
-		
-		if(count($language)>0 && is_array($language))
-		{
-			
-	    foreach($language as $lang)
-		{
-			
-			## alt parçalama
-			foreach($lang as $langfile)
-			{
-				
-				$file = $this->joinDotToUrl($langfile);
-				$fileName = LANG.$langfile.'/'.$file.".php";
-				
-				if(file_exists($fileName))
-				{
-					
-					$newParams = include $fileName;
-					$this->params = array_merge($this->params, $newParams);
-					
-				}
-				
-			}
-			
-		}
-			
-		}
-	
+    public function __construct() {
 
-		
-		return $this;
-	}
-	
-	/**
-	 * Çýktýyý gönderir
-	 * @throws Exception
-	 */
-	
-	public function execute()
-	{
-		
-		$fileName =  $this->viewFilePath($this->fileName);
-		$variables = $this->params;
+        if (!file_exists(VIEW)) {
 
-	
-		
-		if(file_exists($fileName))
-		{
-		
+            throw new Exception(sprintf("%s dosyaniz  bulunamadi", VIEW));
+        }
+    }
+
+    /**
+     * Gï¿½rï¿½ntï¿½ dosyasï¿½ oluï¿½turur
+     * @param string $fileName
+     * @param array $variables
+     * @throws Exception
+     */
+    public function make($fileName, $variables) {
+
+
+        if (strstr($fileName, ".")) {
+
+
+            $fileName = $this->joinDotToUrl($fileName);
+        }
+
+
+        $this->fileName = $fileName;
+        $this->params = $variables;
+
+        return $this;
+    }
+
+    public function autoload($au = false) {
+
+        $this->autoload = $au;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param array $language
+     * @return \Gem\Components\View
+     * 
+     *  [ 'dil' => [
+     *   'file1','file2'
+     *  ]
+     */
+    public function language($language) {
+
+        if (count($language) > 0 && is_array($language)) {
+
+            foreach ($language as $lang) {
+
+                ## alt parï¿½alama
+                foreach ($lang as $langfile) {
+
+                    $file = $this->joinDotToUrl($langfile);
+                    $fileName = LANG . $langfile . '/' . $file . ".php";
+
+                    if (file_exists($fileName)) {
+
+                        $newParams = include $fileName;
+                        $this->params = array_merge($this->params, $newParams);
+                    }
+                }
+            }
+        }
+
+
+
+        return $this;
+    }
+
+    /**
+     * ï¿½ï¿½ktï¿½yï¿½ gï¿½nderir
+     * @throws Exception
+     */
+    public function execute() {
+
+        $fileName = $this->viewFilePath($this->fileName);
+        $variables = $this->params;
+
+
+
+        if (file_exists($fileName)) {
+
             extract($variables);
-            
-			
-			## header dosyasý yüklemesi
-			if($this->autoload === true)
-			{
-				
-				$file = $this->autoloadGenareteFilePath('inc.header');
-				
-				if(file_exists($file))
-				{
-				
-					include $file;
-					
-				}
-				
-					
-			}
-			
-			include $fileName;
-			
-			## footer dosyasý yüklemesi
-			if($this->autoload === true)
-			{
-				
-				$fileF = $this->autoloadGenareteFilePath('inc.footer');
-				
-				if(file_exists($fileF))
-				{
-				
-					include $filef;
-						
-				}
-			}
-				
-		}
-		else
-		{
-				
-			throw new Exception(sprintf("%s dosyasi bulunamadi",$fileName));
-				
-		}
-		
-		
-	}
-	
-	/**
-	 * 
-	 * @param string $path
-	 * @return string
-	 */
-	private function viewFilePath($path)
-	{
-		
-		return VIEW.$path.'.php';
-		
-	}
-	
-	/**
-	 * 
-	 * @param string $path
-	 * @return string
-	 * @access private
-	 */
-	
-	private function autoloadGenareteFilePath($path)
-	{
-		
-		$filePath = $this->joinDotToUrl($path);
-		
-		$path = $this->viewFilePath($filePath);
-		
-		return $path;
-	
-		
-	}
-	
-	
-	
+
+
+            ## header dosyasï¿½ yï¿½klemesi
+            if ($this->autoload === true) {
+
+                $file = $this->autoloadGenareteFilePath('inc.header');
+
+                if (file_exists($file)) {
+
+                    include $file;
+                }
+            }
+
+            include $fileName;
+
+            ## footer dosyasï¿½ yï¿½klemesi
+            if ($this->autoload === true) {
+
+                $fileF = $this->autoloadGenareteFilePath('inc.footer');
+
+                if (file_exists($fileF)) {
+
+                    include $filef;
+                }
+            }
+        } else {
+
+            throw new Exception(sprintf("%s dosyasi bulunamadi", $fileName));
+        }
+    }
+
+    /**
+     * 
+     * @param string $path
+     * @return string
+     */
+    private function viewFilePath($path) {
+
+        return VIEW . $path . '.php';
+    }
+
+    /**
+     * 
+     * @param string $path
+     * @return string
+     * @access private
+     */
+    private function autoloadGenareteFilePath($path) {
+
+        $filePath = $this->joinDotToUrl($path);
+
+        $path = $this->viewFilePath($filePath);
+
+        return $path;
+    }
+
 }

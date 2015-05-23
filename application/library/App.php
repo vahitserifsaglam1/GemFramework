@@ -1,7 +1,8 @@
 <?php
+
 /**
  * 
- *   GemFramework dosyalarda Controller ve Model leri çaðýrmakta kullanýlacak
+ *   GemFramework dosyalarda Controller ve Model leri ï¿½aï¿½ï¿½rmakta kullanï¿½lacak
  *   
  *   @package Gem\Components
  *   
@@ -11,69 +12,125 @@
  *   
  * 
  */
+
 namespace Gem\Components;
 
-use Gem\Components\Helpers\Config;
+class App {
 
-class App
-{
-	
-	const CONTROLLER = 'Controller';
-	
-	const MODEL = 'Model';
-	
-	const VIEW = 'View';
-	
-	/**
-	 * Controller, method yada bir sýnýf çaðýrýr
-	 * @param mixed $names
-	 * @param string $type
-	 * @return mixed
-	 * @access public
-	 */
-	
-	public static function uses($names, $type)
-	{
-		
-		
-	      switch ($type)
-	      {
-	      	
-	      	case self::CONTROLLER:
-	      		
-	      		$this->includeController($names);
-	      		
-	      		break;
-	      		
-	      	case self::MODEL:
-	      		
-	      		$this->includeModel($names);
-	      		
-	      		break;
-	      		
-	      	case self::VIEW:
-	      		
-	      		$this->includeView($names);
-	      		
-	      		break;
-	      	
-	      }
-		
-		
-	}
-	
-	/**
-	 * Html da kullanýlmak için base kodunu oluþturur
-	 * @return string
-	 */
-	 
-	public static function base()
-	{
-		$config = self::getConfigStatic('configs')['url'];
-		
-		return '<base href="'.$config.'" target="_blank">';
-	}
+    const CONTROLLER = 'Controller';
+    const MODEL = 'Model';
+    const VIEW = 'View';
 
-	
-	
+    /**
+     * Controller, method yada bir sï¿½nï¿½f ï¿½aï¿½ï¿½rï¿½r
+     * @param mixed $names
+     * @param string $type
+     * @return mixed
+     * @access public
+     */
+    public static function uses($names, $type) {
+
+        $names = (array) $names;
+
+
+
+        foreach ($names as $name) {
+
+
+
+            switch ($type) {
+
+                case self::CONTROLLER:
+
+                    $return[$name] = self::includeController($name);
+
+                    break;
+
+                case self::MODEL:
+
+                    $return[$name] = self::includeModel($name);
+
+                    break;
+
+                case self::VIEW:
+
+                    $return[$name] = self::includeView($name);
+
+                    break;
+            }
+        }
+
+        if (count($return) == 1) {
+
+            $return = array_reverse($return);
+            $return = end($return);
+        }
+
+        return $return;
+    }
+
+    /**
+     * Html da kullanï¿½lmak iï¿½in base kodunu oluï¿½turur
+     * @return string
+     */
+    public static function base() {
+        $config = self::getConfigStatic('configs')['url'];
+
+        return '<base href="' . $config . '" target="_blank">';
+    }
+
+    /**
+     * 
+     * @param string $controller
+     * @return null|object
+     */
+    private static function includeController($controller) {
+
+        $controllerName = $controller;
+
+        $controllerPath = APP . 'controllers/' . $controllerName . '.php';
+
+        if (file_exists($controllerPath)) {
+
+            if (!class_exists($controller)) {
+
+                include $controllerPath;
+            }
+
+            $controller = new $controllerName;
+        } else {
+
+            $controller = null;
+        }
+
+        return $controller;
+    }
+
+    /**
+     * 
+     * @param string $model
+     * @return null|object
+     */
+    private function includeModel($model) {
+
+        $modelName = $model;
+
+        $modelPath = APP . 'models/' . $modelName . '.php';
+
+        if (file_exists($modelPath)) {
+
+            if (!class_exists($model)) {
+
+                include $modelPath;
+            }
+
+            $model = new $modelName;
+        } else {
+
+            $model = null;
+        }
+
+        return $model;
+    }
+
 }

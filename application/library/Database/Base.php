@@ -1,9 +1,10 @@
 <?php
+
 /**
  *  
- *  GemFramework Veritabaný sýnýfý ana sýnýfý 
+ *  GemFramework Veritabanï¿½ sï¿½nï¿½fï¿½ ana sï¿½nï¿½fï¿½ 
  *  
- *  # builder lerle ve diðer altyapýlarla iletiþimi saðlayacak
+ *  # builder lerle ve diï¿½er altyapï¿½larla iletiï¿½imi saï¿½layacak
  *  
  *  @package Gem\Components\Database
  *  @author vahitserifsaglam <vahit.serif119@gmail.com>
@@ -19,100 +20,91 @@ use Gem\Components\Database\Mode\Read;
 use Gem\Components\Database\Mode\Update;
 use Gem\Components\Database\Mode\Insert;
 use Gem\Components\Database\Mode\Delete;
+use Gem\Components\Database\Traits\ModeManager;
+
+class Base extends Starter {
+
+    use ConnectionManager,
+        Config,
+        ModeManager;
+
+    public function __construct() {
 
 
+        $configs = $this->getConfig('db');
+        $this->connection = parent::__construct($configs);
+    }
 
-class Base extends Starter{
-	
-	use ConnectionManager,Config;
-	
-	
-	public function __construct()
-	{
-		
-		
-		$configs = $this->getConfig('db');
-		$this->connection = parent::__construct($configs);
-	
-	}
-	
-	/**
-	 * Select iþleminde sorgu oluþturmak da kullanýlýr
-	 * @param string $table
-	 * @param callable $callable
-	 * @return mixed
-	 * @access public
-	 */
-	public function read($table, callable $callable = null)
-	{
-		
-         $this->connect($table);
-         $read = new Read($this);
-         return $callable($read);
-		
-	}
-	
-	/**
-	 * Update Ýþlemlerinde kullanýlýr
-	 * @param string $table
-	 * @param callable $callable
-	 * @return mixed
-	 */
-	public function update($table, callable $callable = null)
-	{
-	
-		$this->connect($table);
-		$update = new Update($this);
-		return $callable($update);
-	
-	}
-	
+    /**
+     * Select iï¿½leminde sorgu oluï¿½turmak da kullanï¿½lï¿½r
+     * @param string $table
+     * @param callable $callable
+     * @return mixed
+     * @access public
+     */
+    public function read($table, callable $callable = null) {
 
-	/**
-	 * Insert Ýþlemlerinde kullanýlýr
-	 * @param string $table
-	 * @param callable $callable
-	 * @return mixed
-	 */
-	public function insert($table, callable $callable = null)
-	{
-	
-		$this->connect($table);
-		$insert = new Insert($this);
-		return $callable($insert);
-	
-	}
-		
+        $this->connect($table);
+        $read = new Read($this);
+        return $callable($read);
+    }
 
-	/**
-	 * Delete Ýþlemlerinde kullanýlýr
-	 * @param string $table
-	 * @param callable $callable
-	 * @return mixed
-	 */
-	public function delete($table, callable $callable = null)
-	{
-	
-		$this->connect($table);
-		$delete = new Delete($this);
-		return $callable($delete);
-	
-	}
-	
-	/**
-	 * Dinamik method çaðrýmý
-	 * @param string $method
-	 * @param array $args
-	 * @return mixed
-	 */
-	
-	public function __call($method, array $args = [])
-	{
-		
-		return call_user_func_array([$this->getConnection(),$method], $args);
-		
-	}
-	
-	
-	
+    /**
+     * Update ï¿½ï¿½lemlerinde kullanï¿½lï¿½r
+     * @param string $table
+     * @param callable $callable
+     * @return mixed
+     */
+    public function update($table, callable $callable = null) {
+
+        $this->connect($table);
+        $update = new Update($this);
+        return $callable($update);
+    }
+
+    /**
+     * Insert ï¿½ï¿½lemlerinde kullanï¿½lï¿½r
+     * @param string $table
+     * @param callable $callable
+     * @return mixed
+     */
+    public function insert($table, callable $callable = null) {
+
+        $this->connect($table);
+        $insert = new Insert($this);
+        return $callable($insert);
+    }
+
+    /**
+     * Delete ï¿½ï¿½lemlerinde kullanï¿½lï¿½r
+     * @param string $table
+     * @param callable $callable
+     * @return mixed
+     */
+    public function delete($table, callable $callable = null) {
+
+        $this->connect($table);
+        $delete = new Delete($this);
+        return $callable($delete);
+    }
+
+    /**
+     * Dinamik method ï¿½aï¿½rï¿½mï¿½
+     * @param string $method
+     * @param array $args
+     * @return mixed
+     */
+    public function __call($method, array $args = []) {
+
+        if ($this->isMode($method)) {
+
+            $return = $this->callMode($method, $args);
+        } else {
+
+            $return = call_user_func_array([$this->getConnection(), $method], $args);
+        }
+
+        return $return;
+    }
+
 }

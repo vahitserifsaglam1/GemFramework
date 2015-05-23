@@ -1,6 +1,7 @@
 <?php
+
 /**
- * GemFramework Config Helper -> kullanýcý ayarlarýnýnýn çekildiði trait
+ * GemFramework Config Helper -> kullanï¿½cï¿½ ayarlarï¿½nï¿½nï¿½n ï¿½ekildiï¿½i trait
  *  
  * @package Gem\Components\Helpers
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
@@ -9,63 +10,37 @@
 
 namespace Gem\Components\Helpers;
 
+trait Config {
 
-trait Config
-{
-		
-	/**
-	 * Ýstenilen ayarý getirir
-	 * @param string $config
-	 * @return boolean|mixed
-	 * @access public
-	 * 
-	 */
-	
-	public function getConfig($config = ''){
-		
-		$path = CONFIG_PATH.$config.'.php';
-		
-		if(file_exists($path))
-		{
-			
-			return include $path;
-			
-		}
-		else
-		{
-			
-			return false;
-			
-		}
-		
-	}
-	
     /**
-	 * Ýstenilen ayarý getirir
-	 * @param string $config
-	 * @return boolean|mixed
-	 * @access public
-	 * 
-	 */
-	
-	public static function getConfigStatic($config)
-	{
-		$path = CONFIG_PATH.$config.'.php';
-		
-		if(file_exists($path))
-		{
-			
-			return include $path;
-			
-		}
-		else
-		{
-			
-			return false;
-			
-		}
-		
-	}
-	
-	
+     * ï¿½stenilen ayarï¿½ getirir
+     * @param string $config
+     * @return boolean|mixed
+     * @access public
+     * 
+     */
+    public function getConfig($config = '') {
+
+       return self::getConfigStatic($config);
+    }
+
+    /**
+     * ï¿½stenilen ayarï¿½ getirir
+     * @param string $config
+     * @return boolean|mixed
+     * @access public
+     * 
+     */
+    public static function getConfigStatic($config) {
+        $path = CONFIG_PATH . $config . '.php';
+
+        if (file_exists($path)) {
+
+            return include $path;
+        } else {
+
+            return false;
+        }
+    }
+
 }
