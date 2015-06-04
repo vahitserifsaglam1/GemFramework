@@ -26,6 +26,8 @@ define('LANG', 'language/');
 
 include APP . 'libs/Functions.php';
 
+## ana controller sınıfımız
+include SYSTEM.'MainController.php';
 ## başlatma dosyası
 include SYSTEM . 'run.php';
 

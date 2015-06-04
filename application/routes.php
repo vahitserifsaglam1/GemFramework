@@ -1,13 +1,9 @@
-<?php
+<?php 
 
-return $app->before('bb', function() {
-                    return true;
-                })
-                ->before('aa', function() {
-                    return true;
-                })->
-                group('test', ['aa', 'bb'])
-                ->get('/', ['group' => 'test', 'action' => function() {
 
-                        echo "hello world";
-                    }]);
+$app->get('/index/:page', function($page){
+
+    print_r($_SERVER);
+    
+})->filter('page','[0-9]+')
+        ->run();

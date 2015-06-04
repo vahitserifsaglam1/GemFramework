@@ -6,5 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Gem\\Components\\' => array($baseDir . '/application/library'),
+    'Gem\\Modules\\' => array($baseDir . '/modules'),
+    'Gem\\Components\\' => array($baseDir . '/application/components'),
+    'Gem\\Application\\Manager\\' => array($baseDir . '/application/managers'),
 );

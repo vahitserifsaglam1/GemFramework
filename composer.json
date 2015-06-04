@@ -6,7 +6,9 @@
   "autoload": {
     "psr-4": {
       
-      "Gem\\Components\\": "application/library/"
+      "Gem\\Components\\": "application/components/",
+	  "Gem\\Modules\\":"modules/",
+          "Gem\\Application\\Manager\\":"application/managers/"
       
     },
     
@@ -16,6 +18,7 @@
     
   },
    "require": {
-                "php": ">=5.6"
+                "php": ">=5.6",
+                "phpmailer/phpmailer": "~5.2"
             }
 }

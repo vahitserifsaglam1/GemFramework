@@ -6,6 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'ComposerAutoloaderInit2c5fec806b071501d95feee4099bb6b0' => $vendorDir . '/composer/autoload_real.php',
+    'ComposerAutoloaderInit6a8b7a665a05f022afff117284c06a7b' => $vendorDir . '/composer/autoload_real.php',
     'Composer\\Autoload\\ClassLoader' => $vendorDir . '/composer/ClassLoader.php',
+    'EasyPeasyICS' => $vendorDir . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
+    'PHPMailer' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
+    'PHPMailerLangTest' => $vendorDir . '/phpmailer/phpmailer/test/phpmailerLangTest.php',
+    'PHPMailerTest' => $vendorDir . '/phpmailer/phpmailer/test/phpmailerTest.php',
+    'POP3' => $vendorDir . '/phpmailer/phpmailer/class.pop3.php',
+    'SMTP' => $vendorDir . '/phpmailer/phpmailer/class.smtp.php',
+    'ntlm_sasl_client_class' => $vendorDir . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
+    'phpmailerException' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
 );
