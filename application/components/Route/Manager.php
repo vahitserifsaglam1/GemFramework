@@ -2,11 +2,11 @@
 
 /**
  *  Bu s�n�f Gem Framework un Route i�lemlerini ger�ekle�tirir
- * 
- *  @package Gem\Components
- *  
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- * 
+ *
+ * @package Gem\Components
+ *
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
  */
 
 namespace Gem\Components\Route;
@@ -21,7 +21,8 @@ use Gem\Components\App;
 use BadFunctionCallException;
 use Gem\Components\Helpers\AccessManager;
 
-class Manager {
+class Manager
+{
 
     use Parser,
         Server,
@@ -30,10 +31,10 @@ class Manager {
         AccessManager;
 
     /**
-     * 
-     * @var $collection,$params,$types
+     *
+     * @var $collection ,$params,$types
      * @access private
-     * 
+     *
      */
     private $collection = [
     ];
@@ -47,23 +48,26 @@ class Manager {
     private $before = [];
     private $group = [];
 
-    public function __construct() {
+    public function __construct()
+    {
 
         $this->basePath = $this->findBasePath();
     }
 
-    public function getTypes() {
+    public function getTypes()
+    {
 
         return $this->types;
     }
 
     /**
-     * 
+     *
      * @param string $type
      * @param array $args
      * @access public
      */
-    public function add($type, $args) {
+    public function add($type, $args)
+    {
 
         $add = [
             'action' => ltrim($args[0], '/'),
@@ -85,13 +89,14 @@ class Manager {
     }
 
     /**
-     * 
+     *
      * @param array $types
      * @param array $args
      * @access public
-     * 
+     *
      */
-    public function match($types, $args) {
+    public function match($types, $args)
+    {
 
         foreach ($types as $type) {
 
@@ -104,7 +109,8 @@ class Manager {
      * @return Ambigous <multitype: boolean, multitype:array >
      * @access public
      */
-    public function getCollections() {
+    public function getCollections()
+    {
 
         return $this->collection;
     }
@@ -113,12 +119,14 @@ class Manager {
      * Http Methodunu D�nd�r�r
      * @return string
      */
-    public function getMethod() {
+    public function getMethod()
+    {
 
         return mb_convert_case($this->get('REQUEST_METHOD'), MB_CASE_LOWER);
     }
 
-    public function before(array $before = []) {
+    public function before(array $before = [])
+    {
         $this->before[$before['name']] = $before['use'];
     }
 
@@ -128,7 +136,8 @@ class Manager {
      * @param string $pattern
      * @return null
      */
-    public function filter($name = '', $pattern = '') {
+    public function filter($name = '', $pattern = '')
+    {
 
         $this->filters[$name] = $pattern;
     }
@@ -138,38 +147,43 @@ class Manager {
      * @param string $name
      * @return boolean|string
      */
-    public function getFilter($name) {
+    public function getFilter($name)
+    {
 
-     
-        return $a = $this->filters[$name] ? : false;
+
+        return isset($this->filters[$name]) ? $this->filters[$name] : "([\w-%]+)";
     }
 
     /**
      * Regex i d�nd�r�r
      * @return mixed
      */
-    private function getRegex($url) {
+    private function getRegex($url)
+    {
 
         return preg_replace_callback("/:(\w+)/", [$this, 'substituteFilter'], $url);
     }
 
     /**
-     * 
+     *
      * @param array $matches
      * @return string
      */
-    private function substituteFilter(array $matches = []) {
+    private function substituteFilter(array $matches = [])
+    {
 
-        return $a = "({$this->getFilter($matches[1])})" ? : "([\w-%]+)";
+
+        return $a = "({$this->getFilter($matches[1])})" ?: "([\w-%]+)";
     }
 
     /**
-     * 
+     *
      * Parametreleri atar
      * @param array $params
-     * 
+     *
      */
-    private function setParams(array $params = []) {
+    private function setParams(array $params = [])
+    {
 
         $this->params = $params;
     }
@@ -178,12 +192,14 @@ class Manager {
      * Parametreleri d�nd�r�r
      * @return array
      */
-    private function getParams() {
+    private function getParams()
+    {
 
         return $this->params;
     }
 
-    public function setCollections(array $collections = []) {
+    public function setCollections(array $collections = [])
+    {
 
         $this->collection = $collections;
     }
@@ -193,19 +209,21 @@ class Manager {
      * @param string $name
      * @param array $befores
      */
-    public function group($name, $befores) {
+    public function group($name, $befores)
+    {
 
         $this->group[$name] = $befores;
     }
 
     /**
-     * 
+     *
      * $name e göre grup'u bulur, eğer yoksa exception oluşturur
      * @param string $name
      * @throw RuntimeException
      * @return array
      */
-    private function getGroup($name) {
+    private function getGroup($name)
+    {
 
         if (isset($this->group[$name])) {
 
@@ -216,24 +234,27 @@ class Manager {
         }
     }
 
-    public function run() {
+    public function run()
+    {
 
         if (isset($this->getCollections()[$this->getMethod()]))
             $collections = $this->getCollections()[$this->getMethod()];
 
         $url = $this->getUrl();
 
-     
+
         ## kontrol ediliyor
         if (count($collections) > 0) {
 
             foreach ($collections as $collection) {
 
-           
-                if (!preg_match("@^" . $this->getRegex($collection['action']) . "*$@i", $url, $matches)) {
-                    continue;
-                }
+                $regex = $this->getRegex($collection['action']);
+                if ($regex !== '') {
 
+                    if (!preg_match("@^" . $regex . "*$@i", $url, $matches)) {
+                        continue;
+                    }
+                }
 
 
                 $args = $this->routeGenareteParams($url, $collection['action']);
@@ -250,11 +271,10 @@ class Manager {
                 }
 
 
-
                 ## url in tamamı
                 $url = $this->basePath . $url;
 
-             
+
                 ## olu�turulmu� string
                 if ($this->routeGenareteNewUrl($argument_kets, $params, $url, $this->basePath . $collection['action'])) {
 
@@ -273,7 +293,8 @@ class Manager {
      * @param array $params
      * @return boolean
      */
-    private function runBefore($before, $params) {
+    private function runBefore($before, $params)
+    {
 
         $response = call_user_func_array($before, $params);
 
@@ -284,13 +305,14 @@ class Manager {
     }
 
     /**
-     * 
+     *
      * Karşılaştırır ve yürütür
      * @param string $url
      * @param string $replaced
      * @param array $collection
      */
-    private function beforeAndRun($collection, $params) {
+    private function beforeAndRun($collection, $params)
+    {
 
 
         if ($this->actionBefore($collection['callback'], $params) && $this->actionGroup($collection, $params) && $this->actionAccessControl($collection['callback'])) {
@@ -300,11 +322,12 @@ class Manager {
     }
 
     /**
-     * 
+     *
      * @param mixed $callback
      * @return boolean
      */
-    private function actionAccessControl($callback) {
+    private function actionAccessControl($callback)
+    {
 
         if (is_array($callback)) {
             if (isset($callback['access'])) {
@@ -323,21 +346,21 @@ class Manager {
 
                 return true;
             }
-        }else{
-            
+        } else {
+
             return true;
-            
         }
     }
 
     /**
-     * 
+     *
      * Grupları kontrol eder.
      * @param array $action
      * @param array $params
      * @return boolean
      */
-    private function actionGroup($action = [], array $params = []) {
+    private function actionGroup($action = [], array $params = [])
+    {
 
 
         $return = true;
@@ -380,13 +403,14 @@ class Manager {
     }
 
     /**
-     * 
+     *
      * @param array $action
      * @param array $params
      * @return boolean
      * @throws InvalidArgumentException
      */
-    private function actionBefore($action, $params) {
+    private function actionBefore($action, $params)
+    {
 
         if (is_array($action)) {
 
@@ -411,7 +435,8 @@ class Manager {
      * @param string $name
      * @return boolean|Clourse
      */
-    private function isBefore($name) {
+    private function isBefore($name)
+    {
 
         return (isset($this->before[$name])) ? $this->before[$name] : false;
     }
@@ -420,7 +445,8 @@ class Manager {
      * Callback parçalama i�lemi burada ger�ekle�ir
      * @param array $callback
      */
-    private function dispatch($callback = []) {
+    private function dispatch($callback = [])
+    {
 
 
         if (is_array($callback)) {
@@ -436,11 +462,12 @@ class Manager {
     }
 
     /**
-     * 
+     *
      * @param array $callback
      * @throws RuntimeException
      */
-    private function dispatchArray(array $callback = []) {
+    private function dispatchArray(array $callback = [])
+    {
 
 
         if (isset($callback['action']))
@@ -457,7 +484,8 @@ class Manager {
      * @param callable $callback
      * @return mixed
      */
-    private function dispatchCallable(callable $callback) {
+    private function dispatchCallable(callable $callback)
+    {
 
         $params = $this->getParams();
 
@@ -468,7 +496,8 @@ class Manager {
      * Controllerı çağırır
      * @param string $callback
      */
-    private function dispatchString($callback = '') {
+    private function dispatchString($callback = '')
+    {
 
         if (strstr($callback, '::')) {
 
@@ -483,12 +512,13 @@ class Manager {
     }
 
     /**
-     * 
+     *
      * @param string $controller
      * @param string $method
-     * 
+     *
      */
-    private function dispatchRunController($controllerName, $method = '') {
+    private function dispatchRunController($controllerName, $method = '')
+    {
         $controller = App::uses($controllerName, 'Controller');
 
         if ($controller) {

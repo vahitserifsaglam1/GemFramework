@@ -1,19 +1,20 @@
 <?php
 
 /**
- * 
+ *
  *  GemFramework String Builder Trait -> metinleri birle�tirirken
  *  kullan�lacak baz� fonksiyonlar� i�erir
- *  
- *  @package Gem\Components\Helpers\String
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- *  @version 1.0
- * 
+ *
+ * @package Gem\Components\Helpers\String
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ * @version 1.0
+ *
  */
 
 namespace Gem\Components\Helpers\String;
 
-trait Builder {
+trait Builder
+{
 
     /**
      * Verilen diziyi bir string haline getirir
@@ -21,9 +22,10 @@ trait Builder {
      * @param string $joiner
      * @return string
      * @access public
-     * 
+     *
      */
-    public function joinWithImploder(array $array = [], $joiner) {
+    public function joinWithImploder(array $array = [], $joiner)
+    {
 
         return join($joiner, $array);
     }
@@ -33,7 +35,8 @@ trait Builder {
      * @param unknown $dot
      * @return string
      */
-    public function joinDotToUrl($dot) {
+    public function joinDotToUrl($dot)
+    {
 
         return $this->replaceString(".", "/", $dot);
     }
@@ -43,7 +46,8 @@ trait Builder {
      * @param array $url
      * @return string
      */
-    public function joinUrl(array $url = []) {
+    public function joinUrl(array $url = [])
+    {
 
         return $this->joinWithImploder($url, '/');
     }
@@ -53,31 +57,34 @@ trait Builder {
      * @param array $dor
      * @return string
      */
-    public function joinWithDot(array $dor = []) {
+    public function joinWithDot(array $dor = [])
+    {
 
         return $this->joinWithImploder($dot, '.');
     }
 
     /**
-     * 
+     *
      * @param mixed $search
      * @param mixed $replace
      * @param string $string
      * @return string
      * @access public
      */
-    public function replaceString($search, $replace, $string) {
+    public function replaceString($search, $replace, $string)
+    {
 
         return str_replace($search, $replace, $string);
     }
 
     /**
-     * 
+     *
      * @param string $url
      * @param string $action
      * @return array
      */
-    public function routeGenareteParams($url = '', $action) {
+    public function routeGenareteParams($url = '', $action)
+    {
 
         ## parametreler
         $params = [];
@@ -102,24 +109,26 @@ trait Builder {
     }
 
     /**
-     * 
+     *
      * @param array $replaces
      * @param array $params
      * @param string $url
      * @return string
      */
-    public function routeGenareteNewUrl($replaces, $params, $url, $action) {
+    public function routeGenareteNewUrl($replaces, $params, $url, $action)
+    {
 
-     
+
         $replaced = $this->replaceString($replaces, $params, $action);
-  
+
         if ($replaced == $url) {
 
             return true;
         }
     }
 
-    public function clearLastSlash($url) {
+    public function clearLastSlash($url)
+    {
 
         $len = strlen($url);
         if (substr($url, $len - 1, $len) == "/") {
@@ -134,10 +143,11 @@ trait Builder {
      * @param string $action
      * @return multitype:|unknown
      */
-    private function createArgumentKeys($action) {
+    private function createArgumentKeys($action)
+    {
 
         return array_filter(
-                $this->urlParser($action), function ($a) {
+            $this->urlParser($action), function ($a) {
 
             if (preg_match("/:([\w-%]+)/", $a, $find)) {
 

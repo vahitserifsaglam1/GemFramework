@@ -2,17 +2,18 @@
 
 /**
  * GemFramework Captcha oluşturma sınıfı
- *  
+ *
  * @package  Gem\Components;
  * @author  vahitserifsaglam <vahit.serif119@gmail.com>
- * 
+ *
  */
 
 namespace Gem\Components;
 
 use Gem\Components\Session;
 
-class Captcha {
+class Captcha
+{
 
     /**
      * Geni�li�i tutar
@@ -27,38 +28,40 @@ class Captcha {
     private $height = 200;
 
     /**
-     * 
+     *
      * @var array
      */
     private $font;
 
     /**
-     * 
+     *
      * @var int
      */
     private $min = 1;
 
     /**
-     * 
+     *
      * @var number
      */
     private $max = 9999999;
 
-    public function __construct($configs = []) {
+    public function __construct($configs = [])
+    {
 
         $this->setConfigs($configs);
     }
 
     /**
      * Ayar atamas� yapar
-     * @param array  $configs
+     * @param array $configs
      * @return \Myfc\Captcha
      */
-    public function setConfigs(array $configs = []) {
+    public function setConfigs(array $configs = [])
+    {
 
         $this->setWidth($configs['width']);
         $this->setHeight($configs['height']);
-        $this->setFont((isset($configs['font'])) ? $configs['font'] : 'public/fonts/HoboStd.otf' );
+        $this->setFont((isset($configs['font'])) ? $configs['font'] : 'public/fonts/HoboStd.otf');
 
 
         return $this;
@@ -68,18 +71,20 @@ class Captcha {
      * Geni�lik atamas� yapar
      * @param number $width
      */
-    public function setWidth($width = 200) {
+    public function setWidth($width = 200)
+    {
 
         $this->width = $width;
         return $this;
     }
 
     /**
-     * 
+     *
      * @param number $height
      * @return \Myfc\Captcha
      */
-    public function setHeight($height = 200) {
+    public function setHeight($height = 200)
+    {
 
         $this->height = $height;
         return $this;
@@ -90,29 +95,32 @@ class Captcha {
      * @param String $font
      * @return \Myfc\Captcha
      */
-    public function setFont($font) {
+    public function setFont($font)
+    {
 
         $this->font = $font;
         return $this;
     }
 
     /**
-     * 
+     *
      * @param number $max
      * @return \Myfc\Captcha
      */
-    public function setMax($max = 1) {
+    public function setMax($max = 1)
+    {
 
         $this->max = $max;
         return $this;
     }
 
     /**
-     * 
+     *
      * @param number $min
      * @return \Myfc\Captcha
      */
-    public function setMin($min = 1) {
+    public function setMin($min = 1)
+    {
 
         $this->min = $min;
         return $this;
@@ -122,7 +130,8 @@ class Captcha {
      * geni�lik de�erlerini d�nd�r�r
      * @return number
      */
-    public function getWidth() {
+    public function getWidth()
+    {
 
         return $this->width;
     }
@@ -131,7 +140,8 @@ class Captcha {
      * Font u getirir
      * @return multitype:String
      */
-    public function getFont() {
+    public function getFont()
+    {
 
         return $this->font;
     }
@@ -140,7 +150,8 @@ class Captcha {
      * metnin ba�lang�� de�erlerini d�nd�r�r
      * @return number
      */
-    public function getMin() {
+    public function getMin()
+    {
 
         return $this->min;
     }
@@ -149,7 +160,8 @@ class Captcha {
      * metnin geni�lik de�erini d�nd�r�r
      * @return int
      */
-    public function getMax() {
+    public function getMax()
+    {
 
         return $this->max;
     }
@@ -158,7 +170,8 @@ class Captcha {
      * uzunluk de�erini d�nd�r�r
      * @return number
      */
-    public function getHeight() {
+    public function getHeight()
+    {
 
         return $this->height;
     }
@@ -166,7 +179,8 @@ class Captcha {
     /**
      * Captcha olu�turur
      */
-    public function generate() {
+    public function generate()
+    {
 
 
         $harfler = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "y", "x", "w", "z");
@@ -205,7 +219,8 @@ class Captcha {
         imagedestroy($resim);
     }
 
-    public static function check($string = '') {
+    public static function check($string = '')
+    {
 
         ($string === Session::get('captcha')) ? true : false;
     }

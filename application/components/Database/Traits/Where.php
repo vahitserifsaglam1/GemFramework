@@ -2,26 +2,26 @@
 
 namespace Gem\Components\Database\Traits;
 
-trait Where {
+trait Where
+{
 
     /**
-     * 
+     *
      * @param array $args
      * @param string $start
      * @return multitype:string multitype:mixed
      */
-    private function databaseStringBuilderWithStart(array $args, $start) {
+    private function databaseStringBuilderWithStart(array $args, $start)
+    {
 
         $s = '';
         $arr = [];
 
 
-
         foreach ($args as $arg) {
 
 
-
-            $s .= " {$arg[0]} {$arg[1]} ?";
+            $s .= " {$arg[0]} {$arg[1]} ? $start";
             $arr[] = $arg[2];
         }
 
@@ -31,6 +31,7 @@ trait Where {
             $s = $start . $s;
         }
 
+        $s = rtrim($s, $start);
 
         return [
 
@@ -44,19 +45,18 @@ trait Where {
      * @param unknown $set
      * @return multitype:string multitype:array
      */
-    private function databaseSetBuilder($set) {
+    private function databaseSetBuilder($set)
+    {
 
 
         $s = '';
         $arr = [];
 
 
-
         foreach ($set as $key => $value) {
             $s .= "$key = ?,";
             $arr[] = $value;
         }
-
 
 
         return [

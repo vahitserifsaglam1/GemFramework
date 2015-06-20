@@ -5,11 +5,12 @@ namespace Gem\Components\File\App;
 /**
  *
  * @author vahit�erif
- * 
+ *
  *  S�n�flarda klas�rlerin i�eriklerini, klas�rlerini listelemek i�in kullan�lacak
- *        
+ *
  */
-class DirectoryIterator {
+class DirectoryIterator
+{
     /*
      *  @var $folder
      *  
@@ -22,11 +23,12 @@ class DirectoryIterator {
     public $mixed = [];
 
     /**
-     * 
+     *
      * S�n�f� ba�lat�r e�er bir dosya giri�i yap�lm��sa onu listeler
      * @param null $folder
      */
-    public function __construct($folder = null) {
+    public function __construct($folder = null)
+    {
 
         if ($folder !== null) {
 
@@ -35,11 +37,12 @@ class DirectoryIterator {
     }
 
     /**
-     * 
+     *
      * @param string $folder
      * @return \Myfc\App\DirectoryIterator
      */
-    public function read($folder = '') {
+    public function read($folder = '')
+    {
 
         if (!strstr($folder, "/")) {
 
@@ -60,14 +63,15 @@ class DirectoryIterator {
      * Klas�rdeki dosyalar� okur
      * @return string
      */
-    public function readFiles() {
+    public function readFiles()
+    {
 
         $folder = $this->folder;
 
 
         $glob = glob($folder . "*", GLOB_NOSORT);
 
-        $glob = array_filter($glob, function($key) {
+        $glob = array_filter($glob, function ($key) {
 
             $key = realpath($key);
 
@@ -84,7 +88,8 @@ class DirectoryIterator {
     /**
      * Klas�rdeki klas�rleri okur
      */
-    public function readFolders() {
+    public function readFolders()
+    {
 
         $folder = $this->folder;
 
@@ -94,42 +99,46 @@ class DirectoryIterator {
     }
 
     /**
-     * Mixed 
+     * Mixed
      */
-    public function mix() {
+    public function mix()
+    {
 
         $this->mixed = array_merge($this->files, $this->folders);
     }
 
     /**
-     *  
+     *
      *   Dosyalar� D�nd�r�r
-     * 
+     *
      * @return multitype:
      */
-    public function getMixed() {
+    public function getMixed()
+    {
 
         return $this->mixed;
     }
 
     /**
-     *  
+     *
      *   Klas�rleri D�nd�r�r
-     * 
+     *
      * @return multitype:
      */
-    public function getFolders() {
+    public function getFolders()
+    {
 
         return $this->folders;
     }
 
     /**
-     *  
+     *
      *   T�m i�eri�i D�nd�r�r
-     *  
+     *
      * @return multitype:
      */
-    public function getFiles() {
+    public function getFiles()
+    {
 
         return $this->files;
     }
@@ -139,7 +148,8 @@ class DirectoryIterator {
      * @param string $realpath
      * @return boolean
      */
-    public function isDot($realpath = '') {
+    public function isDot($realpath = '')
+    {
 
         if ($realpath == "." || $realpath == "..") {
 
@@ -155,7 +165,8 @@ class DirectoryIterator {
      * @param unknown $file
      * @return boolean
      */
-    public function isFile($file) {
+    public function isFile($file)
+    {
 
         if (file_exists($file)) {
 
@@ -172,7 +183,8 @@ class DirectoryIterator {
      * @param unknown $folder
      * @return boolean
      */
-    public function isFolder($folder) {
+    public function isFolder($folder)
+    {
 
         if (file_exists($folder)) {
 
@@ -189,12 +201,13 @@ class DirectoryIterator {
      * Aranan bir t�rdeki i�erikleri d�nd�r�r
      * @param string $type
      */
-    public function getType($type = '') {
+    public function getType($type = '')
+    {
 
         $files = $this->files;
 
 
-        $filter = array_filter($files, function ($key) use($type) {
+        $filter = array_filter($files, function ($key) use ($type) {
 
             if (strstr($key, $type)) {
 
@@ -209,15 +222,17 @@ class DirectoryIterator {
      * Adapter s�n�f�n�n s�n�f� i�erikleyebilmesi i�in kullan�lacak
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
 
         return "iterator";
     }
 
     /**
-     * 
+     *
      */
-    public function boot() {
+    public function boot()
+    {
 
         //
     }

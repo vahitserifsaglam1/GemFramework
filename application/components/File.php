@@ -9,9 +9,10 @@ use Exception;
 
 /**
  * @author vahit�erif
- * 
+ *
  */
-class File {
+class File
+{
 
     public $folder;
     public $adapter;
@@ -19,10 +20,11 @@ class File {
 
     /**
      *   Ba�lat�c� fonksiyon
-     *   
+     *
      *   Adapter a gerekli s�n�flar� y�kler
      */
-    public function __construct() {
+    public function __construct()
+    {
 
         $this->adapter = new Adapter('filesystem');
 
@@ -31,15 +33,17 @@ class File {
     }
 
     /**
-     * 
+     *
      * @return Filesystem
      */
-    public static function boot() {
+    public static function boot()
+    {
 
         return new static();
     }
 
-    public function getIndex($path) {
+    public function getIndex($path)
+    {
 
         $path = $this->inPath($path);
 
@@ -53,7 +57,8 @@ class File {
      * @param unknown $type
      * @param string $path
      */
-    public function getType($type, $path = null) {
+    public function getType($type, $path = null)
+    {
 
         if ($path == null) {
 
@@ -65,13 +70,13 @@ class File {
 
         return $this->adapter->iterator->getType($type);
     }
-    
-    
-    public function listDirContent($path, $type = '')
+
+
+    public function listDir($path, $type = '')
     {
-        
-       $path = $this->inPath($path);
-        
+
+        $path = $this->inPath($path);
+
     }
 
     /**
@@ -79,7 +84,8 @@ class File {
      * @param unknown $path
      * @return Filesystem
      */
-    public function in($path) {
+    public function in($path)
+    {
 
         $son = substr($path, strlen($path) - 1, strlen($path));
 
@@ -95,13 +101,14 @@ class File {
     }
 
     /**
-     *  
+     *
      *   Girilen path yollar�n� in e d�nd�r�r
-     * 
+     *
      * @param unknown $path
      * @return string|unknown
      */
-    public function inPath($path) {
+    public function inPath($path)
+    {
 
         if ($this->in !== null) {
 
@@ -112,7 +119,8 @@ class File {
         }
     }
 
-    public function getInPath() {
+    public function getInPath()
+    {
 
         return $this->in;
     }
@@ -122,11 +130,12 @@ class File {
      * @param unknown $path
      * @return boolean
      */
-    public function exists($path) {
+    public function exists($path)
+    {
 
         $path = $this->inPath($path);
 
-        return ( file_exists($path) ) ? true : false;
+        return (file_exists($path)) ? true : false;
     }
 
     /**
@@ -135,7 +144,8 @@ class File {
      * @param string $remote
      * @return string|unknown
      */
-    public function read($filename, $remote = false) {
+    public function read($filename, $remote = false)
+    {
         $filename = $this->inPath($filename);
         if (!$remote) {
             if (file_exists($filename)) {
@@ -154,13 +164,14 @@ class File {
     }
 
     /**
-     * Dosyan�n i�eri�ini de�i�tirir
-     * @param unknown $data
-     * @param unknown $filename
-     * @param string $append
+     * Dosyaya metni girmeye yarar
+     * @param string $data
+     * @param mixed $filename
+     * @param boolean|string $append
      * @return boolean
      */
-    public function write($filename, $data, $append = false) {
+    public function write($filename, $data, $append = false)
+    {
 
         $filename = $this->inPath($filename);
 
@@ -181,7 +192,8 @@ class File {
      * Yeni bir klas�r olu�turur
      * @param unknown $path
      */
-    public function createDirectory($path) {
+    public function createDirectory($path)
+    {
         $this->mkdir($path);
     }
 
@@ -190,7 +202,8 @@ class File {
      * @param unknown $path
      * @return unknown
      */
-    public function create($path) {
+    public function create($path)
+    {
 
         $path = $this->inPath($path);
 
@@ -200,6 +213,15 @@ class File {
         }
 
         return $path;
+
+    }
+
+    public function chmod($file, $mode = 0744){
+
+        $file = $this->inPath($file);
+
+        chmod($file, $mode);
+
     }
 
     /**
@@ -207,7 +229,8 @@ class File {
      * @param unknown $path
      * @return boolean
      */
-    public function mkdir($path) {
+    public function mkdir($path)
+    {
 
         $path = $this->inPath($path);
 
@@ -226,7 +249,8 @@ class File {
      * @param unknown $src
      * @return boolean
      */
-    public function delete($src) {
+    public function delete($src)
+    {
         $src = $this->inPath($src);
         if (is_dir($src) && $src != "") {
             $result = $this->Listing($src);
@@ -269,7 +293,8 @@ class File {
      * @param unknown $dest
      * @return boolean
      */
-    function copy($src, $dest) {
+    function copy($src, $dest)
+    {
 
         $src = $this->inPath($src);
 
@@ -297,7 +322,8 @@ class File {
         }
     }
 
-    public function move($src, $dest) {
+    public function move($src, $dest)
+    {
 
         $scr = $this->inPath($src);
 
@@ -329,7 +355,8 @@ class File {
         @unlink($src);
     }
 
-    public function inc($path, $parametres = null) {
+    public function inc($path, $parametres = null)
+    {
 
         $path = $this->inPath($path);
 
@@ -341,16 +368,27 @@ class File {
         return include $path;
     }
 
+    public function ftime($path){
+
+        $path = $this->inPath($path);
+
+        return filemtime($path);
+
+    }
+
+
+
     /**
      * S�n�fta bulunmayan fonksiyonlar �nce iterator s�n�f�nda aran�r
-     * E�er o s�n�fta bulunmassa 
+     * E�er o s�n�fta bulunmassa
      * finder s�n�f�nda aran�r ve oradada yoksa hata mesaj� verilir
      * @param unknown $name
      * @param unknown $params
      * @throws Exception
      * @return mixed
      */
-    public function __call($name, $params) {
+    public function __call($name, $params)
+    {
         if (method_exists($this->adapter->iterator, $name)) {
 
             return call_user_func_array([$this->adapter->iterator, $name], $params);

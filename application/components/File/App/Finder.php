@@ -7,11 +7,12 @@ use Exception;
 /**
  *
  * @author vahit�erif
- * 
+ *
  *  Seçilen dosyanın alt, üst , tip , boyut vs �zellikleri bulunur
- *        
+ *
  */
-class Finder {
+class Finder
+{
 
     public $file;
     private $type;
@@ -21,7 +22,8 @@ class Finder {
      * S�n�f� ba�lat�r ve e�er file null girilmemi�se dosyan�n �zelliklerini indexler
      * @param string $file
      */
-    public function __construct($file = null) {
+    public function __construct($file = null)
+    {
 
         if ($file !== null) {
 
@@ -34,7 +36,8 @@ class Finder {
      * Dosyan�n �zelliklerini okur
      * @param unknown $file
      */
-    public function indexFile($file = '') {
+    public function indexFile($file = '')
+    {
 
         if (file_exists($file)) {
 
@@ -61,7 +64,8 @@ class Finder {
      * @param string $file
      * @return mixed
      */
-    protected function nameFinder($file = null) {
+    protected function nameFinder($file = null)
+    {
 
         if (strstr($file, "/")) {
 
@@ -95,7 +99,8 @@ class Finder {
      * @param unknown $file
      * @return mixed
      */
-    protected function typeFinder($file) {
+    protected function typeFinder($file)
+    {
 
         if ($file === $this->file) {
 
@@ -124,7 +129,8 @@ class Finder {
      * @param number $folder
      * @return string|boolean
      */
-    public function parentFolder($folder = 1) {
+    public function parentFolder($folder = 1)
+    {
 
         if ($folder > 1) {
 
@@ -146,16 +152,18 @@ class Finder {
     }
 
     /**
-     * 
+     *
      * @param string $file
      * @return string
      */
-    public function get() {
+    public function get()
+    {
 
         return $this->index;
     }
 
-    protected function realPathFinder($file = '') {
+    protected function realPathFinder($file = '')
+    {
 
         return realpath($file);
     }
@@ -164,7 +172,8 @@ class Finder {
      * Adapter dan �a��r�l�rken kullan�lacak ismi
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
 
         return "finder";
     }
@@ -172,12 +181,14 @@ class Finder {
     /**
      * Adapter standart fonksiyonlar�
      */
-    public function boot() {
+    public function boot()
+    {
 
         //
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
 
         if (isset($this->index[$name])) {
 

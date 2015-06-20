@@ -1,25 +1,26 @@
 <?php
 
 /**
- * 
+ *
  *   GemFramework dosyalarda Controller ve Model leri �a��rmakta kullan�lacak
- *   
- *   @package Gem\Components
- *   
- *   @author vahitserifsaglam <vahit.serif119@gmail.com>
- *   
- *   @copyright MyfcYazilim
- *   
- * 
+ *
+ * @package Gem\Components
+ *
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
+ * @copyright MyfcYazilim
+ *
+ *
  */
 
 namespace Gem\Components;
 
-class App {
+class App
+{
 
     const CONTROLLER = 'Controller';
     const MODEL = 'Model';
- 
+
 
     /**
      * Controller, method yada bir s�n�f �a��r�r
@@ -28,14 +29,13 @@ class App {
      * @return mixed
      * @access public
      */
-    public static function uses($names, $type) {
+    public static function uses($names, $type)
+    {
 
-        $names = (array) $names;
-
+        $names = (array)$names;
 
 
         foreach ($names as $name) {
-
 
 
             switch ($type) {
@@ -68,64 +68,37 @@ class App {
      * Html da kullan�lmak i�in base kodunu olu�turur
      * @return string
      */
-    public static function base() {
+    public static function base()
+    {
         $config = self::getConfigStatic('configs')['url'];
 
         return '<base href="' . $config . '" target="_blank">';
     }
 
     /**
-     * 
+     *
      * @param string $controller
      * @return null|object
      */
-    private static function includeController($controller) {
+    private static function includeController($controller)
+    {
 
-        $controllerName = $controller;
+        $controllername = 'Gem\\Controllers\\' . $controller;
 
-        $controllerPath = APP . 'controllers/' . $controllerName . '.php';
+        return new $controllername;
 
-        if (file_exists($controllerPath)) {
-
-            if (!class_exists($controller)) {
-
-                include $controllerPath;
-            }
-
-            $controller = new $controllerName;
-        } else {
-
-            $controller = null;
-        }
-
-        return $controller;
     }
 
     /**
-     * 
+     *
      * @param string $model
      * @return null|object
      */
-    private function includeModel($model) {
+    private function includeModel($model)
+    {
 
-        $modelName = $model;
-
-        $modelPath = APP . 'models/' . $modelName . '.php';
-
-        if (file_exists($modelPath)) {
-
-            if (!class_exists($model)) {
-
-                include $modelPath;
-            }
-
-            $model = new $modelName;
-        } else {
-
-            $model = null;
-        }
-
-        return $model;
+        $modelname = 'Gem\\Models\\' . $model;
+        return new $modelname;
     }
 
 }

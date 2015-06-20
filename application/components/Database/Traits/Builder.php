@@ -2,7 +2,8 @@
 
 namespace Gem\Components\Database\Traits;
 
-trait Builder {
+trait Builder
+{
 
     /**
      * Sorgu olu�turur
@@ -10,7 +11,8 @@ trait Builder {
      * @param array $args
      * @return mixed
      */
-    private function buildQuery($pattern, $args) {
+    private function buildQuery($pattern, $args)
+    {
 
 
         if (count($args['parameters']) > 0) {

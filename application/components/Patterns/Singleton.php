@@ -3,27 +3,30 @@
 /**
  * Bu dosya GemFramework 'un Singleton Desing Pattern
  * S�n�f�na ait bir dosyad�r, Singleton Pattern bu s�n�f �zerinden �al���r.
- * 
+ *
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
  * @package Gem\Components\Patterns
  * @copyright MyfcYaz�l�m
- *  
+ *
  */
 
 namespace Gem\Components\Patterns;
+
 use ReflectionClass;
-class Singleton {
+
+class Singleton
+{
 
     /**
-     * 
+     *
      * @var Object, Integer
      * @access private
-     * 
-     * S�n�flar�n instancelerini ve olu�an toplam say�y� tutar
-     * 
+     *
+     * Sınıfların toplam instance sayısını tutar
+     *
      */
     private static $instances,
-            $instances_count = 0;
+        $instances_count = 0;
 
     /**
      * Yeni bir instance olu�turur
@@ -32,16 +35,16 @@ class Singleton {
      * @access public
      * @return Object
      */
-    static function make($instance, $parametres) {
+    static function make($instance, array $parametres = [])
+    {
 
 
-        if (!is_object($instance)){
+        if (!is_object($instance)) {
             $classs = new ReflectionClass($instance);
-            $setParameters =  $classs->newInstanceArgs($parametres);
-            $instance_name =  $instance;
-            $instance =   $setParameters;
-        }
-        else
+            $setParameters = $classs->newInstanceArgs($parametres);
+            $instance_name = $instance;
+            $instance = $setParameters;
+        } else
             $instance_name = get_class($instance);
 
         if (!isset(self::$instances[$instance_name])) {

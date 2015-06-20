@@ -1,25 +1,27 @@
 <?php
 
 /**
- *  
+ *
  *  GemFramework Limit Builder -> limit sorgular� burada olu�tururlur
- *  
- *  @package  Gem\Components\Database\Builders;
- *  
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- *  
- * 
+ *
+ * @package  Gem\Components\Database\Builders;
+ *
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
+ *
  */
 
 namespace Gem\Components\Database\Builders;
 
 use Gem\Components\Helpers\String\Parser;
 
-class Limit {
+class Limit
+{
 
     use Parser;
 
-    public function limit($limit) {
+    public function limit($limit)
+    {
 
 
         if (is_string($limit)) {

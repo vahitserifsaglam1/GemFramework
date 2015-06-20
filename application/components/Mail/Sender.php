@@ -1,16 +1,16 @@
 <?php
 
 /**
- * 
+ *
  *  Bu Sınıf GemFramework' e ait bir sınıftır, istenilirse kopyalanılıp ayrı olarak kullanılabilir.
- * 
+ *
  *  Bu sınıf ile phpmailer altyapısı ile stmp üzerinden mail gönderilir.
- * 
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- *  @copyright (c) 2015, vahit serif saglam
- *  @package Gem\Components\Mail
- *  @see https://github.com/PHPMailer/PHPMailer
- * 
+ *
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ * @copyright (c) 2015, vahit serif saglam
+ * @package Gem\Components\Mail
+ * @see https://github.com/PHPMailer/PHPMailer
+ *
  */
 
 namespace Gem\Components\Mail;
@@ -21,7 +21,8 @@ use Gem\Components\Mail\Content\Manager;
 use PHPMailer;
 use RuntimeException;
 
-class Sender extends PHPMailer {
+class Sender extends PHPMailer
+{
 
     use Builder,
         Config;
@@ -33,13 +34,14 @@ class Sender extends PHPMailer {
      * @param array|string $options
      * @param boolean $exceptions
      */
-    public function __construct($options = [], $exceptions = false) {
+    public function __construct($options = [], $exceptions = false)
+    {
         $this->getConfig('mail');
         parent::__construct($exceptions);
         $this->isSMTP();
         $this->SMTPAuth = true;
         $this->setOptions(
-                $this->getOptions($options)
+            $this->getOptions($options)
         );
     }
 
@@ -49,14 +51,15 @@ class Sender extends PHPMailer {
      * @param array|string $options
      * @return array
      */
-    private function getOptions($options) {
+    private function getOptions($options)
+    {
 
         if (is_array($options)) {
 
             return $options;
         } elseif (is_string($options)) {
             $configs = $this->configs;
-            $obje = (object) $configs;
+            $obje = (object)$configs;
             $ex = explode(".", $options);
             $first = $ex[0];
             unset($first);
@@ -69,7 +72,8 @@ class Sender extends PHPMailer {
      * PHPMailer sınıfa bazı bilgileri gönderir.
      * @param array $options
      */
-    private function setOptions(array $options = []) {
+    private function setOptions(array $options = [])
+    {
 
         foreach ($options as $key => $value) {
 
@@ -78,26 +82,28 @@ class Sender extends PHPMailer {
     }
 
     /**
-     * 
+     *
      * Mesajın kimden gittiğini gösteren bilgiler atanır
      * @param string $adress
      * @param string $name
      * @return \Gem\Components\Mail\Sender
      */
-    public function from($address, $name = '') {
+    public function from($address, $name = '')
+    {
 
         $this->setFrom($address, $name);
         return $this;
     }
 
     /**
-     * 
+     *
      * Sınıfın kime gideceğini atar, birden çok kullanımda birden çok adress atanır
      * @param string $address
      * @param string $name
      * @return \Gem\Components\Mail\Sender
      */
-    public function to($address, $name = '') {
+    public function to($address, $name = '')
+    {
 
         $this->addAddress($address, $name);
         return $this;
@@ -108,7 +114,8 @@ class Sender extends PHPMailer {
      * @param string $subject
      * @return \Gem\Components\Mail\Sender
      */
-    public function subject($subject) {
+    public function subject($subject)
+    {
 
         $this->Subject = $subject;
         return $this;
@@ -119,7 +126,8 @@ class Sender extends PHPMailer {
      * @param string $charset
      * @return \Gem\Components\Mail\Sender
      */
-    public function charset($charset) {
+    public function charset($charset)
+    {
 
         $this->CharSet = $charset;
         return $this;
@@ -130,7 +138,8 @@ class Sender extends PHPMailer {
      * @param Manager $content
      * @return \Gem\Components\Mail\Sender
      */
-    public function content(Manager $content) {
+    public function content(Manager $content)
+    {
 
         $contents = $content->getContent();
         $this->msgHTML($contents);
@@ -143,7 +152,8 @@ class Sender extends PHPMailer {
      * @return boolean
      * @throws RuntimeException
      */
-    public function sendMail() {
+    public function sendMail()
+    {
 
 
         if ($this->send()) {

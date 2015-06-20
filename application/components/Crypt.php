@@ -1,11 +1,11 @@
 <?php
 
 /**
- *  
+ *
  *  GemFramework Crypte sınıfı, şifrelenmiş metinler üretmek için kullanılır
- *  @package Gem\Components
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- * 
+ * @package Gem\Components
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
  */
 
 namespace Gem\Components;
@@ -13,7 +13,8 @@ namespace Gem\Components;
 use Exception;
 use Gem\Components\Helpers\Server;
 
-class Crypt {
+class Crypt
+{
 
     use Server;
     private $securityKey;
@@ -21,7 +22,8 @@ class Crypt {
     private $rand = MCRYPT_RAND;
     private $alogirtym = MCRYPT_RIJNDAEL_256;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         if (!function_exists('mcrypt_create_iv')) {
 
@@ -34,7 +36,8 @@ class Crypt {
     /**
      * GÃ¼venlik anahtarÄ± oluÅŸtrucu
      */
-    private function securityKeyCreator() {
+    private function securityKeyCreator()
+    {
 
         $url = $this->findBasePath();
         $ip = $this->getIP();
@@ -44,11 +47,11 @@ class Crypt {
 
             $letters[$j] = $i;
         }
-        
+        $bas = substr($ip, 0, 2);
         $con = $letters[$len];
-        $son = substr($ip, $len-1, 1);
-        $con2 = $letters[$len+$ip];
-        $key = $url . $con.$con2 . $ip;
+        $son = substr($ip, $len - 1, 1);
+        $con2 = $letters[$len + $ip];
+        $key = $url . $con . $con2 . $ip . $bas;
         $this->securityKey = md5($key);
     }
 
@@ -57,7 +60,8 @@ class Crypt {
      * @param string $value
      * @return string
      */
-    public function encode($value = '') {
+    public function encode($value = '')
+    {
 
         if (is_string($value)) {
 
@@ -77,14 +81,16 @@ class Crypt {
      *
      * Å�ifrelenmiÅŸ metin oluÅŸturur
      */
-    private function encrypt($value = '', $iv) {
+    private function encrypt($value = '', $iv)
+    {
 
         $value = $this->returnCleanAndHexedValue($value);
 
         return @mcrypt_encrypt($this->alogirtym, $this->securityKey, $value, $this->mode, $iv);
     }
 
-    private function payloadCreator($creypted, $iv) {
+    private function payloadCreator($creypted, $iv)
+    {
 
 
         return array(
@@ -98,13 +104,15 @@ class Crypt {
      * @param string $value
      * @return string
      */
-    private function returnCleanAndHexedValue($value = '') {
+    private function returnCleanAndHexedValue($value = '')
+    {
 
         $value = trim($value);
         return $value;
     }
 
-    private function hexValue($value) {
+    private function hexValue($value)
+    {
 
         if (function_exists('bin2hex')) {
 
@@ -119,7 +127,8 @@ class Crypt {
      * Randomizer i dÃ¶ndÃ¼rÃ¼r
      * @return int
      */
-    private function getRandomizer() {
+    private function getRandomizer()
+    {
 
         if ($this->rand) {
 
@@ -131,12 +140,14 @@ class Crypt {
      * Iv uzunluÄŸunu DÃ¶ndÃ¼rÃ¼r
      * @return int
      */
-    private function getIvSize() {
+    private function getIvSize()
+    {
 
         return mcrypt_get_iv_size($this->alogirtym, $this->mode);
     }
 
-    public function decode($value = '') {
+    public function decode($value = '')
+    {
 
 
         if (is_string($value)) {
@@ -153,11 +164,11 @@ class Crypt {
      *
      * PayloadÄ± parÃ§alamakta kullanÄ±lÄ±r
      */
-    private function parsePayload($value) {
+    private function parsePayload($value)
+    {
 
 
-        $based = (array) json_decode(base64_decode($value));
-
+        $based = (array)json_decode(base64_decode($value));
 
 
         if (isset($based['value']) && isset($based['iv'])) {
@@ -175,13 +186,13 @@ class Crypt {
      * @param array $payload
      * @return string
      */
-    private function decrypt(array $payload) {
+    private function decrypt(array $payload)
+    {
 
 
         $iv = $payload['iv'];
 
         $value = $payload['value'];
-
 
         $value = $this->returnCleanAndDeHexedValue($value);
 
@@ -193,7 +204,8 @@ class Crypt {
      * @return string
      * Parametreyi temizler ve hexden kurtarÄ±r
      */
-    private function returnCleanAndDeHexedValue($value) {
+    private function returnCleanAndDeHexedValue($value)
+    {
 
         $value = trim($value);
 
@@ -206,7 +218,8 @@ class Crypt {
      * @return string
      * Parametreyi hex halinden kurtarÄ±r
      */
-    private function deHexValue($value) {
+    private function deHexValue($value)
+    {
 
 
         if (function_exists('hex2bin')) {

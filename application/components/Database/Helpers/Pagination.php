@@ -1,13 +1,13 @@
 <?php
 
 /**
- * 
+ *
  *  Gem Framework Pagination sınıfı -> Sayfalama İşlemlerinde Kullanılır
- * 
- *  @package Gem\Components\Database\Helpers
- *  @copyright (c) 2015, MyfcYazilim
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- *  @version 1.0
+ *
+ * @package Gem\Components\Database\Helpers
+ * @copyright (c) 2015, MyfcYazilim
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ * @version 1.0
  */
 
 namespace Gem\Components\Database\Helpers;
@@ -15,7 +15,8 @@ namespace Gem\Components\Database\Helpers;
 use Gem\Components\Helpers\String\Builder;
 use Gem\Components\Helpers\Config;
 
-class Pagination {
+class Pagination
+{
 
     use Builder,
         Config;
@@ -24,24 +25,29 @@ class Pagination {
     private $count;
     private $rep;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         $this->options = $this->getConfig('pagination');
+
     }
 
-    public function setCount($count) {
+    public function setCount($count)
+    {
 
         $this->count = $count;
         return $this;
     }
 
-    private function chieldString($i, $url, $search) {
+    private function chieldString($i, $url, $search)
+    {
 
         $url = $this->replaceString($search, $i, $url);
         return "\n <a class='{$this->options['chieldClass']}' href='$url'>$i</a>";
     }
 
-    public function paginate($action) {
+    public function paginate($action)
+    {
 
 
         $url = $this->clearLastSlash($action['url']);

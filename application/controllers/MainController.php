@@ -10,6 +10,8 @@
  * 
  */
 
+namespace Gem\Controllers;
+
 use Gem\Components\View;
 use Gem\Components\App;
 
@@ -32,6 +34,7 @@ class MainController{
      * 
      * Controller'in modelini atar.
      * @param mixed $model
+     * @return mixed
      */
     public function model($model)
     {

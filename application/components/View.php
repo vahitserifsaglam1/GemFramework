@@ -1,9 +1,9 @@
 <?php
 
 /**
- * 
+ *
  *  GemFramework View S�n�f� -> G�r�nt� dosyalar� �retmek de kullan�l�r
- *  
+ *
  */
 
 namespace Gem\Components;
@@ -13,14 +13,16 @@ use Gem\Components\Helpers\String\Builder;
 use Gem\Components\File;
 use Exception;
 
-class View {
+class View
+{
 
     use Parser,
         Builder;
 
     private $params, $fileName, $autoload = false, $file;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         $this->file = File::boot();
         $this->file->in(VIEW);
@@ -36,7 +38,8 @@ class View {
      * @param array $variables
      * @throws Exception
      */
-    public function make($fileName, $variables) {
+    public function make($fileName, $variables)
+    {
 
 
         if (strstr($fileName, ".")) {
@@ -52,22 +55,24 @@ class View {
         return $this;
     }
 
-    public function autoload($au = false) {
+    public function autoload($au = false)
+    {
 
         $this->autoload = $au;
         return $this;
     }
 
     /**
-     * 
+     *
      * @param array $language
      * @return \Gem\Components\View
-     * 
+     *
      *  [ 'dil' => [
      *   'file1','file2'
      *  ]
      */
-    public function language($language) {
+    public function language($language)
+    {
 
         if (count($language) > 0 && is_array($language)) {
 
@@ -89,7 +94,6 @@ class View {
         }
 
 
-
         return $this;
     }
 
@@ -97,11 +101,11 @@ class View {
      * Çıktıyı oluşturur
      * @throws Exception
      */
-    public function execute() {
+    public function execute()
+    {
 
         $fileName = $this->viewFilePath($this->fileName);
         $variables = $this->params;
-
 
 
         if ($this->file->exists($fileName)) {
@@ -114,11 +118,11 @@ class View {
                 if ($this->file->exists($file)) {
 
                     $this->file->inc($file, $variables);
-                   
+
                 }
             }
 
-             $this->file->inc($fileName, $variables);
+            $this->file->inc($fileName, $variables);
 
             ## footer dosyaı yüklemesi
             if ($this->autoload === true) {
@@ -137,22 +141,24 @@ class View {
     }
 
     /**
-     * 
+     *
      * @param string $path
      * @return string
      */
-    private function viewFilePath($path) {
+    private function viewFilePath($path)
+    {
 
         return $path . '.php';
     }
 
     /**
-     * 
+     *
      * @param string $path
      * @return string
      * @access private
      */
-    private function autoloadGenareteFilePath($path) {
+    private function autoloadGenareteFilePath($path)
+    {
 
         $filePath = $this->joinDotToUrl($path);
 

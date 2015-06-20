@@ -6,18 +6,18 @@ ob_start();
 /**
  * 
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
- * @copyright MyfcYazýlým
+ * @copyright MyfcMedya
  * 
  * 
- *  PHP 5.6 a göre hazýrlanmýþ olan bu Frameworkde
- *  PHP 'in tüm imkanlarýný, tüm syntaxlarý kullanýlmaya çalýþýlmýþtýr.
+ *  PHP 5.6 a gï¿½re hazï¿½rlanmï¿½ï¿½ olan bu Frameworkde
+ *  PHP 'in tï¿½m imkanlarï¿½nï¿½, tï¿½m syntaxlarï¿½ kullanï¿½lmaya ï¿½alï¿½ï¿½ï¿½lmï¿½ï¿½tï¿½r.
  * 
  */
 
   include 'vendor/autoload.php';
   
   
-  ## baþlangýç dosyasýnýn yüklenmesi
+  ## baï¿½langï¿½ï¿½ dosyasï¿½nï¿½n yï¿½klenmesi
   
   include "system/bootstrap.php";
   

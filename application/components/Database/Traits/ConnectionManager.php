@@ -1,16 +1,17 @@
 <?php
 /**
- * 
+ *
  *  GemFramework Connection Manager Trait, veritabanı baağlantısını başlatır ve sonlandırılması
  *  ması bu trait de gerçekleşir
- *  
- *  @package  Gem\Components\Database\Traits;
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
+ * @package  Gem\Components\Database\Traits;
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
 
 namespace Gem\Components\Database\Traits;
 
-trait ConnectionManager {
+trait ConnectionManager
+{
 
     private $connection;
     private $connectedTable;
@@ -18,7 +19,8 @@ trait ConnectionManager {
     /**
      * Ba�lant� sonland�r�ld�
      */
-    public function close() {
+    public function close()
+    {
 
         $this->connection = null;
     }
@@ -27,7 +29,8 @@ trait ConnectionManager {
      * Kullan�lacak tabloyu se�er
      * @param string $table
      */
-    public function connect($table) {
+    public function connect($table)
+    {
 
         $this->connectedTable = $table;
     }
@@ -36,16 +39,18 @@ trait ConnectionManager {
      * Se�ilen tabloyu d�nd�r�r
      * @return string
      */
-    public function getTable() {
+    public function getTable()
+    {
 
         return $this->connectedTable;
     }
 
     /**
-     * 
+     *
      * @return \PDO
      */
-    public function getConnection() {
+    public function getConnection()
+    {
 
         return $this->connection;
     }

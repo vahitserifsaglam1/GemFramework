@@ -1,31 +1,33 @@
 <?php
 
 /**
- * 
- *  GemFramework Veritaban� pdo instance olu�turma s�n�f� 
- *  
- *  @package Gem\Components\Database
- *  
- *  @author vahitserifsaglam1 <vahit.serif119@gmail.com>
- *  
- *  @copyright MyfcYazilim
- * 
+ *
+ *  GemFramework Veritaban� pdo instance olu�turma s�n�f�
+ *
+ * @package Gem\Components\Database
+ *
+ * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
+ *
+ * @copyright MyfcYazilim
+ *
  */
 
 namespace Gem\Components\Database;
 
 use PDO;
 
-class Starter {
+class Starter
+{
 
-    public function __construct($options = []) {
+    public function __construct($options = [])
+    {
 
 
-        $host = $options['host'] ? : '';
-        $database = $options['db'] ? : '';
-        $username = $options['username'] ? : '';
-        $password = $options['password'] ? : '';
-        $charset = $options['charset'] ? : 'utf-8';
+        $host = $options['host'] ?: '';
+        $database = $options['db'] ?: '';
+        $username = $options['username'] ?: '';
+        $password = $options['password'] ?: '';
+        $charset = $options['charset'] ?: 'utf-8';
 
 
         try {

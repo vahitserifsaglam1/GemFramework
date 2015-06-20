@@ -1,14 +1,14 @@
 <?php
 
 /**
- *  
- *  GemFramework Veritaban� s�n�f� ana s�n�f� 
- *  
+ *
+ *  GemFramework Veritaban� s�n�f� ana s�n�f�
+ *
  *  # builder lerle ve di�er altyap�larla ileti�imi sa�layacak
- *  
- *  @package Gem\Components\Database
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- * 
+ *
+ * @package Gem\Components\Database
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
  */
 
 namespace Gem\Components\Database;
@@ -22,13 +22,15 @@ use Gem\Components\Database\Mode\Insert;
 use Gem\Components\Database\Mode\Delete;
 use Gem\Components\Database\Traits\ModeManager;
 
-class Base extends Starter {
+class Base extends Starter
+{
 
     use ConnectionManager,
         Config,
         ModeManager;
 
-    public function __construct() {
+    public function __construct()
+    {
 
 
         $configs = $this->getConfig('db');
@@ -42,7 +44,8 @@ class Base extends Starter {
      * @return mixed
      * @access public
      */
-    public function read($table, callable $callable = null) {
+    public function read($table, callable $callable = null)
+    {
 
         $this->connect($table);
         $read = new Read($this);
@@ -55,7 +58,8 @@ class Base extends Starter {
      * @param callable $callable
      * @return mixed
      */
-    public function update($table, callable $callable = null) {
+    public function update($table, callable $callable = null)
+    {
 
         $this->connect($table);
         $update = new Update($this);
@@ -68,7 +72,8 @@ class Base extends Starter {
      * @param callable $callable
      * @return mixed
      */
-    public function insert($table, callable $callable = null) {
+    public function insert($table, callable $callable = null)
+    {
 
         $this->connect($table);
         $insert = new Insert($this);
@@ -81,7 +86,8 @@ class Base extends Starter {
      * @param callable $callable
      * @return mixed
      */
-    public function delete($table, callable $callable = null) {
+    public function delete($table, callable $callable = null)
+    {
 
         $this->connect($table);
         $delete = new Delete($this);
@@ -94,7 +100,8 @@ class Base extends Starter {
      * @param array $args
      * @return mixed
      */
-    public function __call($method, array $args = []) {
+    public function __call($method, array $args = [])
+    {
 
         if ($this->isMode($method)) {
 

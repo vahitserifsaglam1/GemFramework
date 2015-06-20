@@ -1,23 +1,24 @@
 <?php
 
 /**
- * 
+ *
  * GemFramework Server Helper -> $_SERVER ile ilgili işlemleri yapar
- * 
+ *
  * @package Gem\Components\Helpers
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
- * 
+ *
  */
 
 namespace Gem\Components\Helpers;
 
-trait Server {
+trait Server
+{
 
     public $url;
 
     /**
      * @var array
-     *  Ã–zel arama terimleri
+     *  Özel arama terimleri
      */
     public $server_filters = [
         'useragent' => 'HTTP_USER_AGENT',
@@ -36,7 +37,8 @@ trait Server {
      * @param string $name
      * @return unknown
      */
-    public function get($name = 'HTTP_HOST') {
+    public function get($name = 'HTTP_HOST')
+    {
         if (isset($_SERVER[$name])) {
             return $_SERVER[$name];
         }
@@ -44,14 +46,15 @@ trait Server {
 
     /**
      * Url i döndürür
-     * 
+     *
      * @return string
      */
-    public function getUrl() {
+    public function getUrl()
+    {
 
         $this->url = $_GET['url'];
 
-        return $this->url;
+        return xss_protection($this->url);
     }
 
     /**
@@ -60,7 +63,8 @@ trait Server {
      * @throws \Exception
      * @return string
      */
-    public function __get($name) {
+    public function __get($name)
+    {
         if (isset($this->server_filters[$name])) {
             return $_SERVER[$this->server_filters[$name]];
         } else {
@@ -76,7 +80,8 @@ trait Server {
     /**
      * Çalıştığı url i bulur
      */
-    public function findBasePath() {
+    public function findBasePath()
+    {
 
         $host = $this->host;
         $uri = $this->uri;
@@ -84,13 +89,14 @@ trait Server {
         $url = "$type://$host . $uri";
         return $url;
     }
-    
+
 
     /**
      * Kullanıcının ip adresini döndürür
      * @return string
      */
-    public function getIP() {
+    public function getIP()
+    {
         if (getenv("HTTP_CLIENT_IP")) {
             $ip = getenv("HTTP_CLIENT_IP");
         } elseif (getenv("HTTP_X_FORWARDED_FOR")) {

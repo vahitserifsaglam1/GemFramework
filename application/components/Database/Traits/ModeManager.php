@@ -1,11 +1,11 @@
 <?php
 
 /**
- * 
+ *
  *  GemFramework Model Manager, Database Sınıfına yeni modlar eklenmesi bu sınıfta gerçekleşir
- *  
- *  @package  Gem\Components\Database\Traits;
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
+ * @package  Gem\Components\Database\Traits;
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
 
 namespace Gem\Components\Database\Traits;
@@ -13,17 +13,19 @@ namespace Gem\Components\Database\Traits;
 use Gem\Components\Database\Mode\ModeManager as Mode;
 use BadFunctionCallException;
 
-trait ModeManager {
+trait ModeManager
+{
 
     private $modes;
 
     /**
-     * 
+     *
      * Böyle bir mod varmı yokmu diye kontrol eder
      * @param string $modeName
      * @return boolean
      */
-    public function isMode($modeName) {
+    public function isMode($modeName)
+    {
 
         return isset($this->modes[$modeName]);
     }
@@ -33,7 +35,8 @@ trait ModeManager {
      * @param string $modeName
      * @return mixed
      */
-    public function getMode($modeName) {
+    public function getMode($modeName)
+    {
 
         return $this->modes[$modeName];
     }
@@ -44,19 +47,21 @@ trait ModeManager {
      * @param type $modeArgs
      * @return type
      */
-    public function callMode($modeName, $modeArgs) {
+    public function callMode($modeName, $modeArgs)
+    {
 
         return call_user_func_array($this->getMode($modeName), $modeArgs);
     }
 
     /**
-     * 
+     *
      * @param type $modeName
      * @param callable $callback
      * @return $this
      * @throws BadFunctionCallException
      */
-    public function addMode($modeName, callable $callback) {
+    public function addMode($modeName, callable $callback)
+    {
 
         $call = $callback();
 

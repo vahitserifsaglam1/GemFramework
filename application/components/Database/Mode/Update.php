@@ -7,11 +7,13 @@ use Gem\Components\Database\Builders\Where;
 use Gem\Components\Helpers\Database\Where as WhereTrait;
 use Gem\Components\Database\Base;
 
-class Update extends ModeManager {
+class Update extends ModeManager
+{
 
     use WhereTrait;
 
-    public function __construct(Base $base) {
+    public function __construct(Base $base)
+    {
 
         $this->setBase($base);
 
@@ -33,10 +35,11 @@ class Update extends ModeManager {
     }
 
     /**
-     * 
+     *
      * @param array $set
      */
-    public function set($set = []) {
+    public function set($set = [])
+    {
 
         $update = $this->databaseSetBuilder($set);
         $this->string['update'] .= $update['content'];

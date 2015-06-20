@@ -5,10 +5,11 @@ namespace Gem\Components\Database\Builders;
 use Gem\Components\Database\Helpers\Pagination;
 use PDO;
 
-class BuildManager {
+class BuildManager
+{
 
     /**
-     * 
+     *
      * @var \PDO
      */
     private $connection;
@@ -19,7 +20,8 @@ class BuildManager {
      * Base Atamas� yapar
      * @param Base $base
      */
-    public function __construct(PDO $base) {
+    public function __construct(PDO $base)
+    {
 
         $this->connection = $base;
     }
@@ -28,7 +30,8 @@ class BuildManager {
      * Query Sorgusunu atar
      * @param string $query
      */
-    public function setQuery($query) {
+    public function setQuery($query)
+    {
 
         $this->query = $query;
     }
@@ -37,7 +40,8 @@ class BuildManager {
      * parametreleri atar
      * @param array $params
      */
-    public function setParams($params = []) {
+    public function setParams($params = [])
+    {
 
 
         $this->params = $params;
@@ -47,7 +51,8 @@ class BuildManager {
      * Sorguyu Y�r�t�r
      * @return PDOStatement
      */
-    public function run() {
+    public function run()
+    {
 
         $prepare = $this->connection->prepare($this->query);
         $prepare->execute($this->params);
@@ -55,12 +60,13 @@ class BuildManager {
     }
 
     /**
-     * Sayfalama işlemini yapar 
+     * Sayfalama işlemini yapar
      *  ['url' => 'asdasd/asdasd/:page', 'now' = 0]
      * @param array $action
      * @return string
      */
-    public function pagination($action = [], $return = true) {
+    public function pagination($action = [], $return = true)
+    {
 
         $pagination = new Pagination();
         $pagination->setCount($this->run()->rowCount());

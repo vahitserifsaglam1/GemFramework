@@ -5,52 +5,59 @@ namespace Gem\Components\Http;
 use Gem\Components\Session;
 use ErrorException;
 use Gem\Components\Redirect;
-class UserManager {
+use Gem\Components\Auth;
 
-  
+class UserManager
+{
+
+
     private $error_page;
     private $error_file;
 
     const LOGIN = 'GemLogin';
 
-    public function setUser(array $conf = []) {
+    public function setUser(array $conf = [])
+    {
 
         Session::set(self::LOGIN, $conf);
     }
-    
+
     /**
      * Error tetiklendiğinde yönlendirilecek sayfa atanır
      * @param string $url
      * @return \Gem\Components\Http\UserManager
      */
-    public function setErrorPage($url){
-        
+    public function setErrorPage($url)
+    {
+
         $this->error_page = $url;
         return $this;
-        
+
     }
-    
+
     /**
      * Atanan error page veya error file ye göre işlem yapar
      * öncelik error page dedir, eğer atanmışsa o sayfaya yönlendirme yapılır,
      * eğer atanmamışsa error file include edilir
      * @return \Gem\Components\Http\UserManager
      */
-    
-    public function error(){
-        
-        if($this->error_page){
-            
+
+    public function error()
+    {
+
+        if ($this->error_page) {
+
             Redirect::to($this->error_page);
-            
-        }elseif($this->error_file){
-            
+
+        } elseif ($this->error_file) {
+
             include $this->error_file;
-            
+
         }
-        
+
+
         return $this;
-        
+
     }
 
 
@@ -60,32 +67,32 @@ class UserManager {
      * @return \Gem\Components\Http\UserManager
      * @throws ErrorException
      */
-    public function setErrorFile($path){
-      
-        if(file_exists($path)){
-            
+    public function setErrorFile($path)
+    {
+
+        if (file_exists($path)) {
+
             $this->error_file = $path;
-            
-        }else{
-            
-            throw new ErrorException(sprintf('%s fonksiyonu parametre olarak girdiğiniz %s yolunda herhangi bir dosya bulunamadı',__FUNCTION__, $path));
-            
+
+        } else {
+
+            throw new ErrorException(sprintf('%s fonksiyonu parametre olarak girdiğiniz %s yolunda herhangi bir dosya bulunamadı', __FUNCTION__, $path));
+
         }
-        
+
         return $this;
-        
+
     }
+
     /**
      * Kullanıcı girişi yapılıp yapılmadığını kontrol eder
      * @return boolean
      */
-    public function isLogined() {
+    public function isLogined($remember = false)
+    {
 
-        if (Session::has(self::LOGIN)) {
-            
-            return true;
-            
-        }
+        return Auth::check($remember);
+
     }
 
     /**
@@ -93,7 +100,8 @@ class UserManager {
      * @param string $role
      * @return boolean
      */
-    public function hasRole($role) {
+    public function hasRole($role)
+    {
 
         if (!Session::has(self::LOGIN))
             return false;

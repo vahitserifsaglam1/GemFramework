@@ -1,9 +1,6 @@
-<?php 
+<?php
+
+$app->get('/', function () {
 
 
-$app->get('/index/:page', function($page){
-
-    print_r($_SERVER);
-    
-})->filter('page','[0-9]+')
-        ->run();
+})->run();

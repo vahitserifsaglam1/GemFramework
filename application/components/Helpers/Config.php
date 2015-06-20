@@ -2,26 +2,28 @@
 
 /**
  * GemFramework Config Helper -> kullan�c� ayarlar�n�n�n �ekildi�i trait
- *  
+ *
  * @package Gem\Components\Helpers
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
- * 
+ *
  */
 
 namespace Gem\Components\Helpers;
 
-trait Config {
+trait Config
+{
 
     /**
      * �stenilen ayar� getirir
      * @param string $config
      * @return boolean|mixed
      * @access public
-     * 
+     *
      */
-    public function getConfig($config = '') {
+    public function getConfig($config = '')
+    {
 
-       return self::getConfigStatic($config);
+        return self::getConfigStatic($config);
     }
 
     /**
@@ -29,9 +31,10 @@ trait Config {
      * @param string $config
      * @return boolean|mixed
      * @access public
-     * 
+     *
      */
-    public static function getConfigStatic($config) {
+    public static function getConfigStatic($config)
+    {
         $path = CONFIG_PATH . $config . '.php';
 
         if (file_exists($path)) {

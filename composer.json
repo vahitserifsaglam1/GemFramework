@@ -6,14 +6,16 @@
   "autoload": {
     "psr-4": {
       
-      "Gem\\Components\\": "application/components/",
+          "Gem\\Components\\": "application/components/",
 	  "Gem\\Modules\\":"modules/",
-          "Gem\\Application\\Manager\\":"application/managers/"
+          "Gem\\Application\\Manager\\":"application/managers/",
+          "Gem\\Controllers\\":"application/controllers",
+          "Gem\\Models\\":"application/models"
       
     },
     
      "classmap" : [
-      "Vendor"
+      "vendor"
     ]
     
   },

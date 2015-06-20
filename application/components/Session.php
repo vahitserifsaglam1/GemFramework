@@ -1,47 +1,44 @@
 <?php
 
 /**
- * 
+ *
  *  Gem Framework Session s�n�f�, h�zl� bir bi�imde sessionlar� kontrol etmenizi sa�lar
- *  @package Gem\Components
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- *  
+ * @package Gem\Components
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
  */
 
 namespace Gem\Components;
+
 use InvalidArgumentException;
 
-class Session {
+class Session
+{
 
     /**
      * Session un olup olmadigini kontrol eder
      * @param string $name
      * @return boolean
      */
-    static function has($name = null) {
+    static function has($name = null)
+    {
 
-        if($name !== null && is_string($name))
-        {
-            
+        if ($name !== null && is_string($name)) {
+
             if (isset($_SESSION[$name]))
-            return true;
-        else
-            return false;
-            
-        }
-        
-        elseif($name == null)
-        {
-            
-            return (count($_SESSION)> 0) ? true:false;
-            
-        }
-        else
-        {
-            
+                return true;
+            else
+                return false;
+
+        } elseif ($name == null) {
+
+            return (count($_SESSION) > 0) ? true : false;
+
+        } else {
+
             throw new InvalidArgumentException(sprintf('%s Sınıfı %s fonksiyonuna parametre olarak sadece string girilebilir', 'Session', 'has'));
         }
-        
+
     }
 
     /**
@@ -49,7 +46,8 @@ class Session {
      * @param string $name
      * @param mixed $value
      */
-    static function set($name, $value) {
+    static function set($name, $value)
+    {
 
         $_SESSION[$name] = $value;
     }
@@ -57,7 +55,8 @@ class Session {
     /**
      * Tum sessionlari temizler
      */
-    static function flush() {
+    static function flush()
+    {
 
         foreach ($_SESSION as $key => $value) {
 
@@ -70,7 +69,8 @@ class Session {
      * @param string $name
      * @return mixed|boolean
      */
-    public function get($name) {
+    public function get($name)
+    {
 
         return $_SESSION[$name];
     }
@@ -79,7 +79,8 @@ class Session {
      * Session i siler
      * @param string $name
      */
-    public function delete($name) {
+    public function delete($name)
+    {
         if (self::has($name))
             unset($_SESSION[$name]);
         else

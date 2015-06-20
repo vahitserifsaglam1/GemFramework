@@ -1,12 +1,12 @@
 <?php
 
 /**
- * 
+ *
  *  Bu s�n�f GemFramework de route ve database s�n�f�na yard�mc�
  *  olmak �zere baz� fonksiyonlar� bar�nd�r�r
- *  
- *  @package Gem\Components\Helpers\String
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
+ * @package Gem\Components\Helpers\String
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
 
 namespace Gem\Components\Helpers\String;
@@ -16,31 +16,34 @@ namespace Gem\Components\Helpers\String;
  * @trait Parser
  *
  */
-trait Parser {
+trait Parser
+{
 
     /**
-     * 
+     *
      * Url par�alamada kullan�l�r
      * @param string $url
      * @return multitype:array
      * @access public
-     * 
+     *
      */
-    function urlParser($url) {
+    function urlParser($url)
+    {
 
 
         return $this->parseFromExploder($url, '/');
     }
 
     /**
-     * Bir par�alay�c� yard�m�yla verileri par�alar 
+     * Bir par�alay�c� yard�m�yla verileri par�alar
      * @param string $string
      * @param string $parser
      * @return multitype:array
      * @access public
-     * 
+     *
      */
-    function parseFromExploder($string, $parser = '') {
+    function parseFromExploder($string, $parser = '')
+    {
 
         $string = trim($string, $parser);
         return explode($parser, $string);
@@ -50,10 +53,11 @@ trait Parser {
      * . lar� par�alar
      * @param unknown $string
      * @return Ambigous <multitype:multitype: , multitype:>
-     * @access public 
-     * 
+     * @access public
+     *
      */
-    function dotParser($string) {
+    function dotParser($string)
+    {
 
         return $this->parseFromExploder($string, '.');
     }
@@ -64,9 +68,10 @@ trait Parser {
      * @param string $preg
      * @return array
      * @access public
-     * 
+     *
      */
-    function matchStringFromParsed(array $parsed = [], $implodeWith = '', $preg = '') {
+    function matchStringFromParsed(array $parsed = [], $implodeWith = '', $preg = '')
+    {
 
         $content = implode($implodeWith, $parsed);
 
@@ -77,7 +82,7 @@ trait Parser {
                 $start = strpos($find[1], $content);
                 $lenght = strlen($find[1]);
                 $return = [];
-                $return[]= [ $parse => [
+                $return[] = [$parse => [
 
                     'finded' => $find,
                     'find' => $find[1],
@@ -87,7 +92,7 @@ trait Parser {
                 ]];
             }
         }
-        
+
         return $return;
     }
 

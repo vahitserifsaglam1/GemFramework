@@ -1,10 +1,10 @@
 <?php
 
 /**
- * 
- *  @package  Gem\Components\Database\Base;
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- *  
+ *
+ * @package  Gem\Components\Database\Base;
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *
  */
 
 namespace Gem\Components\Database\Mode;
@@ -12,19 +12,21 @@ namespace Gem\Components\Database\Mode;
 use Gem\Components\Database\Traits\Builder;
 use Gem\Components\Database\Builders\BuildManager;
 
-class ModeManager {
+class ModeManager
+{
 
     use Builder;
-    ## Gem\Components\Database\Base	
+
+    ## Gem\Components\Database\Base
 
     /**
-     * 
+     *
      * @var Gem\Components\Database\Base
      */
     private $base;
 
     /**
-     * 
+     *
      * @var array
      */
     private $builders;
@@ -52,10 +54,11 @@ class ModeManager {
     ];
 
     /**
-     * 
+     *
      * @return \Gem\Components\Database\Base
      */
-    public function getBase() {
+    public function getBase()
+    {
 
         return $this->base;
     }
@@ -64,16 +67,18 @@ class ModeManager {
      * Patterin i atar
      * @param string $pattern
      */
-    protected function setChieldPattern($pattern) {
+    protected function setChieldPattern($pattern)
+    {
 
         $this->chieldPattern = $pattern;
     }
 
     /**
      * Uygulanan pattern i g�sterir
-     * @return string 
+     * @return string
      */
-    protected function getChieldPattern() {
+    protected function getChieldPattern()
+    {
 
         return $this->chieldPattern;
     }
@@ -82,12 +87,14 @@ class ModeManager {
      * veleti g�nderir
      * @param  $chield
      */
-    protected function getChield() {
+    protected function getChield()
+    {
 
         return $this->chield;
     }
 
-    protected function setChield($chield) {
+    protected function setChield($chield)
+    {
 
 
         $this->chield = $chield;
@@ -97,7 +104,8 @@ class ModeManager {
      * Yeni bir query Sorgusu olu�turur
      * @return \Gem\Components\Database\Builders\BuildManager
      */
-    public function getQuery() {
+    public function getQuery()
+    {
 
         $strings = $this->string;
         $query = $this->buildQuery($this->getPattern($this->getChieldPattern()), $strings);
@@ -108,7 +116,8 @@ class ModeManager {
      * Sorguyu buildManager ��ine atar
      * @return \Gem\Components\Database\Builders\BuildManager
      */
-    public function build() {
+    public function build()
+    {
 
         $query = $this->getQuery();
         $manager = new BuildManager($this->getBase()->getConnection());
@@ -122,7 +131,8 @@ class ModeManager {
      * Query i �al��t�r�r
      * @return \PDOStatement
      */
-    public function run() {
+    public function run()
+    {
 
         return $this->build()->run();
     }
@@ -130,7 +140,8 @@ class ModeManager {
     /**
      * veleti �a��r�r
      */
-    protected function getCield() {
+    protected function getCield()
+    {
 
         return $this->chield;
     }
@@ -138,29 +149,32 @@ class ModeManager {
     protected $string;
 
     /**
-     * 
+     *
      * @param Gem\Components\Database\Base $base
      */
-    public function setBase($base) {
+    public function setBase($base)
+    {
 
         $this->base = $base;
     }
 
     /**
-     * 
+     *
      * @param array $builders
      */
-    protected function useBuilders($builders = []) {
+    protected function useBuilders($builders = [])
+    {
 
         $this->builders = $builders;
     }
 
     /**
-     * 
+     *
      * @param string $builderName
      * @return multitype:mixed
      */
-    protected function useBuilder($builderName) {
+    protected function useBuilder($builderName)
+    {
 
         if (isset($this->builders[$builderName])) {
 
@@ -169,11 +183,12 @@ class ModeManager {
     }
 
     /**
-     * 
+     *
      * @param string $pattern
      * @return multitype:multitype:string
      */
-    protected function getPattern($pattern) {
+    protected function getPattern($pattern)
+    {
 
         if (isset($this->patterns[$pattern])) {
 
@@ -182,12 +197,13 @@ class ModeManager {
     }
 
     /**
-     * 
+     *
      * Pattern atamas� yapar
      * @param string $name
      * @param array $patterns
      */
-    protected function setPattern($name, array $patterns) {
+    protected function setPattern($name, array $patterns)
+    {
 
         $this->patterns[$name] = $patterns;
     }
@@ -197,23 +213,23 @@ class ModeManager {
      * @param unknown $args
      * @param unknown $type
      */
-    private function doWhere($where, $type) {
+    private function doWhere($where, $type)
+    {
 
-       
-        
+
         switch ($type) {
 
             case 'and':
 
                 $where = $this->useBuilder('where')
-                        ->where($where, $this->getCield());
+                    ->where($where, $this->getCield());
 
                 break;
 
             case 'or':
 
                 $where = $this->useBuilder('where')
-                        ->orWhere($where, $this->getCield());
+                    ->orWhere($where, $this->getCield());
 
                 break;
         }
@@ -227,26 +243,27 @@ class ModeManager {
      * Where  sorgusu
      * @param mixed $where
      */
-    public function where($where, $controll = null) {
+    public function where($where, $controll = null)
+    {
 
-        if(!is_array($where) && !is_null($controll)){
-            
+        if (!is_array($where) && !is_null($controll)) {
+
             $where = [
-                [$where,'=', $controll]
+                [$where, '=', $controll]
             ];
-            
-        }elseif(is_array($where) && isset($where[0]) && isset($where[1])){
-            
-            if(is_string($where[1])){
-                
+
+        } elseif (is_array($where) && isset($where[0]) && isset($where[1])) {
+
+            if (is_string($where[1])) {
+
                 $where = [
                     [$where[0], $where[1], $where[2]]
                 ];
-                
-            } 
-            
+
+            }
+
         }
-        
+
         $this->doWhere($where, 'and');
 
         return $this;
@@ -256,7 +273,8 @@ class ModeManager {
      * OrWhere sorgusu
      * @param mixed $where
      */
-    public function orWhere($where) {
+    public function orWhere($where)
+    {
 
         $this->doWhere($where, 'or');
     }

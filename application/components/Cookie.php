@@ -1,23 +1,25 @@
 <?php
 
 /**
- * 
+ *
  * GemFramework Cookie S�n�f�, Cookie i�lemleri yap�l�rken h�zl� bir bi�imde kullan�l�r
  * @package Gem\Components
  * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
- * 
+ *
  */
 
 namespace Gem\Components;
 
 use InvalidArgumentException;
 
-class Cookie {
+class Cookie
+{
 
     /**
      * tum cookieleri temizler
      */
-    public static function flush() {
+    public static function flush()
+    {
 
 
         foreach ($_COOKIE as $key => $value) {
@@ -32,7 +34,8 @@ class Cookie {
      * @param mixed $value
      * @param integer $time
      */
-    public static function set($name = '', $value, $time = 3600) {
+    public static function set($name = '', $value, $time = 3600)
+    {
         if (is_string($value)) {
             setcookie($name, $value, time() + $time);
         }
@@ -47,25 +50,27 @@ class Cookie {
     }
 
     /**
-     *  
+     *
      *  Girilen $name degerine gore�re cookie olup olmadığını kontrol eder varsa cookie i d�nd�r�r yoksa false d�ner
-     *  
+     *
      * @param string $name
      * @return mixed|boolean
      */
-    public static function get($name = '') {
+    public static function get($name = '')
+    {
 
         return $_COOKIE[$name];
     }
 
     /**
-     * 
+     *
      *  girilen $name degiskenine gore varsa silinir yoksa exception olu�tururlur
-     * 
+     *
      * @param string $name
      * @throws Exception
      */
-    public static function delete($name = '') {
+    public static function delete($name = '')
+    {
 
         if (isset($_Cookie[$name]))
             setcookie($name, '', time() - 29556466);
@@ -76,13 +81,14 @@ class Cookie {
      * @param unknown $name
      * @return boolean
      */
-    public static function has($name = null) {
+    public static function has($name = null)
+    {
 
         if ($name !== null && is_string($name)) {
 
             if (isset($_COOKIE[$name]))
                 return true;
-        }elseif (is_null($name)) {
+        } elseif (is_null($name)) {
 
             return (count($_COOKIE) > 0) ? true : false;
         } else {

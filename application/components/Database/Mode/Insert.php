@@ -6,11 +6,13 @@ use Gem\Components\Database\Base;
 use Gem\Components\Database\Mode\ModeManager;
 use Gem\Components\Helpers\Database\Where as WhereTrait;
 
-class Insert extends ModeManager {
+class Insert extends ModeManager
+{
 
     use WhereTrait;
 
-    public function __construct(Base $base) {
+    public function __construct(Base $base)
+    {
 
         $this->setBase($base);
 
@@ -28,10 +30,11 @@ class Insert extends ModeManager {
     }
 
     /**
-     * 
+     *
      * @param array $set
      */
-    public function set($set = []) {
+    public function set($set = [])
+    {
 
         $insert = $this->databaseSetBuilder($set);
         $this->string['insert'] .= $insert['content'];

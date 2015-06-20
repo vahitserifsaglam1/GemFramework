@@ -4,8 +4,8 @@
  *
  *  GemFramework Builders Select Trait -> select sorgular� burada olu�turulur
  *
- *  @package Gem\Components\Database\Builders
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
+ * @package Gem\Components\Database\Builders
+ * @author vahitserifsaglam <vahit.serif119@gmail.com>
  *
  */
 
@@ -13,11 +13,13 @@ namespace Gem\Components\Database\Builders;
 
 use Gem\Components\Helpers\String\Builder;
 
-class Select {
+class Select
+{
 
     use Builder;
 
-    public function select($select = null, $base = null) {
+    public function select($select = null, $base = null)
+    {
 
         ## de�er dizi ise string e �eviriyoruz
 
@@ -49,12 +51,13 @@ class Select {
     }
 
     /**
-     * 
+     *
      * @param mixed $select
      * @param mixed $base
      * @return string
      */
-    private function selectCallable($select, $base) {
+    private function selectCallable($select, $base)
+    {
 
 
         $response = $select($base);

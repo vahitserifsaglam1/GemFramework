@@ -1,13 +1,13 @@
 <?php
 
 /**
- * 
+ *
  * Bu trait GemFramework'un yardımcılarından biridir, bir olaya erişim hakkınızın olup olmadığını kontrol eder.
  * @see Laravel\Middleware
  * @see GemFramework\AccessManager
  * @copyright (c) 2015, MyfcYazilim
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
- * 
+ *
  */
 
 namespace Gem\Components\Helpers;
@@ -17,7 +17,8 @@ use Gem\Components\Helpers\AccessManager\Interfaces\Terminate;
 use Gem\Components\Request;
 use RuntimeException;
 
-trait AccessManager {
+trait AccessManager
+{
 
     private $access;
 
@@ -26,7 +27,8 @@ trait AccessManager {
      * @param string $name
      * @return string|boolean
      */
-    public function getAccess($name) {
+    public function getAccess($name)
+    {
 
         if (isset($this->access[$name])) {
 
@@ -44,7 +46,8 @@ trait AccessManager {
      * @param string $role
      * @return boolean
      */
-    public function checkAccess($name, $next, $role = null) {
+    public function checkAccess($name, $next, $role = null)
+    {
 
         if ($access = $this->getAccess($name)) {
 
@@ -79,7 +82,8 @@ trait AccessManager {
      * AccessAtaması yapar
      * @param array $access
      */
-    public function setAccess(array $access = []) {
+    public function setAccess(array $access = [])
+    {
 
         $this->access = $access;
     }
