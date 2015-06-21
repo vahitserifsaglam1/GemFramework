@@ -4,7 +4,7 @@
  *  Bu Sınıf GemFramework'e ağit bir sınıftır.
  *  Temel olarak controller objemizden view ve model'imizi yönetmemizi sağlar.
  * 
- *  @packpage 
+ *  @packpage Gem\Controllers
  *  @author vahitserifsaglam <vahit.serif119@gmail.com>
  *  @copyright (c) 2015, Vahit Şerif Sağlam
  * 
@@ -27,7 +27,23 @@ class MainController{
      */
     
     public function __construct() {
+
         $this->view = new View();
+    }
+
+    /**
+     * Bir Components import eder.
+     * @param $name
+     * @param array $parametres
+     * @return mixed
+     */
+    public function import($name, $parametres = []){
+
+        $name = "Gem\\Components\\".$name;
+        $classs = new ReflectionClass($name);
+        $setParameters = $classs->newInstanceArgs($parametres);
+        return $setParameters;
+
     }
     
     /**

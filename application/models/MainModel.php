@@ -1,7 +1,8 @@
 <?php
 /**
  *
- *  Bu Sınıf GemFramework'un Ana Model sınıfıdır, her model bu sınıfı extends etmelidir.
+ *  Bu Sınıf GemFramework'un Ana Model sınıfıdır, her model bu sınıfı extends etmelidir
+ * @packpage Gem\Models
  * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
  * @copyright 2015, Vahit Şerif Sağlam
  */

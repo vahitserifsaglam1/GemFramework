@@ -7,7 +7,7 @@
     "psr-4": {
       
           "Gem\\Components\\": "application/components/",
-	  "Gem\\Modules\\":"modules/",
+	      "Gem\\Modules\\":"modules/",
           "Gem\\Application\\Manager\\":"application/managers/",
           "Gem\\Controllers\\":"application/controllers",
           "Gem\\Models\\":"application/models"

@@ -51,7 +51,7 @@ class Crypt
         $con = $letters[$len];
         $son = substr($ip, $len - 1, 1);
         $con2 = $letters[$len + $ip];
-        $key = $url . $con . $con2 . $ip . $bas;
+        $key = $url . FRAMEWORK_VERSION.$con . $con2 . $ip . $bas .FRAMEWORK_NAME;
         $this->securityKey = md5($key);
     }
 

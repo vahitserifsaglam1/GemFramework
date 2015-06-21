@@ -10,7 +10,7 @@ use Gem\Components\Mail\Content\Manager;
  * @package Gem\Components\Mail\Content
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
-class File implements Manager
+class Text implements Manager
 {
 
     private $content;

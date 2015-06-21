@@ -42,8 +42,6 @@ class Event
 
     private $firing;
 
-    private static $instance;
-    private static $staticApplicationInstance = null;
 
     /**
      *
@@ -56,7 +54,6 @@ class Event
     {
 
          $this->container = $container;
-        self::$staticApplicationInstance = $container;
 
     }
 
@@ -127,18 +124,11 @@ class Event
 
     }
 
-    /**
-     * �a�r�labilir s�n�f fonksiyono olu�turur
-     * @param unknown $listener
-     * @param Container $container
-     * @return multitype:NULL multitype:\Myfc\Ambigous
-     */
-
     protected function createClassCallable($listener, Container $container)
     {
         list($class, $method) = $this->parseClassCallable($listener);
 
-        return array($container->make($class), $method);
+        return array($container->makeManager($class), $method);
 
     }
 
@@ -321,19 +311,5 @@ class Event
         return $this->fire($event, $payload, true);
     }
 
-    /**
-     * Yeni bir instance oluşturur
-     * @return mixed
-     */
-    public static function getInstance(){
-
-        return Singleton::make('\Gem\Components\Event',[self::$staticApplicationInstance]);
-
-    }
-    public static function __callStatic($method, $params){
-
-        if(!static::$instance) self::getInstance();
-
-    }
 
 }

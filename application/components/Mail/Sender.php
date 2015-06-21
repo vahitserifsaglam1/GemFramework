@@ -57,6 +57,7 @@ class Sender extends PHPMailer
         if (is_array($options)) {
 
             return $options;
+
         } elseif (is_string($options)) {
             $configs = $this->configs;
             $obje = (object)$configs;
@@ -159,6 +160,7 @@ class Sender extends PHPMailer
         if ($this->send()) {
 
             return true;
+
         } else {
 
             return false;

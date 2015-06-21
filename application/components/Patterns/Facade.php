@@ -11,7 +11,7 @@
 
 namespace Gem\Components\Patterns;
 
-use Gem\Components\Singleton;
+use Gem\Components\Patterns\Singleton;
 use Exception;
 
 class Facade
@@ -73,7 +73,7 @@ class Facade
     /**
      * Tüm sınıfları temizler
      */
-    public static function clearFacades()
+    private static function clearFacades()
     {
 
         static::$instance = array();
@@ -84,7 +84,7 @@ class Facade
      *
      *  İsme göre temizleme işlemi
      */
-    public static function clearFacade($name)
+    private static function clearFacade($name)
     {
 
         if (isset(static::$instance[$name])) {

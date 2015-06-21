@@ -29,14 +29,14 @@ class Auth extends Model
      * @param boolean $remember
      * @return boolean
      */
-    public static function login($name, $password, $remember = false)
+    public static function login($username, $password, $remember = false)
     {
 
-        $login = self::read('user', function (Read $mode) use ($name, $password) {
+        $login = self::read('user', function (Read $mode) use ($username, $password) {
 
             return $mode->where([
 
-                ['username', '=', $name],
+                ['username', '=', $username],
                 ['password', '=', $password]
             ])->select('username.password.role')->run();
         });
@@ -137,6 +137,16 @@ class Auth extends Model
 
             }
 
+        }
+
+    }
+
+    public function logout($remember = false){
+
+        Session::delete(UserManager::LOGIN);
+
+        if($remember){
+            Cookie::delete(UserManager::LOGIN);
         }
 
     }

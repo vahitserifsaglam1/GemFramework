@@ -16,12 +16,6 @@ class UserManager
 
     const LOGIN = 'GemLogin';
 
-    public function setUser(array $conf = [])
-    {
-
-        Session::set(self::LOGIN, $conf);
-    }
-
     /**
      * Error tetiklendiğinde yönlendirilecek sayfa atanır
      * @param string $url

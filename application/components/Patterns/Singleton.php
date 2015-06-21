@@ -35,9 +35,8 @@ class Singleton
      * @access public
      * @return Object
      */
-    static function make($instance, array $parametres = [])
+    public static function make($instance, array $parametres = [])
     {
-
 
         if (!is_object($instance)) {
             $classs = new ReflectionClass($instance);

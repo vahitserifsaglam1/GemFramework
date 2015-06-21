@@ -17,7 +17,7 @@ class BuildManager
     private $params;
 
     /**
-     * Base Atamas� yapar
+     * Base Ataması yapar
      * @param Base $base
      */
     public function __construct(PDO $base)
