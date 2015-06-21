@@ -17,6 +17,20 @@ class RouteCollector
         $this->router = Singleton::make('Gem\Components\Route\Manager', []);
     }
 
+
+    /**
+     * Access Ataması yapar
+     * @param array $access
+     * @return \Gem\Components\Application
+     */
+    public function setAccess($access)
+    {
+
+        $this->router->setAccess($access);
+        return $this;
+
+    }
+
     /**
      * Get verilerini toplar
      * @param $url

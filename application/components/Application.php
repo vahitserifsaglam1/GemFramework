@@ -67,18 +67,6 @@ class Application extends RouteCollector
 
     }
 
-    /**
-     * Access Ataması yapar
-     * @param array $access
-     * @return \Gem\Components\Application
-     */
-    public function setAccess($access)
-    {
-
-        $this->router->setAccess($access);
-        return $this;
-
-    }
 
 
     /**
