@@ -6,5 +6,6 @@ return [
     'db' => 'test',
     'username' => 'root',
     'password' => '',
-    'charset' => 'utf-8'
+    'charset' => 'utf-8',
+    'driver'  => 'mysqli' // pdo veya mysqli
 ];

@@ -29,16 +29,47 @@ class Starter
         $password = $options['password'] ?: '';
         $charset = $options['charset'] ?: 'utf-8';
 
+        if(!isset($options['driver']))
+            $driver= 'pdo';
+        else
+            $driver = $options['driver'];
 
-        try {
 
-            $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
-            $pdo->query("SET CHARSET {$charset}");
-            return $pdo;
-        } catch (\PDOException $e) {
 
-            throw new \Exception($e->getMessage());
+        if(!isset($options['type']))
+            $type= 'mysql';
+        else
+        $type = $options['type'];
+
+
+        switch($driver){
+
+            case 'pdo':
+
+                try {
+
+                    $db = new PDO("$type:host=$host;dbname=$database", $username, $password);
+                    $db->query("SET CHARSET {$charset}");
+                    return $db;
+                } catch (\PDOException $e) {
+
+                    throw new \Exception($e->getMessage());
+                }
+
+                break;
+            case 'mysqli':
+
+                $db = new \mysqli($host,$username,$password, $database);
+
+                if($db->connect_errno > 0){
+                    throw new \Exception('Bağlantı işlemi başarısız [' . $db->connect_error . ']');
+                }
+
+                return $db;
+                break;
+
         }
+
     }
 
 }

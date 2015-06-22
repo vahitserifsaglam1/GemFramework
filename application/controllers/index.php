@@ -5,18 +5,10 @@
  *  @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
 namespace Gem\Controllers;
-class index extends MainController{
-    
-    public function __construct(){
- 
-        parent::__construct();
 
-    }
+class index{
 
-    public function ornek(){
 
-        echo 'hello world';
 
-    }
     
 }

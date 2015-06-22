@@ -4,6 +4,9 @@ namespace Gem\Components\Database\Builders;
 
 use Gem\Components\Database\Helpers\Pagination;
 use PDO;
+use PDOStatement;
+use mysqli_stmt;
+use ReflectionFunction;
 
 class BuildManager
 {
@@ -14,13 +17,13 @@ class BuildManager
      */
     private $connection;
     private $query;
-    private $params;
+    private $params = [];
 
     /**
      * Base Ataması yapar
      * @param Base $base
      */
-    public function __construct(PDO $base)
+    public function __construct($base)
     {
 
         $this->connection = $base;
@@ -43,7 +46,6 @@ class BuildManager
     public function setParams($params = [])
     {
 
-
         $this->params = $params;
     }
 
@@ -55,8 +57,47 @@ class BuildManager
     {
 
         $prepare = $this->connection->prepare($this->query);
-        $prepare->execute($this->params);
+        if ($this->connection instanceof PDO) {
+
+            $prepare->execute($this->params);
+
+        } else {
+
+            $s = "";
+            foreach ($this->params as $param) {
+
+                if (is_string($param)) {
+                    $s .= "s";
+                } elseif (is_integer($param)) {
+                    $s .= "i";
+                }
+
+            }
+
+             if(count($this->params) < 1){
+                 $param_arr = [];
+             }else{
+                 $param_arr = array_merge([$s], $this->params);
+             }
+
+
+             call_user_func_array([$prepare, 'bind_param'], $this->refValues($param_arr));
+             $prepare->execute();
+
+        }
+
         return $prepare;
+    }
+
+    private function refValues($arr){
+        if (strnatcmp(phpversion(),'5.3') >= 0) //Reference is required for PHP 5.3+
+        {
+            $refs = array();
+            foreach($arr as $key => $value)
+                $refs[$key] = &$arr[$key];
+            return $refs;
+        }
+        return $arr;
     }
 
     /**
@@ -79,5 +120,33 @@ class BuildManager
             echo $paginate;
         }
     }
+
+    public function fetch($fetchAll = false){
+
+        $query = $this->run();
+
+        if($query instanceof PDOStatement){
+
+            if($fetchAll)
+                return $query->fetchAll();
+            else
+                return $query->fetch(PDO::FETCH_OBJ);
+
+        }elseif($query instanceof mysqli_stmt){
+
+            $query = $query->get_result();
+            if($fetchAll)
+                return $query->fetch_all();
+            else
+                return $query->fetch_object();
+
+        }else{
+
+             throw new \Exception(sprintf('Girdiğiniz veri tipi geçerli bir query değil. Tip:%s',gettype($query)));
+
+        }
+
+    }
+
 
 }

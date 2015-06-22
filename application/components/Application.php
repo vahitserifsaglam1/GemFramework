@@ -78,7 +78,6 @@ class Application extends RouteCollector
      */
     function singleton($instance, array $parameters = [])
     {
-
         return Singleton::make($instance, $parameters);
     }
 
@@ -102,6 +101,9 @@ class Application extends RouteCollector
 
         ## rotalandırmanın başlamı
         $this->router->run();
+
+        $this->starter = null;
+        $this->router = null;
     }
 
     /**
@@ -193,8 +195,6 @@ class Application extends RouteCollector
     }
 
 
-
-
     /**
      * Rötalandırma işleminin nerden devam edeceğine karar verir
      * @param $filePath
@@ -205,10 +205,10 @@ class Application extends RouteCollector
     {
 
         if (file_exists($filePath)) {
-
             $app = $this;
             $inc = include $filePath;
-            $app->run();
+            unset($app);
+            $this->run();
         } else {
 
             throw new Exception(sprintf("girmiş olduğunuz %s dosyası bulunmadı", $filePath));

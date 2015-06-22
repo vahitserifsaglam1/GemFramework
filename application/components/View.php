@@ -167,4 +167,9 @@ class View
         return $path;
     }
 
+    public function __destruct(){
+
+        unset($this->file);
+
+    }
 }

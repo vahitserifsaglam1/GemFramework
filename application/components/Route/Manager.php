@@ -279,8 +279,13 @@ class Manager
                 if ($this->routeGenareteNewUrl($argument_kets, $params, $url, $this->basePath . $collection['action'])) {
 
                     $this->beforeAndRun($collection, $params);
+                    unset($params);
+                    unset($collection);
                 }
             }
+            unset($collections);
+            unset($this->collection);
+
         } else {
 
             return false;

@@ -17,19 +17,7 @@ use Gem\Components\App;
 
 class MainController{
     
-    protected $view;
     protected $model;
-    
-    /**
-     * 
-     * Yeni bir instance Oluşturur ve sınıf paremetresi olan $view'e bir instance atar.
-     * 
-     */
-    
-    public function __construct() {
-
-        $this->view = new View();
-    }
 
     /**
      * Bir Components import eder.

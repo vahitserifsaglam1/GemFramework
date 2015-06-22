@@ -5,22 +5,18 @@
   "description": "GemFramework - php 5.6 ın gücüyle yazılan tek framework",
   "autoload": {
     "psr-4": {
-      
-          "Gem\\Components\\": "application/components/",
-	      "Gem\\Modules\\":"modules/",
-          "Gem\\Application\\Manager\\":"application/managers/",
-          "Gem\\Controllers\\":"application/controllers",
-          "Gem\\Models\\":"application/models"
-      
+      "Gem\\Components\\": "application/components/",
+      "Gem\\Modules\\": "modules/",
+      "Gem\\Application\\Manager\\": "application/managers/",
+      "Gem\\Controllers\\": "application/controllers",
+      "Gem\\Models\\": "application/models"
     },
-    
-     "classmap" : [
+    "classmap": [
       "vendor"
     ]
-    
   },
-   "require": {
-                "php": ">=5.6",
-                "phpmailer/phpmailer": "~5.2"
-            }
+  "require": {
+    "php": ">=5.6",
+    "phpmailer/phpmailer": "~5.2"
+  }
 }

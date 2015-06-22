@@ -27,9 +27,9 @@ class File
     {
 
         $this->adapter = new Adapter('filesystem');
-
         $this->adapter->addAdapter(new DirectoryIterator());
         $this->adapter->addAdapter(new Finder());
+
     }
 
     /**
