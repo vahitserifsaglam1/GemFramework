@@ -14,6 +14,7 @@ use Gem\Components\Patterns\Singleton;
 use Gem\Components\Patterns\Facade;
 use Gem\Components\Helpers\Server;
 use Gem\Components\Route\Collector;
+
 use Exception;
 /**
  *
@@ -27,7 +28,7 @@ class Application extends Collector
     const ROUTEFILE = 'application/routes.php';
 
     private $framework_name;
-    private $modules = [];
+    private $modules;
     private $starter;
 
 
@@ -43,6 +44,18 @@ class Application extends Collector
         parent::__construct();
     }
 
+    /**
+     * $name 'e göre veriyi döndürür
+     * @param string $name
+     * @return mixed
+     */
+    public function getModule($name = ''){
+
+        if(isset($this->modules[$name])){
+            return $this->modules[$name];
+        }
+
+    }
 
     /**
      * Kullanılacak modulleri atar.
@@ -57,9 +70,9 @@ class Application extends Collector
             $modules = (array) $modules;
         }
 
-        foreach ($modules as $module) {
+        foreach ($modules as $key => $module) {
 
-            $this->modules[] = new $module;
+            $this->modules[$key] = new $module;
 
 
         }

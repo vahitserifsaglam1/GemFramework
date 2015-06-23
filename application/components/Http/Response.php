@@ -13,7 +13,7 @@ use HttpResponseException;
 class Response {
 
     private $protocolVersion;
-    public static $statusTexts = array(
+    private $statusTexts = array(
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',            // RFC2518
@@ -180,7 +180,12 @@ class Response {
     public function execute(){
 
 
-        http_response_code($this->statusCode);
+        $code = $this->statusCode;
+        if(isset($this->statusTexts[$code]))
+            $text = $this->statusTexts[$code];
+        else
+            $text = '';
+        header($this->protocolVersion.' '.$code.' '. $text);
 
         if(!headers_sent()){
 
@@ -208,5 +213,15 @@ class Response {
 
     }
 
+    /**
+     * Yeni bir response objesi oluşturur
+     * @param string $content
+     * @param int $statusCode
+     * @return static
+     */
+    public static function make($content = '', $statusCode = 200){
 
+        return new static($content, $statusCode);
+
+    }
 }

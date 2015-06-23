@@ -9,22 +9,25 @@
 namespace Gem\Components;
 
 
-use Gem\Components\File;
+use Gem\Components\Patterns\Singleton;
 use Gem\Components\Helpers\LanguageManager;
+use Gem\Components\Helpers\String\Parser;
+use Gem\Components\Helpers\String\Builder;
 use Exception;
 
 class View
 {
 
-    use Parser,
-        Builder;
+    use Parser;
+    use Builder;
+    use LanguageManager;
 
     private $params, $fileName, $autoload = false, $file;
 
     public function __construct()
     {
 
-        $this->file = File::boot();
+        $this->file = Singleton::make('Gem\Components\File');
         $this->file->in(VIEW);
         if (!file_exists(VIEW)) {
 

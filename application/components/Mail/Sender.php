@@ -24,8 +24,8 @@ use RuntimeException;
 class Sender extends PHPMailer
 {
 
-    use Builder,
-        Config;
+    use Builder;
+    use Config;
 
     private $configs;
 
@@ -59,14 +59,10 @@ class Sender extends PHPMailer
             return $options;
 
         } elseif (is_string($options)) {
-            $configs = $this->configs;
 
-            $ex = explode(".", $options);
-            $first = $ex[0];
-            unset($first);
-            $replaced = $this->joinWithImploder($ex, '->');
-            return eval('$object = (object) $configs;
-                         return $object->' . $replaced . ';');
+            if(isset($this->configs[$options])){
+                return $this->configs[$options];
+            }
         }
     }
 
@@ -165,7 +161,8 @@ class Sender extends PHPMailer
         } else {
 
             return false;
-            throw new RuntimeException(sprintf("%s mail gönderimi başarısız, oluşan hata :%s",
+            throw new RuntimeException(
+                sprintf("%s mail gönderimi başarısız, oluşan hata :%s",
                       $this->ErrorInfo));
         }
     }

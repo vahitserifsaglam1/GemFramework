@@ -12,7 +12,6 @@
 
 namespace Gem\Controllers;
 
-use Gem\Components\View;
 use Gem\Components\App;
 use ReflectionClass;
 

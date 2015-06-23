@@ -53,7 +53,10 @@ class Auth
                         $role = 'all';
                     else
 
-                        $role = @unserialize($fetch->role);
+                        if($fetch->role !== ''){
+                            $role = unserialize($fetch->role);
+                        }
+
                 }
 
                 $username = $fetch->username;

@@ -301,11 +301,10 @@ class File
         }
     }
 
-    public function move($src, $dest)
+    public function move($src = '', $dest)
     {
 
         $scr = $this->inPath($src);
-
         $dest = $this->inPath($dest);
         // If source is not a directory stop processing
         if (!is_dir($src)) {

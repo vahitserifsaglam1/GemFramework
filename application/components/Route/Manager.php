@@ -90,6 +90,16 @@ class Manager
     }
 
     /**
+     * Route verisinin atanmış olup olmadığına bakar
+     * @param $name
+     * @return bool
+     */
+    public function isNamedRoute($name){
+
+        return isset($this->namedRoutes[$name]);
+
+    }
+    /**
      *
      * @param array $types
      * @param array $args
