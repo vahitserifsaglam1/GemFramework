@@ -27,9 +27,4 @@ define('LANG', 'language/');
 
 
 include(APP . 'libs/Functions.php');
-
 include(SYSTEM . 'run.php');
-
-
-
-

@@ -1,5 +1,4 @@
 <?php
 
 
-return [
-		'message' => 'hello world'];
+return ['message' => 'hello world'];

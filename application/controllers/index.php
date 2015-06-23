@@ -15,6 +15,4 @@ class Index extends MainController{
 
     }
 
-
-    
 }

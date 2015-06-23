@@ -162,7 +162,8 @@ class Sender extends PHPMailer
 
             return false;
             throw new RuntimeException(
-                sprintf("%s mail gönderimi başarısız, oluşan hata :%s",
+                sprintf(
+                    "%s mail gönderimi başarısız, oluşan hata :%s",
                       $this->ErrorInfo));
         }
     }
