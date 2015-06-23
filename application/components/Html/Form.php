@@ -7,7 +7,8 @@
  */
 
 namespace Gem\Components\Html;
-
+use Closure;
+use Exception;
 
 class Form
 {
@@ -109,7 +110,7 @@ class Form
         {
             self::$functions[$name] = Closure::bind($return, null, get_class());
         }else{
-            error::newError("$name e atadığınız fonksiyon çağrılabilir bir fonksiyon değildir");
+           throw new Exception(sprintf("%s e atadığınız fonksiyon çağrılabilir bir fonksiyon değildir", $name));
         }
     }
 

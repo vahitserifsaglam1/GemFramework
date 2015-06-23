@@ -4,7 +4,7 @@ namespace Gem\Components\File\App;
 
 /**
  *
- * @author vahit�erif
+ * @author vahitşerif
  *
  *  S�n�flarda klas�rlerin i�eriklerini, klas�rlerini listelemek i�in kullan�lacak
  *
@@ -236,7 +236,4 @@ class DirectoryIterator
 
         //
     }
-
 }
-
-?>

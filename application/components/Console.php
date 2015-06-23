@@ -51,6 +51,7 @@ class Console
 
             list($class, $function) = array_slice($this->args, 0, 2);
             $parameters = array_slice($this->args, 1, count($this->args));
+            return call_user_func_array([$class, $function], $parameters);
         } else {
 
             throw new RuntimeException(sprintf('%s sınıfına %i den az parametre girmişsiniz bu şekilde çalışmaz.', get_class(), 2));

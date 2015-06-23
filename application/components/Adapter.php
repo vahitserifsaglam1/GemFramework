@@ -1,7 +1,8 @@
 <?php
 
 namespace Gem\Components;
-
+use Exception;
+use Gem\Components\Adapter\AdapterInterface;
 /**
  * Class Adapter
  * @package Adapter
@@ -68,7 +69,7 @@ class Adapter
      * @return $this
      */
 
-    public function addAdapter($adapter, $priority = 0)
+    public function addAdapter(AdapterInterface $adapter, $priority = 0)
     {
 
 
@@ -231,6 +232,4 @@ class Adapter
 
         return $this->adapter[$this->page][$name]['adapter'];
     }
-
-
 }

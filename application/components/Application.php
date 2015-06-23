@@ -14,6 +14,7 @@ use Gem\Components\Patterns\Singleton;
 use Gem\Components\Patterns\Facade;
 use Gem\Components\Helpers\Server;
 use Gem\Components\Route\Collector;
+use Exception;
 /**
  *
  * @class Application
@@ -26,7 +27,7 @@ class Application extends Collector
     const ROUTEFILE = 'application/routes.php';
 
     private $framework_name;
-    private $modules;
+    private $modules = [];
     private $starter;
 
 
@@ -150,7 +151,7 @@ class Application extends Collector
         $event = APP.'events.php';
 
         if(file_exists($event))
-            include $event;
+            include($event);
 
 
     }
@@ -192,7 +193,7 @@ class Application extends Collector
 
         if (file_exists($filePath)) {
 
-            $inc = include $filePath;
+            $inc = include($filePath);
             $this->run();
         } else {
 

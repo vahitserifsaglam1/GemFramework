@@ -26,9 +26,9 @@ define('SYSTEM', 'system/');
 define('LANG', 'language/');
 
 
-include APP . 'libs/Functions.php';
+include(APP . 'libs/Functions.php');
 
-include SYSTEM . 'run.php';
+include(SYSTEM . 'run.php');
 
 
 

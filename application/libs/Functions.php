@@ -3,14 +3,14 @@
 use Gem\Components\View;
 use Gem\Components\Captcha;
 use Gem\Components\Twig;
-## g�r�nt� dosyas� olu�turur
+## görüntü dosyasını oluşturur.
 
-function view($path, $variables = [], $language = [], $autoload = true) {
+function view($path ='', array $variables = [], array $language = [], $autoload = true) {
     $view = new View();
     $view->make($path, $variables)->language($language)->autoload($autoload)->execute();
 }
 
-function twig($path, $variables = [], $language = [], $autoload = true) {
+function twig($path, array $variables = [], array $language = [], $autoload = true) {
     $view = new Twig();
     $view->make($path, $variables)->language($language)->autoload($autoload)->execute();
 }
@@ -22,7 +22,7 @@ function twig($path, $variables = [], $language = [], $autoload = true) {
  * @param array $options
  * @return Captcha
  */
-function captcha($options = []) {
+function captcha(array $options = []) {
     static $captcha;
     $captcha = new Captcha($options);
     return $captcha;

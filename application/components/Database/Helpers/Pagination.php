@@ -23,7 +23,6 @@ class Pagination
 
     private $options;
     private $count;
-    private $rep;
 
     public function __construct()
     {

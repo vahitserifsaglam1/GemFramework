@@ -1,15 +1,15 @@
 <?php
 
 namespace Gem\Application\Manager\Access;
-use Gem\Components\Helpers\AccessManager\Interfaces\Handle;
-use Gem\Components\Helpers\AccessManager\Interfaces\Terminate;
+use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
+use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
 use Gem\Components\Request;
 /**
  * 
  * GemFramework accessManager test dosyası
  * 
  */
-class Auth implements Handle{
+class Auth implements HandleInterface{
     
     public function handle(Request $request, $next = null, $role = null) {
 
@@ -19,10 +19,6 @@ class Auth implements Handle{
             echo 'yok';
 
         }
-
         
     }
-
-    
 }
-    

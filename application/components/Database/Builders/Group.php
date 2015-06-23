@@ -23,6 +23,4 @@ class Group
         return "GROUP BY $group";
 
     }
-
-
 }

@@ -48,5 +48,4 @@ class Limit
 
         return "LIMIT $limit";
     }
-
 }

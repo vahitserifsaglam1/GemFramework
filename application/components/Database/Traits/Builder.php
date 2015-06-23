@@ -28,7 +28,7 @@ trait Builder
             $match = $match[0];
             $values = array_values($args);
 
-            return $replaces = str_replace($match, $values, $string);
+            return str_replace($match, $values, $string);
         }
     }
 

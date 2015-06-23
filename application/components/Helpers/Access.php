@@ -12,8 +12,8 @@
 
 namespace Gem\Components\Helpers;
 
-use Gem\Components\Helpers\AccessManager\Interfaces\Handle;
-use Gem\Components\Helpers\AccessManager\Interfaces\Terminate;
+use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
+use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
 use Gem\Components\Request;
 use RuntimeException;
 
@@ -53,13 +53,13 @@ trait AccessManager
 
             $manager = new $access;
 
-            if ($manager instanceof Handle) {
+            if ($manager instanceof HandleInterface) {
                 $request = new Request();
                 $response = $manager->handle($request, $next, $role);
                 if ($response) {
 
                     return true;
-                } elseif ($manager instanceof Terminate) {
+                } elseif ($manager instanceof TerminateInterface) {
 
                     $response = $manager->terminate($request);
                     if ($response) {
@@ -69,12 +69,15 @@ trait AccessManager
                 }
             } else {
 
-                throw new RuntimeException(sprintf('%s isimli AccessManager sınıfınız %s interface\'ine sahip olmalıdır ', $name, 'Gem\Components\AccessManager\Interfaces\Handable'));
+                throw new RuntimeException(
+                    sprintf('%s isimli Access sınıfınız %s interface\'ine sahip olmalıdır ',
+                        $name,
+                        'Gem\Components\AccessManager\Interfaces\Handable'
+                    ));
             }
         } else {
 
-            throw new RuntimeException(sprintf('%s isimli bir AccessManager bulunamadı', $name));
-            return false;
+            throw new RuntimeException(sprintf('%s isimli bir Access bulunamadı', $name));
         }
     }
 

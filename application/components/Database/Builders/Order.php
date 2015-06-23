@@ -19,5 +19,4 @@ class Order
 
         return "ORDER BY {$id} {$type}";
     }
-
 }

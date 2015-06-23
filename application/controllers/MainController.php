@@ -14,6 +14,7 @@ namespace Gem\Controllers;
 
 use Gem\Components\View;
 use Gem\Components\App;
+use ReflectionClass;
 
 class MainController{
     
@@ -61,10 +62,10 @@ class MainController{
      * @param array $params
      * @return mixed
      */
-    public function __call($method, $params = []){
+    public function __call($method, $params = [])
+    {
 
         return call_user_func_array([$this->model, $method], $params);
 
     }
-    
 }

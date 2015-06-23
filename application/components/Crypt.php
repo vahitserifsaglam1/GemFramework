@@ -51,7 +51,7 @@ class Crypt
         $con = $letters[$len];
         $son = substr($ip, $len - 1, 1);
         $con2 = $letters[$len + $ip];
-        $key = $url . FRAMEWORK_VERSION.$con . $con2 . $ip . $bas .FRAMEWORK_NAME;
+        $key = $url . $son . FRAMEWORK_VERSION . $con . $con2 . $ip . $bas . FRAMEWORK_NAME;
         $this->securityKey = md5($key);
     }
 
@@ -119,17 +119,6 @@ class Crypt
         return $value;
     }
 
-    private function hexValue($value)
-    {
-
-        if (function_exists('bin2hex')) {
-
-            return bin2hex($value);
-        } else {
-
-            return $value;
-        }
-    }
 
     /**
      * Randomizer i dÃ¶ndÃ¼rÃ¼r
@@ -170,11 +159,10 @@ class Crypt
      * @param $value
      * @return array
      *
-     * PayloadÄ± parÃ§alamakta kullanÄ±lÄ±r
+     * payload verisi parçalanır
      */
     private function parsePayload($value)
     {
-
 
         $based = (array)json_decode(base64_decode($value));
 
@@ -190,7 +178,7 @@ class Crypt
     }
 
     /**
-     * Metnin ÅŸireli halini Ã§Ã¶zer
+     * Metnin şifresini çözer
      * @param array $payload
      * @return string
      */
@@ -210,7 +198,7 @@ class Crypt
     /**
      * @param $value
      * @return string
-     * Parametreyi temizler ve hexden kurtarÄ±r
+     * Parametreyi temizler ve hexden çıkarır
      */
     private function returnCleanAndDeHexedValue($value)
     {
@@ -226,14 +214,5 @@ class Crypt
      * @return string
      * Parametreyi hex halinden kurtarÄ±r
      */
-    private function deHexValue($value)
-    {
-
-
-        if (function_exists('hex2bin')) {
-
-            return hex2bin($value);
-        }
-    }
 
 }

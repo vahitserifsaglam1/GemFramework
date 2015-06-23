@@ -53,39 +53,13 @@ class File
         return $index;
     }
 
-    /**
-     * �stenen tipteki �zellikleri d�nd�r�r
-     * @param unknown $type
-     * @param string $path
-     */
-    public function getType($type, $path = null)
-    {
-
-        if ($path == null) {
-
-            $path = $this->inPath($path);
-        }
-
-
-        $array = $this->adapter->iterator->read($path);
-
-        return $this->adapter->iterator->getType($type);
-    }
-
-
-    public function listDir($path, $type = '')
-    {
-
-        $path = $this->inPath($path);
-
-    }
 
     /**
      * in ile atanan klas�r ana klas�r olarak se�ilir
-     * @param unknown $path
+     * @param string $path
      * @return Filesystem
      */
-    public function in($path)
+    public function in($path = '')
     {
 
         $son = substr($path, strlen($path) - 1, strlen($path));
@@ -103,9 +77,9 @@ class File
 
     /**
      *
-     *   Girilen path yollar�n� in e d�nd�r�r
+     *   Girilen path yollarıni e dönüştürür
      *
-     * @param unknown $path
+     * @param string $path
      * @return string|unknown
      */
     public function inPath($path)
@@ -127,8 +101,8 @@ class File
     }
 
     /**
-     * Dosyan�n olup olmad���n� kontrol eder
-     * @param unknown $path
+     * Dosyanın olup olmadığını kontrol eder
+     * @param string $path
      * @return boolean
      */
     public function exists($path)
@@ -141,9 +115,9 @@ class File
 
     /**
      * Dosyan�n i�eri�ini okur
-     * @param unknown $filename
-     * @param string $remote
-     * @return string|unknown
+     * @param string $filename
+     * @param boolean $remote
+     * @return string|array
      */
     public function read($filename, $remote = false)
     {
@@ -199,9 +173,9 @@ class File
     }
 
     /**
-     * Yeni bir dosya olu�turur
-     * @param unknown $path
-     * @return unknown
+     * Yeni bir dosya oluşturur
+     * @param string $path
+     * @return mixed
      */
     public function create($path)
     {
@@ -217,7 +191,11 @@ class File
 
     }
 
-    public function chmod($file, $mode = 0744){
+    /**
+     * @param string $file
+     * @param int $mode
+     */
+    public function chmod($file = '', $mode = 0744){
 
         $file = $this->inPath($file);
 
@@ -226,11 +204,11 @@ class File
     }
 
     /**
-     * Yeni bir klas�r olu�turur
-     * @param unknown $path
+     * Yeni bir klasör oluşturur
+     * @param string $path
      * @return boolean
      */
-    public function mkdir($path)
+    public function mkdir($path = '')
     {
 
         $path = $this->inPath($path);
@@ -246,11 +224,11 @@ class File
     }
 
     /**
-     * Bir dosya yada klas�r� siler
-     * @param unknown $src
+     * Bir dosya yada klasör siler
+     * @param string $src
      * @return boolean
      */
-    public function delete($src)
+    public function delete($src = '')
     {
         $src = $this->inPath($src);
         if (is_dir($src) && $src != "") {
@@ -366,7 +344,7 @@ class File
             extract($parametres);
         }
 
-        return include $path;
+        return include($path);
     }
 
     public function ftime($path){
@@ -403,5 +381,3 @@ class File
     }
 
 }
-
-?>

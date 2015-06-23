@@ -1,7 +1,7 @@
 <?php
 
 /**
- * GemFramework Config Helper -> kullan�c� ayarlar�n�n�n �ekildi�i trait
+ * GemFramework Config Helper -> ayar dosyaları bu dosyadan çekilir
  *
  * @package Gem\Components\Helpers
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
@@ -39,7 +39,7 @@ trait Config
 
         if (file_exists($path)) {
 
-            return include $path;
+            return include($path);
         } else {
 
             return false;

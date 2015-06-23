@@ -70,27 +70,6 @@ class Facade
         }
     }
 
-    /**
-     * Tüm sınıfları temizler
-     */
-    private static function clearFacades()
-    {
-
-        static::$instance = array();
-    }
-
-    /**
-     * @param $name
-     *
-     *  İsme göre temizleme işlemi
-     */
-    private static function clearFacade($name)
-    {
-
-        if (isset(static::$instance[$name])) {
-            static::$instance[$name] = $name;
-        }
-    }
 
     /**
      * @param $method

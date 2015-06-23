@@ -8,7 +8,6 @@
 
 namespace Gem\Components;
 use Gem\Components\Application;
-use Gem\Components\Patterns\Singleton;
 
 class Event
 {
@@ -124,7 +123,7 @@ class Event
 
     }
 
-    protected function createClassCallable($listener, Container $container)
+    protected function createClassCallable($listener, Application $container)
     {
         list($class, $method) = $this->parseClassCallable($listener);
 
@@ -310,6 +309,4 @@ class Event
     {
         return $this->fire($event, $payload, true);
     }
-
-
 }

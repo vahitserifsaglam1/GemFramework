@@ -4,6 +4,8 @@
 namespace Gem\Components\Route;
 
 use Gem\Components\Patterns\Singleton;
+use InvalidArgumentException;
+use Gem\Components\Application;
 
 class Collector
 {
@@ -40,7 +42,7 @@ class Collector
     public function get($url, $use)
     {
 
-        $this->router->add('get', func_get_args());
+        $this->router->add('get', [$url, $use]);
         return $this;
     }
 
@@ -53,7 +55,7 @@ class Collector
     public function post($url, $use)
     {
 
-        $this->router->add('post', func_get_args());
+        $this->router->add('post', [$url, $use]);
         return $this;
     }
 
@@ -66,7 +68,7 @@ class Collector
     public function delete($url, $use)
     {
 
-        $this->router->add('delete', func_get_args());
+        $this->router->add('delete', [$url, $use]);
         return $this;
     }
 
@@ -79,7 +81,7 @@ class Collector
     public function put($url, $use)
     {
 
-        $this->router->add('put', func_get_args());
+        $this->router->add('put', [$url, $use]);
         return $this;
     }
 
@@ -92,7 +94,7 @@ class Collector
     public function any($url, $use)
     {
 
-        $this->router->match($this->router->getTypes(), func_get_args());
+        $this->router->match($this->router->getTypes(), [$url, $use]);
         return $this;
     }
 
@@ -109,9 +111,7 @@ class Collector
     {
 
         $type = $types;
-        $args = func_get_args();
-        unset($args[0]);
-        $this->router->match($type, $args);;
+        $this->router->match($type, [$url, $use]);
         return $this;
     }
 

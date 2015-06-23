@@ -19,7 +19,7 @@ use RuntimeException;
 use InvalidArgumentException;
 use Gem\Components\App;
 use BadFunctionCallException;
-use Gem\Components\Helpers\AccessManager;
+use Gem\Components\Helpers\Access;
 use Gem\Components\Http\Response;
 
 class Manager
@@ -29,7 +29,7 @@ class Manager
         Server,
         Config,
         Builder,
-        AccessManager;
+        Access;
 
     /**
      *
@@ -174,7 +174,7 @@ class Manager
     {
 
 
-        return $a = "({$this->getFilter($matches[1])})" ?: "([\w-%]+)";
+        return  "({$this->getFilter($matches[1])})" ?: "([\w-%]+)";
     }
 
     /**

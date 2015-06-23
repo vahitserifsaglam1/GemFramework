@@ -210,8 +210,5 @@ class Cache extends File
             return false;
 
         }
-
-
     }
-
 }

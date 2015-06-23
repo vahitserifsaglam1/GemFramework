@@ -1,6 +1,6 @@
 <?php
 
-namespace Gem\Components\Helpers\AccessManager\Interfaces;
+namespace Gem\Components\Helpers\Access\Interfaces;
 
 use Gem\Components\Request;
 
@@ -8,7 +8,7 @@ use Gem\Components\Request;
  *
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
-interface Terminate
+interface TerminateInterface
 {
 
     public function terminate(Request $request);

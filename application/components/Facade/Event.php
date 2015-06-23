@@ -10,7 +10,5 @@ class Event extends Facade {
     {
 
         return Singleton::make('Gem\Components\Event');
-
     }
-
 }

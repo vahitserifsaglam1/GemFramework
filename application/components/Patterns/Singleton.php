@@ -25,8 +25,8 @@ class Singleton
      * Sınıfların toplam instance sayısını tutar
      *
      */
-    private static $instances,
-        $instances_count = 0;
+    private static $instances;
+    private static $instances_count = 0;
 
     /**
      * Yeni bir instance olu�turur
@@ -51,7 +51,17 @@ class Singleton
             self::$instances[$instance_name] = $instance;
         }
 
+        self::$instances_count++;
         return self::$instances[$instance_name];
     }
 
+    /**
+     * Toplam kaç içerik olduğunu alır
+     * @return int
+     */
+    public static function getInstanceCount(){
+
+        return self::$instances_count;
+
+    }
 }

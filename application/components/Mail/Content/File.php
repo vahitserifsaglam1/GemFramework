@@ -9,7 +9,7 @@ use Gem\Components\File as FileSystem;
  * @package Gem\Components\Mail\Content
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
-class File implements Manager
+class File implements ManagerInterface
 {
 
     private $file;

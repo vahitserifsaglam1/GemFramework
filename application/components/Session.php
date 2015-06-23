@@ -31,7 +31,7 @@ class Session
             else
                 return false;
 
-        } elseif ($name == null) {
+        } elseif ($name === null) {
 
             return (count($_SESSION) > 0) ? true : false;
 
