@@ -81,7 +81,7 @@ class Base extends Starter
     }
 
     /**
-     * Delete ��lemlerinde kullan�l�r
+     * Delete delete işlemlerinde kullanılır
      * @param string $table
      * @param callable $callable
      * @return mixed
@@ -95,7 +95,7 @@ class Base extends Starter
     }
 
     /**
-     * Dinamik method �a�r�m�
+     * Dinamik method çağrımı
      * @param string $method
      * @param array $args
      * @return mixed

@@ -2,10 +2,11 @@
 
 namespace Gem\Components;
 
-use Gem\Components\Adapter;
+
 use Gem\Components\File\App\DirectoryIterator;
 use Gem\Components\File\App\Finder;
 use Exception;
+use Gem\Components\Patterns\Singleton;
 
 /**
  * @author vahit�erif
@@ -26,7 +27,7 @@ class File
     public function __construct()
     {
 
-        $this->adapter = new Adapter('filesystem');
+        $this->adapter = Singleton::make('Gem\Components\Adapter', ['filesystem']);
         $this->adapter->addAdapter(new DirectoryIterator());
         $this->adapter->addAdapter(new Finder());
 

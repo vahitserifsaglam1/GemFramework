@@ -7,5 +7,5 @@ return [
     'username' => 'root',
     'password' => '',
     'charset' => 'utf-8',
-    'driver'  => 'mysqli' // pdo veya mysqli
+    'driver'  => 'pdo' // pdo veya mysqli
 ];

@@ -50,18 +50,18 @@ class BuildManager
     }
 
     /**
-     * Sorguyu Y�r�t�r
+     * Sorguyu Oluşturur
      * @return PDOStatement
      */
     public function run()
     {
 
         $prepare = $this->connection->prepare($this->query);
-        if ($this->connection instanceof PDO) {
+        if ($prepare instanceof PDOStatement) {
 
-            $prepare->execute($this->params);
+             $prepare->execute($this->params);
 
-        } else {
+        }elseif($prepare instanceof mysqli_stmt) {
 
             $s = "";
             foreach ($this->params as $param) {
@@ -144,6 +144,35 @@ class BuildManager
 
              throw new \Exception(sprintf('Girdiğiniz veri tipi geçerli bir query değil. Tip:%s',gettype($query)));
 
+        }
+
+    }
+
+    /**
+     * Tüm işlemleri döndürür
+     * @return array|mixed|object|\stdClass
+     * @throws \Exception
+     */
+
+    public function fetchAll(){
+
+        return $this->fetch(true);
+
+    }
+
+    /**
+     * Eşleşen içerik sayısını döndürür
+     * @return int
+     */
+    public function rowCount(){
+
+        $query = $this->run();
+
+        if($query instanceof PDOStatement){
+            return $query->rowCount();
+        }elseif($query instanceof mysqli_stmt){
+            $query = $query->get_result();
+            return $query->num_rows;
         }
 
     }

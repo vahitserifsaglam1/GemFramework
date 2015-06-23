@@ -2,10 +2,16 @@
 
 use Gem\Components\View;
 use Gem\Components\Captcha;
+use Gem\Components\Twig;
 ## g�r�nt� dosyas� olu�turur
 
 function view($path, $variables = [], $language = [], $autoload = true) {
     $view = new View();
+    $view->make($path, $variables)->language($language)->autoload($autoload)->execute();
+}
+
+function twig($path, $variables = [], $language = [], $autoload = true) {
+    $view = new Twig();
     $view->make($path, $variables)->language($language)->autoload($autoload)->execute();
 }
 
@@ -72,5 +78,16 @@ function validateEmail($mail = ''){
 function validateUrl($url = ''){
 
     return filter_var($url, FILTER_VALIDATE_URL);
+
+}
+
+/**
+ * Yeni bir response objesi döndürür
+ * @param string $content
+ * @param int $statusCode
+ */
+function response($content = '', $statusCode=200){
+
+    return new Gem\Components\Http\Response($content, $statusCode);
 
 }

@@ -6,8 +6,14 @@
  */
 namespace Gem\Controllers;
 
-class index{
+class Index extends MainController{
 
+
+    public function boot(){
+
+        echo 'hello world';
+
+    }
 
 
     

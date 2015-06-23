@@ -2,11 +2,11 @@
 
 ## başlatma dosyası
 
-## uygulama klas�r�n�n sabiti
+## uygulama klasörün sabiti
 
 define('APP', 'application/');
 
-## g�r�nt� klas�r�n�n sabiti
+## Görüntü dosyalarının bulunacağı klasör sabiti
 define('VIEW', APP . 'Views/');
 
 ## model lerin tutulduğu klasör sabiti
@@ -22,7 +22,7 @@ define('CONFIG_PATH', APP . 'Configs/');
 ## sistemin ulduğu klasör sabiti
 define('SYSTEM', 'system/');
 
-## dil dosyalar�n�n oldu�u klas�r
+## dil dosyalarının olduğu klasörün sabiti
 define('LANG', 'language/');
 
 

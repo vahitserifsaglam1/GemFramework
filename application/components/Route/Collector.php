@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Gem\Components\Helpers;
+namespace Gem\Components\Route;
 
 use Gem\Components\Patterns\Singleton;
 
-class RouteCollector
+class Collector
 {
 
     protected $router;

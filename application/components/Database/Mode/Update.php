@@ -4,14 +4,12 @@ namespace Gem\Components\Database\Mode;
 
 use Gem\Components\Database\Mode\ModeManager;
 use Gem\Components\Database\Builders\Where;
-use Gem\Components\Helpers\Database\Where as WhereTrait;
 use Gem\Components\Database\Base;
-
+use Gem\Components\Database\Traits\Where as TraitWhere;
 class Update extends ModeManager
 {
 
-    use WhereTrait;
-
+    use TraitWhere;
     public function __construct(Base $base)
     {
 

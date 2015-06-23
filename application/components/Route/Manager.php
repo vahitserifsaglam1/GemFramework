@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Bu s�n�f Gem Framework un Route i�lemlerini ger�ekle�tirir
+ *  Bu sınıf GemFramework'un Route Sınıfı içindir, toplanılan route olayları çağrılır
  *
  * @package Gem\Components
  *
@@ -20,6 +20,7 @@ use InvalidArgumentException;
 use Gem\Components\App;
 use BadFunctionCallException;
 use Gem\Components\Helpers\AccessManager;
+use Gem\Components\Http\Response;
 
 class Manager
 {
@@ -237,9 +238,11 @@ class Manager
     public function run()
     {
 
+
         if (isset($this->getCollections()[$this->getMethod()]))
             $collections = $this->getCollections()[$this->getMethod()];
-
+        else
+            $collections = [];
         $url = $this->getUrl();
 
 
@@ -279,12 +282,9 @@ class Manager
                 if ($this->routeGenareteNewUrl($argument_kets, $params, $url, $this->basePath . $collection['action'])) {
 
                     $this->beforeAndRun($collection, $params);
-                    unset($params);
-                    unset($collection);
+
                 }
             }
-            unset($collections);
-            unset($this->collection);
 
         } else {
 
@@ -322,7 +322,9 @@ class Manager
 
         if ($this->actionBefore($collection['callback'], $params) && $this->actionGroup($collection, $params) && $this->actionAccessControl($collection['callback'])) {
 
-            $this->dispatch($collection['callback']);
+            $response = $this->dispatch($collection['callback']);
+            if($response instanceof Response)
+                $response->execute();
         }
     }
 
@@ -339,7 +341,8 @@ class Manager
 
                 $access = $callback['access'];
                 $name = $access['name'];
-                $next = $access['next'];
+
+                $next = isset($access['next']) ? $access['next']:null;
                 $role = isset($access['role']) ? $access['role'] : null;
 
                 $response = $this->checkAccess($name, $next, $role);

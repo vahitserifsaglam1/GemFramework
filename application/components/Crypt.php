@@ -40,7 +40,7 @@ class Crypt
     {
 
         $url = $this->findBasePath();
-        $ip = $this->getIP();
+        $ip = $this->serverip;
         $len = strlen($ip);
         $letters = [];
         for ($i = 'a', $j = 1; $j <= 26; $i++, $j++) {
@@ -56,9 +56,10 @@ class Crypt
     }
 
     /**
-     * Å�ifrelenmiÅŸ Metin oluÅŸturur
+     * Şifrelenmiş metni oluşturur
      * @param string $value
      * @return string
+     * @return mixed
      */
     public function encode($value = '')
     {
@@ -79,7 +80,7 @@ class Crypt
      * @param $iv
      * @return string
      *
-     * Å�ifrelenmiÅŸ metin oluÅŸturur
+     * Şifrelenmiş metni hazırlar
      */
     private function encrypt($value = '', $iv)
     {
@@ -88,6 +89,13 @@ class Crypt
 
         return @mcrypt_encrypt($this->alogirtym, $this->securityKey, $value, $this->mode, $iv);
     }
+
+    /**
+     * Value ve iv değerlerini kullanılmak için hazırlar
+     * @param $creypted
+     * @param $iv
+     * @return array
+     */
 
     private function payloadCreator($creypted, $iv)
     {
@@ -100,7 +108,7 @@ class Crypt
     }
 
     /**
-     * TemizlenmiÅŸ ve hex e dÃ¶ndÃ¼rÃ¼lmÃ¼ÅŸ deÄŸer oluÅŸturur
+     * Temizlenmiş value değeri oluşturur
      * @param string $value
      * @return string
      */

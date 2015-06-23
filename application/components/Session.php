@@ -2,7 +2,7 @@
 
 /**
  *
- *  Gem Framework Session s�n�f�, h�zl� bir bi�imde sessionlar� kontrol etmenizi sa�lar
+ *  Gem Framework Session Sınıfı, session'a atama yapmakda kullanılır.
  * @package Gem\Components
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
  *
@@ -11,6 +11,7 @@
 namespace Gem\Components;
 
 use InvalidArgumentException;
+use Exception;
 
 class Session
 {
@@ -84,7 +85,7 @@ class Session
         if (self::has($name))
             unset($_SESSION[$name]);
         else
-            throw new \Exception(sprintf("%s adinda bir session yok", $name));
+            throw new Exception(sprintf("%s adinda bir session yok", $name));
     }
 
 }

@@ -128,7 +128,7 @@ class ModeManager
     }
 
     /**
-     * Query i �al��t�r�r
+     * Query oluşturur
      * @return \PDOStatement
      */
     public function run()
@@ -136,6 +136,8 @@ class ModeManager
 
         return $this->build()->run();
     }
+
+
 
     /**
      * veleti �a��r�r

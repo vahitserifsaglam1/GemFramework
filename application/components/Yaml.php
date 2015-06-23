@@ -9,9 +9,9 @@ namespace Gem\Components;
  * 
  */
 use BadFunctionCallException;
+use Gem\Components\Patterns\Singleton;
 use RuntimeException;
 use Exception;
-use Gem\Components\File;
 
 class Yaml
 {
@@ -30,7 +30,7 @@ class Yaml
      * @return array
      * @throws RuntimeException
      */
-    public function string($string = '')
+    public function decode($string = '')
     {
 
         try {
@@ -40,7 +40,7 @@ class Yaml
 
         } catch (Exception $ex) {
 
-            throw new RuntimeException('String verisi parçalanırken bir hata oluştu,' . $e->getMessage());
+            throw new RuntimeException('String verisi parçalanırken bir hata oluştu,');
 
         }
 
@@ -52,10 +52,10 @@ class Yaml
      * @return array
      * @throws Exception
      */
-    public function file($file = '')
+    public function rende($file = '')
     {
 
-        $file = File::boot();
+        $file = Singleton::make('Gem\Components\File');
         if ($file->exists($file)) {
 
             $content = $file->read($file);

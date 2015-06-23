@@ -7,13 +7,10 @@
  * 
  */
 namespace Gem\Models;
+use Gem\Components\Facade\Database;
+class IndexModel extends Database{
 
-use Gem\Components\Database\Base;
-class index_model extends Base{
-    
-    public function __construct() {
-        parent::__construct();
-    }
-    
+
+
 }
 

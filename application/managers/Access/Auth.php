@@ -9,20 +9,20 @@ use Gem\Components\Request;
  * GemFramework accessManager test dosyası
  * 
  */
-class Auth implements Handle,  Terminate{
+class Auth implements Handle{
     
     public function handle(Request $request, $next = null, $role = null) {
 
+        $user = $request->user();
+        if(!$user->hasRole('read')){
 
-    
+            echo 'yok';
+
+        }
+
         
     }
-    
-    public function terminate(Request $request){
-        
-        echo 'ahanda geldi';
-        
-    }
+
     
 }
     

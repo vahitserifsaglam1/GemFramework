@@ -10,36 +10,36 @@
  */
 
 namespace Gem\Components;
-
 use Gem\Components\Patterns\Singleton;
 use Gem\Components\Patterns\Facade;
-use Gem\Components\Database\Helpers\Server;
-use Gem\Components\Helpers\RouteCollector;
-
+use Gem\Components\Helpers\Server;
+use Gem\Components\Route\Collector;
 /**
  *
  * @class Application
  *
  */
-class Application extends RouteCollector
+class Application extends Collector
 {
 
-    const ROUTEFILE = APP . '/routes.php';
+    use Server;
+    const ROUTEFILE = 'application/routes.php';
 
     private $framework_name;
     private $modules;
     private $starter;
 
-    function __construct($framework_name = 'Gem', $framework_version = 1.0)
+
+    public function __construct($framework_name = 'Gem', $framework_version = 1.0)
     {
 
-        parent::__construct();
+
         $this->framework_name = $framework_name;
         $this->framework_version = $framework_version;
         define('FRAMEWORK_NAME', $this->framework_name);
         define('FRAMEWORK_VERSION', $this->framework_version);
         $this->starter = $this->singleton('Gem\Application\Manager\Starter',[]);
-
+        parent::__construct();
     }
 
 
@@ -76,7 +76,7 @@ class Application extends RouteCollector
      * @return Object
      *
      */
-    function singleton($instance, array $parameters = [])
+    public function singleton($instance, array $parameters = [])
     {
         return Singleton::make($instance, $parameters);
     }
@@ -84,7 +84,7 @@ class Application extends RouteCollector
 
     ## tetikleyici
 
-    function run()
+    public function run()
     {
 
         if (count($this->starter->getAlias()) > 0) {
@@ -96,26 +96,12 @@ class Application extends RouteCollector
 
             $this->runProviders();
         }
-        ## url yönetimi
-        $this->getUrlChecker();
 
         ## rotalandırmanın başlamı
         $this->router->run();
 
         $this->starter = null;
         $this->router = null;
-    }
-
-    /**
-     *
-     * Url'i kontrol eder
-     *
-     */
-    private function getUrlChecker()
-    {
-
-        if (!isset($_GET['url']) || !$_GET['url'])
-            $_GET['url'] = '/';
     }
 
     /**
@@ -205,9 +191,8 @@ class Application extends RouteCollector
     {
 
         if (file_exists($filePath)) {
-            $app = $this;
+
             $inc = include $filePath;
-            unset($app);
             $this->run();
         } else {
 

@@ -101,10 +101,9 @@ class UserManager
             return false;
 
 
-        $get = Session::get(self::LOGIN)['role'];
+        $get = unserialize(Session::get(self::LOGIN)['role']);
         if ($get !== 'all') {
-
-            if (array_search($get[$role], $get)) {
+            if (array_search($role, $get)) {
 
                 return true;
             }

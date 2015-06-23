@@ -8,7 +8,7 @@ $application = new Application('GemFrameworkBuild', 1);
 /**
  *
  *  Rotalama olayının application/routes.php den devam edeceğini bildirir.
- *  İstenilirse ->run() dan önce başka işlemlerde yapılabilir
+ *  İstenilirse ->routesFromFile( den önce istenilen işlemler yapılabilir.
  *
  */
 $application->provider([

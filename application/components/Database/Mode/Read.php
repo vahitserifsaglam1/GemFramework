@@ -2,7 +2,7 @@
 
 /**
  *
- *  GemFramework Database Read Mode -> veritaban�ndan veri okumakda kullan�l�r
+ *  GemFramework Database Read Mode -> veritabanından veri okumakda kullanılır
  *
  * @package Gem\Components\Database\Mode
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
@@ -60,6 +60,7 @@ class Read extends ModeManager
     /**
      * Select sorgusu olu�turur
      * @param string $select
+     * @return $this
      */
     public function select($select = null)
     {
@@ -127,7 +128,7 @@ class Read extends ModeManager
      * İç içe bir sorgu oluşturur
      * @param string $as
      * @param mixed $select
-     * @return @return \Gem\Components\Database\Mode\Read
+     * @return  \Gem\Components\Database\Mode\Read
      */
     public function create($as, $select)
     {
@@ -164,13 +165,47 @@ class Read extends ModeManager
     }
 
     /**
-     * As i d�nd�r�r
+     * Select de kullanılacak as değerini döndürür
      * @return string
      */
     public function getAs()
     {
 
         return $this->as;
+    }
+
+    /**
+     * Etkilenen elaman sayısını döndürür
+     * @return int
+     */
+
+    public function rowCount(){
+
+       return $this->build()->rowCount();
+
+    }
+
+
+    /**
+     * İçeriği tekil veya çokul olarak döndürür
+     * @param bool $fetchAll
+     * @return array|mixed|object|\stdClass
+     * @throws \Exception
+     */
+    public function fetch($fetchAll = false){
+
+        return $this->build()->fetch($fetchAll);
+
+    }
+
+    /**
+     * Tüm İçeriği Döndürür
+     * @return array|mixed|object|\stdClass
+     */
+    public function fetchAll(){
+
+        return $this->fetch(true);
+
     }
 
 }

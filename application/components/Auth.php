@@ -11,14 +11,14 @@
 
 namespace Gem\Components;
 
-use Gem\Components\Database\Model;
+use Gem\Components\Facade\Database;
 use Gem\Components\Database\Mode\Read;
 use PDO;
 use Gem\Components\Session;
 use Gem\Components\Cookie;
 use Gem\Components\Http\UserManager;
 
-class Auth extends Model
+class Auth
 {
 
     /**
@@ -32,14 +32,15 @@ class Auth extends Model
     public static function login($username, $password, $remember = false)
     {
 
-        $login = self::read('user', function (Read $mode) use ($username, $password) {
+        $login = Database::read('user', function (Read $mode) use ($username, $password) {
 
             return $mode->where([
 
                 ['username', '=', $username],
                 ['password', '=', $password]
-            ])->select('username.password.role')->run();
+            ])->select('*')->rowCount();
         });
+
 
         if ($login) {
 
@@ -81,28 +82,14 @@ class Auth extends Model
      * @param string $username
      * @param array $role
      */
-    public function setRole($username, array $role = [])
+    public static function setRole(array $role = [])
     {
 
         $role = serialize($role);
-        $check = self::read('user', function (Read $mode) use ($username) {
-            return $mode->where(['username', '=', $username])
-                ->run();
-        });
 
-        if ($check->rowCount()) {
+            if ($role) {
 
-            $set = self::update('user', function ($mode) use ($username, $role) {
-
-                return $mode->where(['username', '=', $username])
-                    ->set([
-                        'role' => $role
-                    ])
-                    ->run();
-            });
-
-            if ($set) {
-
+                $_SESSION[UserManager::LOGIN]['role'] = $role;
                 return true;
 
             } else {
@@ -110,10 +97,7 @@ class Auth extends Model
                 return false;
 
             }
-        } else {
 
-            return false;
-        }
     }
 
     /**
@@ -121,7 +105,7 @@ class Auth extends Model
      * @param boolean $remember
      * @return boolean
      */
-    public function check($remember = false)
+    public static function check($remember = false)
     {
 
         if (Session::has(self::LOGIN)) {
@@ -141,7 +125,7 @@ class Auth extends Model
 
     }
 
-    public function logout($remember = false){
+    public static function logout($remember = false){
 
         Session::delete(UserManager::LOGIN);
 

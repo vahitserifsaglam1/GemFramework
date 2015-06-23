@@ -2,18 +2,20 @@
 /**
  * Created by PhpStorm.
  * User: vserifsaglam
- * Date: 21.6.2015
- * Time: 00:45
+ * Date: 23.6.2015
+ * Time: 03:25
  */
 
-namespace Gem\components\Facade;
+namespace Gem\Components\Facade;
 use Gem\Components\Patterns\Facade;
 use Gem\Components\Patterns\Singleton;
-class Route extends Facade {
+
+
+class Database extends Facade {
 
     protected static function getFacadeClass(){
 
-        return Singleton::make('Gem\Components\Route\Collector');
+        return Singleton::make('Gem\Components\Database\Base');
 
     }
 
