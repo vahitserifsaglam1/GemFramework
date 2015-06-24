@@ -10,12 +10,13 @@
  */
 
 namespace Gem\Components;
+
 use Gem\Components\Patterns\Singleton;
 use Gem\Components\Patterns\Facade;
 use Gem\Components\Helpers\Server;
 use Gem\Components\Route\Collector;
-
 use Exception;
+
 /**
  *
  * @class Application
@@ -30,17 +31,17 @@ class Application extends Collector
     private $framework_name;
     private $modules;
     private $starter;
-
+    private $file;
 
     public function __construct($framework_name = 'Gem', $framework_version = 1.0)
     {
 
-
+        $this->file = $this->singleton('Gem\Components\File');
         $this->framework_name = $framework_name;
         $this->framework_version = $framework_version;
         define('FRAMEWORK_NAME', $this->framework_name);
         define('FRAMEWORK_VERSION', $this->framework_version);
-        $this->starter = $this->singleton('Gem\Application\Manager\Starter',[]);
+        $this->starter = $this->singleton('Gem\Application\Manager\Starter', []);
         parent::__construct();
     }
 
@@ -49,9 +50,10 @@ class Application extends Collector
      * @param string $name
      * @return mixed
      */
-    public function getModule($name = ''){
+    public function getModule($name = '')
+    {
 
-        if(isset($this->modules[$name])){
+        if (isset($this->modules[$name])) {
             return $this->modules[$name];
         }
 
@@ -66,8 +68,8 @@ class Application extends Collector
     {
 
 
-        if(!is_array($modules)){
-            $modules = (array) $modules;
+        if (!is_array($modules)) {
+            $modules = (array)$modules;
         }
 
         foreach ($modules as $key => $module) {
@@ -80,7 +82,6 @@ class Application extends Collector
         return $this;
 
     }
-
 
 
     /**
@@ -114,8 +115,6 @@ class Application extends Collector
         ## rotalandırmanın başlamı
         $this->router->run();
 
-        $this->starter = null;
-        $this->router = null;
     }
 
     /**
@@ -148,9 +147,10 @@ class Application extends Collector
      * @param $class
      * @return mixed
      */
-    public function makeManager($class){
+    public function makeManager($class)
+    {
 
-        $class = "Gem\\Application\\Managers\\".$class;
+        $class = "Gem\\Application\\Managers\\" . $class;
         $class = new $class();
         return $class;
 
@@ -159,15 +159,19 @@ class Application extends Collector
     /**
      * Event Dosyalarını çağırır
      */
-    public function runEvent(){
+    public function runEvent()
+    {
 
-        $event = APP.'events.php';
+        $event = APP . 'events.php';
 
-        if(file_exists($event))
-            include($event);
+        if ($this->file->exists($event)) {
 
+            $this->file->inc($event);
+
+        }
 
     }
+
     /**
      *
      * @param array $facedes
@@ -176,8 +180,8 @@ class Application extends Collector
     public function register($facedes = [])
     {
 
-        if(!is_array($facedes))
-            $facedes = (array) $facedes;
+        if (!is_array($facedes))
+            $facedes = (array)$facedes;
 
         $this->starter->setAlias($facedes);
         return $this;
@@ -187,10 +191,10 @@ class Application extends Collector
     public function provider($provider = [])
     {
 
-        if(!is_array($provider))
-            $provider = (array) $provider;
+        if (!is_array($provider))
+            $provider = (array)$provider;
 
-       $this->starter->setProviders($provider);
+        $this->starter->setProviders($provider);
         return $this;
     }
 
@@ -204,9 +208,9 @@ class Application extends Collector
     function routesFromFile($filePath = self::ROUTEFILE)
     {
 
-        if (file_exists($filePath)) {
+        if ($this->file->exists($filePath)) {
 
-            $inc = include($filePath);
+            $this->file->inc($filePath);
             $this->run();
         } else {
 
@@ -215,7 +219,6 @@ class Application extends Collector
 
         return $this;
     }
-
 
 
 }

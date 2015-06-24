@@ -304,11 +304,10 @@ class File
     public function move($src = '', $dest)
     {
 
-        $scr = $this->inPath($src);
+
         $dest = $this->inPath($dest);
-        // If source is not a directory stop processing
-        if (!is_dir($src)) {
-            rename($src, $dest);
+        if (!is_dir($this->inPath($src))) {
+            rename($this->inPath($src), $dest);
             return true;
         }
 
@@ -321,7 +320,7 @@ class File
         }
 
         // Open the source directory to read in files
-        $i = new \DirectoryIterator($src);
+        $i = new \DirectoryIterator($this->inPath($src));
         foreach ($i as $f) {
             if ($f->isFile()) {
                 rename($f->getRealPath(), "$dest/" . $f->getFilename());
@@ -335,7 +334,6 @@ class File
 
     public function inc($path, $parametres = null)
     {
-
         $path = $this->inPath($path);
 
         if ($parametres !== null) {
