@@ -341,7 +341,7 @@ class File
             extract($parametres);
         }
 
-        return include($path);
+        return include_once($path);
     }
 
     public function ftime($path){

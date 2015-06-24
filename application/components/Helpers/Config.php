@@ -39,7 +39,7 @@ trait Config
 
         if (file_exists($path)) {
 
-            return include($path);
+            return include_once($path);
         } else {
 
             return false;
