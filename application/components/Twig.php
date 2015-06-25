@@ -7,36 +7,34 @@
  */
 
 namespace Gem\components;
+
 use Gem\Components\Helpers\Config;
-use Gem\Components\Helpers\LanguageManager;
+use Gem\Components\Vıew\Connector;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
-class Twig {
+use Gem\Components\Http\Response;
+use Gem\Components\View\ExcutableViewInterface;
+use Gem\Components\View\HeaderBag;
+use Gem\Components\View\FooterBag;
 
-    use Config, LanguageManager;
+class Twig extends Connector implements ExcutableViewInterface
+{
+
+    use Config;
     private $configs;
-    private $autoload;
-    private $params;
-    private $fileName;
+    private $headerBag;
+    private $footerBag;
+    private $twig;
 
-    public function __construct(){
+    public function __construct()
+    {
 
+        $this->headerBag = new HeaderBag();
+        $this->footerBag = new FooterBag();
         $this->configs = $this->getConfig('twig');
 
     }
 
-    /**
-     * inc/header.php ve inc/footer.php in yüklenmesi
-     * @param bool $au
-     * @return $this
-     */
-
-    public function autoload($au = false)
-    {
-
-        $this->autoload = $au;
-        return $this;
-    }
 
     /**
      * Oluşturulacak görüntü dosyasının ön hazırlığını yapar
@@ -45,32 +43,101 @@ class Twig {
      * @return $this
      */
 
-    public function make($fileName, $params = []){
+    public static function make($fileName = '', $params = [])
+    {
 
-        $this->fileName = $fileName;
-        $this->params = $params;
+        $app = new static();
 
-        return $this;
+        $app->fileName = $fileName;
+        $app->params = $params;
+
+        return $app;
 
     }
 
     /**
      * Görüntü dosyasını oluşturur
      */
-    public function display(){
+    public function execute()
+    {
 
         $content = '';
-        $file = $this->fileName.".php";
+        $file = $this->fileName . ".php";
         $loader = new Twig_Loader_Filesystem(VIEW);
         $twig = new Twig_Environment($loader, $this->configs);
-        if($this->autoload === true)
-            $content = $twig->render('inc/header.php', $this->params);
-        $content .= $twig->render($file, $this->params);
-        if($this->autoload === true)
-            $content .= $twig->render('inc/footer.php',$this->params);
+        $this->twig = $twig;
+        if (true === $this->autoload )
+        {
 
-        response($content, 200)
-                 ->execute();
+           $content .= $this->loadHeaderFiles();
+
+        }
+
+        $content .= $twig->render($file, $this->params);
+
+        if (true === $this->autoload) {
+
+            $content .= $this->loadFooterFiles();
+            #$content .= $twig->render('inc/footer.php', $this->params);
+
+        }
+
+
+        return $content;
     }
+
+    /**
+     * İçeriği okur
+     * @param $file
+     * @param $params
+     * @return mixed
+     */
+    private function loadFile($file, $params){
+
+        return $this->twig->rende($file, $params);
+
+    }
+    /**
+     * Header dosyasını yükler
+     * @return bool
+     */
+    private function loadHeaderFiles()
+    {
+
+        $params = $this->params;
+        $files = $this->headerBag->getViewHeaders();
+
+        $content = '';
+        foreach ($files as $file) {
+
+            $content .= $this->loadFile($file, $params);
+
+        }
+
+        return $content;
+
+    }
+
+    /**
+     * Header dosyasını yükler
+     * @return bool
+     */
+    private function loadFooterFiles()
+    {
+
+        $params = $this->params;
+        $files = $this->footerBag->getViewFooters();
+
+        $contnet = '';
+        foreach ($files as $file) {
+
+            $contnet .= $this->loadFile($file, $params);
+
+        }
+
+        return $contnet;
+
+    }
+
 
 }

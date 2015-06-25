@@ -35,9 +35,9 @@ class Console
     public function __construct(array $args = [], $argc = 0)
     {
         $this->file = File::boot();
-        if ($this->file->exists('application/' . 'console.php')) {
+        if ($this->file->exists('Application/' . 'console.php')) {
 
-            $this->file->inc('application/' . 'console.php');
+            $this->file->inc('Application/' . 'console.php');
         }
 
         $this->args = $args;

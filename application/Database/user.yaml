@@ -1,0 +1,10 @@
+table: user
+login:
+    - username
+    - password
+access:
+    - role
+column:
+    - email
+    - name
+    - username

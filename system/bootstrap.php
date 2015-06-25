@@ -4,7 +4,7 @@
 
 ## uygulama klasörün sabiti
 
-define('APP', 'application/');
+define('APP', 'Application/');
 
 ## Görüntü dosyalarının bulunacağı klasör sabiti
 define('VIEW', APP . 'Views/');
@@ -23,8 +23,10 @@ define('CONFIG_PATH', APP . 'Configs/');
 define('SYSTEM', 'system/');
 
 ## dil dosyalarının olduğu klasörün sabiti
-define('LANG', 'language/');
+define('LANG', 'Language/');
 
+## İçeriğin bulunduğu klasör
 
-include(APP . 'libs/Functions.php');
+define('ASSETS', 'public/assets/');
+
 include(SYSTEM . 'run.php');

@@ -5,8 +5,7 @@
  *
  */
 
-namespace Gem\Application\Manager;
-
+namespace Gem\Manager;
 
 class Starter {
 

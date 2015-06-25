@@ -36,13 +36,23 @@ class Redirect
         }
     }
 
-    protected static function refresh($url, $time)
+    /**
+     *  Eski sayfaya geri döndürür
+     */
+
+    public static function back(){
+
+        self::to($_SERVER['HTTP_REFERER']);
+
+    }
+
+    private static function refresh($url, $time)
     {
 
         header("Refresh:{$time},url=$url");
     }
 
-    protected static function location($url)
+    private static function location($url)
     {
 
         header("Location:$url");

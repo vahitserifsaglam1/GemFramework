@@ -83,7 +83,7 @@ trait Builder
      * @param string $action
      * @return array
      */
-    public function routeGenareteParams($url = '', $action)
+    public function routeGenerateParams($url = '', $action)
     {
 
         ## parametreler

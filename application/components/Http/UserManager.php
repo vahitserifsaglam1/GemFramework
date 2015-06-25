@@ -101,7 +101,11 @@ class UserManager
             return false;
 
 
-        $get = unserialize(Session::get(self::LOGIN)['role']);
+
+        $get = Session::get(self::LOGIN)['role'];
+        if(strstr($get,",")){
+            $get = explode(',', $get);
+        }
         if ($get !== 'all') {
             if (array_search($role, $get)) {
 

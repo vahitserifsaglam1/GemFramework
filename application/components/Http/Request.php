@@ -6,7 +6,7 @@
  * @copyright (c) 2015,  MyfcYazilim
  *
  */
-namespace Gem\Components;
+namespace Gem\Components\Http;
 
 use Gem\Components\Redirect;
 use Gem\Components\Helpers\Server;
@@ -84,5 +84,17 @@ class Request
 
     }
 
-}
+    /**
+     *
+     * Kişiyi geldiği sayfaya döndürür
+     * @return string
+     *
+     */
+    public function back()
+    {
 
+        return $this->referer;
+
+    }
+
+}

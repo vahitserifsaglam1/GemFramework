@@ -9,10 +9,18 @@
 namespace Gem\components\Http;
 
 use HttpResponseException;
+use Gem\Components\View;
+use Gem\Components\Twig;
+use Gem\Components\Http\Response\ExcutableResponseInterface;
+use Gem\Components\Http\JsonResponse;
+use Gem\Components\View\ExcutableViewInterface;
+use Gem\Components\Patterns\Singleton;
+use Gem\Components\Cookie;
+class Response implements ExcutableResponseInterface{
 
-class Response {
-
+    private $contentType = 'text/html';
     private $protocolVersion;
+    private $charset = 'utf-8';
     private $statusTexts = array(
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -84,12 +92,15 @@ class Response {
 
     ];
 
+
+
     private $standartHeaders = [
-        'Content-language' => 'en',
+        'Content-Language' => 'en',
          'X-Powered-By' => 'PHP/'.PHP_VERSION,
     ];
 
-    private $headers = [];
+    private $headersBag;
+    private $cookie;
 
     /**
      * Sınıfı başlatır.
@@ -101,8 +112,76 @@ class Response {
         $this->setContent($content);
         $this->setStatusCode($statusCode);
         $this->setProtocolVersion('1.1');
-        $this->headers = array_merge($this->gemFrameworkHeaders, $this->headers);
-        $this->headers = array_merge($this->standartHeaders, $this->headers);
+        $this->headersBag = Singleton::make('Gem\Components\Http\Response\HeadersBag');
+        $this->headersBag->headers = array_merge($this->gemFrameworkHeaders, $this->headersBag->headers);
+        $this->headersBag->headers = array_merge($this->standartHeaders, $this->headersBag->headers);
+        $this->cookieBag =  new Cookie();
+
+    }
+
+    /**
+     * Cookie Ataması yapar
+     * @param CookieJar $cookieJar
+     * @return $this
+     */
+    public function setCookie(CookieJar $cookieJar)
+    {
+
+        $this->headersBag->setCookie($cookieJar);
+        return $this;
+    }
+
+    /**
+     * Charset'i döndürür
+     * @return string
+     */
+    public function getCharset(){
+
+        return $this->charset;
+
+    }
+
+
+    /**
+     * Cookileri döndürür
+     * @return array
+     */
+    public function getCookies(){
+
+        return $this->cookie->cookies;
+
+    }
+
+    /**
+     * @param string $type
+     * @return $this
+     */
+    public function setContentType($type = ''){
+
+        $this->contentType = $type;
+        return $this;
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentType(){
+
+        return $this->contentType;
+
+    }
+
+    /**
+     * Charset ataması yapar
+     * @param string $charset
+     * @return $this
+     */
+
+    public function setCharset($charset = 'utf-8'){
+
+        $this->charset = $charset;
+        return $this;
 
     }
 
@@ -125,8 +204,21 @@ class Response {
 
     public function setContent($content = ''){
 
+
+        if($content instanceof ExcutableViewInterface){
+            $content = $content->execute();
+        }
+
         $this->content = $content;
         return $this;
+    }
+
+
+    public function jsonResponse($content = '', $statusCode = 200){
+
+
+        return new JsonResponse($content,$statusCode);
+
     }
 
     /**
@@ -140,38 +232,63 @@ class Response {
         return $this;
 
     }
-    public function header($header = '', $value = null){
 
-        if(is_string($header) && !is_null($value))
-        {
-            $this->headers[$header] = $value;
-        }elseif(is_array($header) && is_null($value)){
-            $this->headers = arrray_merge($this->headers, $header);
-        }
 
-        return $this;
+    private function generateHeaderString($key, $value = ''){
+
+
+        return sprintf("%s: %s", settype($key,"string"), settype($key, "string"));
 
     }
+
+    /**
+     * Headerları atar
+     */
 
     private function runHeaders(){
 
-        header('Content-Type: text/html; charset=utf-8');
-        foreach($this->headers as $header => $value){
+        header(
+          sprintf("Content-Type: %s; charset=%s", $this->getContentType(), $this->getCharset())
+        );
+        foreach($this->headersBag->getHeaders() as $header => $value){
 
-
-            header($this->genareteHeaderString($header, $value));
+            header($this->generateHeaderString($header, $value));
 
         }
 
     }
 
-    private function genareteHeaderString($key, $value = ''){
+    /**
+     *
+     * Cookieleri atar
+     *
+     */
+    private function useCookies(){
 
+        $cookies = $this->headersBag->getCookies();
 
-        return "$key: $value;";
+        foreach($cookies as $cookie){
 
+            header(sprintf("Set-Cookies:%s", $cookie));
+
+        }
     }
 
+    /**
+     *
+     * Protocol version ve code atamasını yapar
+     *
+     */
+    private function setProtocolAndCode()
+    {
+
+        $code = $this->statusCode;
+        if(isset($this->statusTexts[$code]))
+            $text = $this->statusTexts[$code];
+        else
+            $text = '';
+        header(sprintf("%s %d %s ", $this->protocolVersion, $code, $text));
+    }
     /**
      * Çıktıyı Gönderiri
      * @throws HttpResponseException
@@ -179,14 +296,8 @@ class Response {
 
     public function execute(){
 
-
-        $code = $this->statusCode;
-        if(isset($this->statusTexts[$code]))
-            $text = $this->statusTexts[$code];
-        else
-            $text = '';
-        header($this->protocolVersion.' '.$code.' '. $text);
-
+        $this->setProtocolAndCode();
+        $this->useCookies();
         if(!headers_sent()){
 
             $this->runHeaders();
@@ -194,7 +305,9 @@ class Response {
 
         }else{
 
-            throw new HttpResponseException('Başlıklar  zaten gönderilimiş, bu işlem gerçekleştirilemez');
+            throw new HttpResponseException(
+                'Başlıklar  zaten gönderilimiş, bu işlem gerçekleştirilemez'
+            );
 
         }
 
@@ -214,14 +327,54 @@ class Response {
     }
 
     /**
+     * yeni bir view objesi döndürür
+     * @param $fileName
+     * @param array $params
+     * @return $this
+     */
+    public function view($fileName, $params = []){
+
+        return View::make($fileName, $params);
+
+    }
+
+    /**
+     * Twig objesi döndürür
+     * @param $fileName
+     * @param array $params
+     * @return $this
+     */
+    public function twig($fileName, $params = []){
+
+        return Twig::make($fileName, $params);
+
+    }
+
+    /**
      * Yeni bir response objesi oluşturur
      * @param string $content
      * @param int $statusCode
      * @return static
      */
-    public static function make($content = '', $statusCode = 200){
+    public function make($content = '', $statusCode = 200){
 
         return new static($content, $statusCode);
+
+    }
+
+    /**
+     * Dinamik olarak method çağrımı
+     * @param $name
+     * @param $params
+     * @return mixed
+     */
+    public function __call($name, $params){
+
+        if(is_callable([$this->headersBag, $name])){
+
+            return call_user_func_array([$this->headersBag, $name], $params);
+
+        }
 
     }
 }

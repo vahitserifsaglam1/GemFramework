@@ -10,11 +10,10 @@
  */
 
 namespace Gem\Components;
-
 use Gem\Components\Patterns\Singleton;
 use Gem\Components\Patterns\Facade;
 use Gem\Components\Helpers\Server;
-use Gem\Components\Route\Collector;
+use Gem\Components\Security\TypeHint;
 use Exception;
 
 /**
@@ -22,64 +21,41 @@ use Exception;
  * @class Application
  *
  */
-class Application extends Collector
+class Application
 {
 
     use Server;
-    const ROUTEFILE = 'application/routes.php';
+    const ROUTEFILE = 'Application/routes.php';
 
-    private $framework_name;
-    private $modules;
+    private $frameworkName;
     private $starter;
-    private $file;
+    private $frameworkVersion;
 
-    public function __construct($framework_name = 'Gem', $framework_version = 1.0)
+    public function __construct($frameworkName = '',$frameworkVersion = 1)
     {
 
-        $this->file = $this->singleton('Gem\Components\File');
-        $this->framework_name = $framework_name;
-        $this->framework_version = $framework_version;
-        define('FRAMEWORK_NAME', $this->framework_name);
-        define('FRAMEWORK_VERSION', $this->framework_version);
-        $this->starter = $this->singleton('Gem\Application\Manager\Starter', []);
-        parent::__construct();
-    }
 
-    /**
-     * $name 'e göre veriyi döndürür
-     * @param string $name
-     * @return mixed
-     */
-    public function getModule($name = '')
-    {
-
-        if (isset($this->modules[$name])) {
-            return $this->modules[$name];
-        }
+        $this->$frameworkName = $frameworkName;
+        $this->frameworkVersion = $frameworkVersion;
+        define('FRAMEWORK_NAME', $this->frameworkName);
+        define('FRAMEWORK_VERSION', $this->frameworkVersion);
+        $this->starter = $this->singleton('Gem\Manager\Starter');
 
     }
 
+
     /**
-     * Kullanılacak modulleri atar.
-     * @param array $modules
-     * @return \Gem\Components\Application
+     * $bool girilirse fonksiyonlar tip yakalaması gerçekleşir
+     * @param bool $bool
+     *
      */
-    public function useModules($modules = [])
-    {
+    public function typeHint($bool = true){
 
-
-        if (!is_array($modules)) {
-            $modules = (array)$modules;
-        }
-
-        foreach ($modules as $key => $module) {
-
-            $this->modules[$key] = new $module;
-
+        if(true === $bool)
+        {
+            TypeHint::setErrorHandler();
 
         }
-
-        return $this;
 
     }
 
@@ -113,7 +89,7 @@ class Application extends Collector
         }
 
         ## rotalandırmanın başlamı
-        $this->router->run();
+        Singleton::make('Gem\Components\Route\Manager',[])->run();
 
     }
 
@@ -164,9 +140,9 @@ class Application extends Collector
 
         $event = APP . 'events.php';
 
-        if ($this->file->exists($event)) {
+        if (file_exists($event)) {
 
-            $this->file->inc($event);
+            include($event);
 
         }
 
@@ -177,7 +153,7 @@ class Application extends Collector
      * @param array $facedes
      * @return \Gem\Components\Application
      */
-    public function register($facedes = [])
+    public function facede($facedes = [])
     {
 
         if (!is_array($facedes))
@@ -208,17 +184,41 @@ class Application extends Collector
     function routesFromFile($filePath = self::ROUTEFILE)
     {
 
-        if ($this->file->exists($filePath)) {
+        if (file_exists($filePath)) {
 
-            $this->file->inc($filePath);
+            include($filePath);
             $this->run();
         } else {
 
-            throw new Exception(sprintf("girmiş olduğunuz %s dosyası bulunmadı", $filePath));
+            throw new Exception(
+                sprintf("girmiş olduğunuz %s dosyası bulunmadı", $filePath)
+            );
         }
 
         return $this;
     }
 
+    /**
+     * İçeriği belirtilen dosya yolundan çeker
+     * @param string $filePath
+     * @throws Exception
+     */
+    public function getProvidersAndAliasFromFile($filePath = ''){
+
+        if(file_exists($filePath)){
+
+            $rende = Yaml::decode(file_get_contents($filePath));
+            $this->starter->setAlias($rende['alias']);
+            $this->starter->setProviders($rende['providers']);
+
+        }else{
+
+            throw new Exception(sprintf(
+                'Girdiğiniz %s url\' inde herhangi bir dosya yok',$filePath
+            ));
+
+        }
+
+    }
 
 }

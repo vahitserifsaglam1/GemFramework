@@ -14,10 +14,10 @@ namespace Gem\Components\Helpers;
 
 use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
 use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
-use Gem\Components\Request;
+use Gem\Components\Http\Request;
 use RuntimeException;
 
-trait AccessManager
+trait Access
 {
 
     private $access;

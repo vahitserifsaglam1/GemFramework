@@ -20,7 +20,10 @@ use InvalidArgumentException;
 use Gem\Components\App;
 use BadFunctionCallException;
 use Gem\Components\Helpers\Access;
+use Gem\Components\Http\Response\ExcutableResponseInterface;
+use Gem\Components\Route\Before;
 use Gem\Components\Http\Response;
+
 
 class Manager
 {
@@ -53,6 +56,7 @@ class Manager
     {
 
         $this->basePath = $this->findBasePath();
+
     }
 
     public function getTypes()
@@ -94,11 +98,13 @@ class Manager
      * @param $name
      * @return bool
      */
-    public function isNamedRoute($name){
+    public function isNamedRoute($name)
+    {
 
         return isset($this->namedRoutes[$name]);
 
     }
+
     /**
      *
      * @param array $types
@@ -116,7 +122,7 @@ class Manager
     }
 
     /**
-     * Collectionlar� d�nd�r�r
+     * Collectionları döndürür
      * @return Ambigous <multitype: boolean, multitype:array >
      * @access public
      */
@@ -127,7 +133,7 @@ class Manager
     }
 
     /**
-     * Http Methodunu D�nd�r�r
+     * Http Methodunu Döndürür
      * @return string
      */
     public function getMethod()
@@ -184,7 +190,7 @@ class Manager
     {
 
 
-        return  "({$this->getFilter($matches[1])})" ?: "([\w-%]+)";
+        return "({$this->getFilter($matches[1])})" ?: "([\w-%]+)";
     }
 
     /**
@@ -241,7 +247,9 @@ class Manager
             return $this->group[$name];
         } else {
 
-            throw new RuntimeException(sprintf('%s adında bir grup bulunamadı', $name));
+            throw new RuntimeException(
+                sprintf('%s adında bir grup bulunamadı', $name)
+            );
         }
     }
 
@@ -253,8 +261,8 @@ class Manager
             $collections = $this->getCollections()[$this->getMethod()];
         else
             $collections = [];
-        $url = $this->getUrl();
 
+        $url = $this->getUrl();
 
         ## kontrol ediliyor
         if (count($collections) > 0) {
@@ -270,11 +278,9 @@ class Manager
                 }
 
 
-                $args = $this->routeGenareteParams($url, $collection['action']);
-
-                $argument_kets = $args['args'];
-                $params = $args['params'];
-
+                $get = $this->routeGenerateParams($url, $collection['action']);
+                $argument_keys = $get['args'];
+                $params = $get['params'];
 
                 $this->setParams($params);
 
@@ -283,14 +289,16 @@ class Manager
                     $url = '';
                 }
 
-
-                ## url in tamamı
                 $url = $this->basePath . $url;
 
 
-                ## olu�turulmu� string
-                if ($this->routeGenareteNewUrl($argument_kets, $params, $url, $this->basePath . $collection['action'])) {
+                if ($this->routeGenareteNewUrl($argument_keys,
+                    $params,
+                    $url,
+                    $this->basePath . $collection['action'])
+                ) {
 
+                    $params = array_merge([new Response()], $params);
                     $this->beforeAndRun($collection, $params);
 
                 }
@@ -302,22 +310,6 @@ class Manager
         }
     }
 
-    /**
-     * Before Yürütmesini yapar
-     * @param mixed $before
-     * @param array $params
-     * @return boolean
-     */
-    private function runBefore($before, $params)
-    {
-
-        $response = call_user_func_array($before, $params);
-
-        if ($response) {
-
-            return true;
-        }
-    }
 
     /**
      *
@@ -329,14 +321,27 @@ class Manager
     private function beforeAndRun($collection, $params)
     {
 
+        $this->setParams($params);
+        if ((new Before($collection['callback'], $params))->execute()) {
 
-        if ($this->actionBefore($collection['callback'], $params) && $this->actionGroup($collection, $params) && $this->actionAccessControl($collection['callback'])) {
+            if ($this->actionGroup($collection, $params)) {
 
-            $response = $this->dispatch($collection['callback']);
-            if($response instanceof Response)
-                $response->execute();
+                if ($this->actionAccessControl($collection['callback'])) {
+
+                    $response = $this->dispatch($collection['callback']);
+
+                    if ($response instanceof ExcutableResponseInterface){
+                        $response->execute();
+                    }
+                }
+
+            }
+
+
         }
+
     }
+
 
     /**
      *
@@ -346,25 +351,28 @@ class Manager
     private function actionAccessControl($callback)
     {
 
-        if (is_array($callback)) {
-            if (isset($callback['access'])) {
+        if (is_array($callback))
+        {
+            if (isset($callback['access']))
+            {
 
                 $access = $callback['access'];
                 $name = $access['name'];
 
-                $next = isset($access['next']) ? $access['next']:null;
+                $next = isset($access['next']) ? $access['next'] : null;
                 $role = isset($access['role']) ? $access['role'] : null;
 
                 $response = $this->checkAccess($name, $next, $role);
-                if ($response)
-                    return true;
-                else
-                    return false;
-            } else {
+                return ($response) ? true : false;
+            }
+            else
+            {
 
                 return true;
             }
-        } else {
+        }
+        else
+        {
 
             return true;
         }
@@ -382,21 +390,27 @@ class Manager
 
 
         $return = true;
-        if (is_array($action)) {
+        if (is_array($action))
+        {
 
-            if (isset($action['groupName'])) {
+            if (isset($action['groupName']))
+            {
 
                 $action['group'] = $this->getGroup($action['groupName']);
             }
 
-            if (isset($action['group'])) {
+            if (isset($action['group']))
+            {
 
-                foreach ($action['group'] as $group) {
+                foreach ($action['group'] as $group)
+                {
 
-                    if ($before = $this->isBefore($group)) {
+                    if ($before = $this->isBefore($group))
+                    {
 
 
-                        if (!$this->runBefore($before, $params)) {
+                        if (!(new Before($before, $params))->execute())
+                        {
 
                             $return = false;
                             break;
@@ -409,7 +423,8 @@ class Manager
 
                 if (isset($action['access'])) {
 
-                    if ($this->actionAccessControl($action)) {
+                    if ($this->actionAccessControl($action))
+                    {
 
                         $return = true;
                     }
@@ -432,17 +447,25 @@ class Manager
 
         if (is_array($action)) {
 
-            if (!isset($action['before'])) {
+            if (!isset($action['before']))
+            {
                 return true;
-            } else {
-                if ($before = $this->isBefore($action['before'])) {
-                    return $this->runBefore($before, $params);
-                } else {
+            }
+            else
+            {
+                if ($before = $this->isBefore($action['before']))
+                {
+                    return (new Before($before, $params))->execute();
+                }
+                else
+                {
 
                     throw new InvalidArgumentException(sprintf('%s adında bir before bulunamadı', $action['before']));
                 }
             }
-        } else {
+        }
+        else
+        {
 
             return true;
         }
@@ -462,6 +485,7 @@ class Manager
     /**
      * Callback parçalama i�lemi burada ger�ekle�ir
      * @param array $callback
+     * @return mixed
      */
     private function dispatch($callback = [])
     {
@@ -513,6 +537,7 @@ class Manager
     /**
      * Controllerı çağırır
      * @param string $callback
+     * @return mixed
      */
     private function dispatchString($callback = '')
     {
@@ -531,9 +556,9 @@ class Manager
 
     /**
      *
-     * @param string $controller
+     * @param string $controllerName
      * @param string $method
-     *
+     * @return mixed
      */
     private function dispatchRunController($controllerName, $method = '')
     {

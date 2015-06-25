@@ -2,7 +2,7 @@
 
 /**
  *
- * GemFramework Cookie S�n�f�, Cookie i�lemleri yap�l�rken h�zl� bir bi�imde kullan�l�r
+ * GemFramework Cookie işlemlerinin yapıldığı sınıf
  * @package Gem\Components
  * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
  *
@@ -11,90 +11,89 @@
 namespace Gem\Components;
 
 use InvalidArgumentException;
-
+use Gem\Components\Http\CookieJar;
+use Gem\Components\Patterns\Singleton;
 class Cookie
 {
 
-    /**
-     * tum cookieleri temizler
-     */
-    public static function flush()
-    {
+    public $cookies;
+    private $headerBag;
+    public function __construct(){
 
+        $this->cookies = Singleton::make('Gem\Components\Http\CookieBag')->getCookies();
+        $this->headerBag = Singleton::make('Gem\Components\Http\Response\HeadersBag');
 
-        foreach ($_COOKIE as $key => $value) {
-
-            static::delete($key);
-        }
     }
 
     /**
-     * cookie ataması yapar, $name degeri zorunludur ve string dir, $time integer girilmelidir
+     * Cookie 'i döndürür
      * @param string $name
-     * @param mixed $value
-     * @param integer $time
+     * @return mixed
      */
-    public static function set($name = '', $value, $time = 3600)
-    {
-        if (is_string($value)) {
-            setcookie($name, $value, time() + $time);
-        }
+   public function get($name = '')
+   {
 
-        if (is_array($value)) {
+       return $this->cookies[$name];
 
-            foreach ($value as $values) {
+   }
 
-                setcookie("$name[$values]", $values, time() + $time);
-            }
-        }
+    public function has($name = ''){
+
+        return isset($this->cookies[$name]);
+
     }
 
     /**
      *
-     *  Girilen $name degerine gore�re cookie olup olmadığını kontrol eder varsa cookie i d�nd�r�r yoksa false d�ner
-     *
-     * @param string $name
-     * @return mixed|boolean
-     */
-    public static function get($name = '')
-    {
-
-        return $_COOKIE[$name];
-    }
-
-    /**
-     *
-     *  girilen $name degiskenine gore varsa silinir yoksa exception olu�tururlur
+     * Cookie Atamasını yapar
+     * $name -> cookie adı
+     * $value -> cookie değeri
+     * $expires -> geçerlilik süresi
+     * $path->cookie nin geçerli olacağı alan
+     * $domain->cookie'in geçerli olduğu domain
+     * $sucere->cookie'nin secure değeri
+     * $httpOnly -> cookie'in httpony değeri
      *
      * @param string $name
-     * @throws Exception
+     * @param string $value
+     * @param int $expires
+     * @param string $path
+     * @param null $domain
+     * @param bool $secure
+     * @param bool $httpOnly
+     * @return $this
      */
-    public static function delete($name = '')
+    public function set($name = '', $value = '', $expires = 0, $path = '/', $domain = null, $secure = false, $httpOnly = false)
     {
 
-        if (isset($_Cookie[$name]))
-            setcookie($name, '', time() - 29556466);
+        $this->headerBag->setCookie(new CookieJar($name, $value, $expires, $path, $domain, $secure, $httpOnly));
+        return $this;
+
     }
 
     /**
-     * Varm� yokmu diye bakar
-     * @param unknown $name
-     * @return boolean
+     * Silme işlemini yapar
+     * @param string $name
+     * @return $this
      */
-    public static function has($name = null)
-    {
+    public function delete($name = ''){
 
-        if ($name !== null && is_string($name)) {
+        $this->set($name, '');
+        return $this;
+    }
 
-            if (isset($_COOKIE[$name]))
-                return true;
-        } elseif (is_null($name)) {
+    /**
+     * Tüm cookileri temizler
+     */
+    public function flush(){
 
-            return (count($_COOKIE) > 0) ? true : false;
-        } else {
+        foreach($this->cookies as $cookie => $value)
+        {
 
-            throw new InvalidArgumentException(sprintf('%s Sınıfı %s fonksiyonuna parametre olarak sadece string girilebilir', 'Cookie', 'has'));
+            $this->delete($cookie);
+
         }
+
     }
 
 }

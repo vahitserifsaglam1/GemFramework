@@ -9,61 +9,53 @@
 namespace Gem\Components;
 
 
-use Gem\Components\Patterns\Singleton;
-use Gem\Components\Helpers\LanguageManager;
-use Gem\Components\Helpers\String\Parser;
-use Gem\Components\Helpers\String\Builder;
 use Exception;
+use Gem\Components\Http\Response;
+use Gem\Components\Patterns\Singleton;
+use Gem\Components\View\Connector;
+use Gem\Components\View\ExcutableViewInterface;
+use Gem\Components\View\HeaderBag;
+use Gem\Components\View\FooterBag;
 
-class View
+class View extends Connector implements ExcutableViewInterface
 {
 
-    use Parser;
-    use Builder;
-    use LanguageManager;
+    private $file;
 
-    private $params, $fileName, $autoload = false, $file;
 
     public function __construct()
     {
 
-        $this->file = Singleton::make('Gem\Components\File');
-        $this->file->in(VIEW);
-        if (!file_exists(VIEW)) {
 
-            throw new Exception(sprintf("%s dosyaniz  bulunamadi", VIEW));
-        }
+        $this->file = Singleton::make('Gem\Components\Filesystem');
+
+
+    }
+
+    private function in($file = '')
+    {
+
+        return VIEW . $file.'.php';
+
     }
 
     /**
-     * G�r�nt� dosyas� olu�turur
+     * Görüntü dosyasını kullanıma hazırlar
      * @param string $fileName
      * @param array $variables
      * @throws Exception
      * @return $this
      */
-    public function make($fileName, $variables)
+    public static function make($fileName = '', $variables = [])
     {
 
 
-        if (strstr($fileName, ".")) {
+        $app = new static();
 
+        $app->fileName = $fileName;
+        $app->params = $variables;
 
-            $fileName = $this->joinDotToUrl($fileName);
-        }
-
-
-        $this->fileName = $fileName;
-        $this->params = $variables;
-
-        return $this;
-    }
-
-    public function autoload($au = false)
-    {
-
-        $this->autoload = $au;
-        return $this;
+        return $app;
     }
 
 
@@ -74,72 +66,87 @@ class View
     public function execute()
     {
 
-        $fileName = $this->viewFilePath($this->fileName);
+        $fileName = $this->fileName;
         $variables = $this->params;
 
 
-        if ($this->file->exists($fileName)) {
+        if(true === $this->autoload){
 
-            ## header dosyası yüklenmesi
-            if ($this->autoload === true) {
+            $this->loadHeaderFiles();
 
-                $file = $this->autoloadGenareteFilePath('inc.header');
+        }
 
-                if ($this->file->exists($file)) {
 
-                    $this->file->inc($file, $variables);
+        $this->loadFile($fileName, $variables);
 
-                }
-            }
+        if(true === $this->autoload){
 
-            $this->file->inc($fileName, $variables);
+            $this->loadFooterFiles();
 
-            ## footer dosyaı yüklemesi
-            if ($this->autoload === true) {
+        }
 
-                $fileF = $this->autoloadGenareteFilePath('inc.footer');
+        return ob_get_clean();
 
-                if ($this->file->exists($fileF)) {
+    }
 
-                    $this->file->inc($fileF, $variables);
-                }
-            }
+
+    /**
+     * Girilen dosyayı yüklemeye çalışır
+     * @param string $file
+     * @param array $params
+     * @return bool
+     */
+    private function loadFile($file = '', $params = [])
+    {
+
+
+        $file = $this->in($file);
+        if ($this->file->exists($file)) {
+            $this->file->inc($file, $params);
         } else {
 
-            throw new Exception(sprintf("%s dosyasi bulunamadi", $fileName));
+            return false;
+
         }
+
     }
 
     /**
-     *
-     * @param string $path
-     * @return string
+     * Header dosyasını yükler
+     * @return bool
      */
-    private function viewFilePath($path)
+    private function loadHeaderFiles()
     {
 
-        return $path . '.php';
+        $params = $this->params;
+        $files = $this->headerBag->getViewHeaders();
+        foreach ($files as $file) {
+
+            $this->loadFile($file, $params);
+
+        }
+
+        return true;
+
     }
 
     /**
-     *
-     * @param string $path
-     * @return string
-     * @access private
+     * Header dosyasını yükler
+     * @return bool
      */
-    private function autoloadGenareteFilePath($path)
+    private function loadFooterFiles()
     {
 
-        $filePath = $this->joinDotToUrl($path);
+        $params = $this->params;
+        $files = $this->footerBag->getViewFooters();
 
-        $path = $this->viewFilePath($filePath);
+        foreach ($files as $file) {
 
-        return $path;
-    }
+            $this->loadFile($file, $params);
 
-    public function __destruct(){
+        }
 
-        unset($this->file);
+        return true;
 
     }
 }

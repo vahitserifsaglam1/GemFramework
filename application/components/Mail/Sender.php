@@ -145,26 +145,5 @@ class Sender extends PHPMailer
         return $this;
     }
 
-    /**
-     * Maili gönderir
-     * @return boolean
-     * @throws RuntimeException
-     */
-    public function sendMail()
-    {
-
-
-        if ($this->send()) {
-
-            return true;
-
-        } else {
-
-            throw new RuntimeException(
-              sprintf('Mail Gönderilirken bir hata oluştu : %s',
-                  $this->ErrorInfo)
-            );
-        }
-    }
 
 }

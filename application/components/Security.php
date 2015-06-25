@@ -24,7 +24,8 @@ class Security
 
         $data = strip_tags(
             htmlspecialchars(
-                htmlentities($data)
+                htmlentities(
+                    filter_var($data,FILTER_SANITIZE_SPECIAL_CHARS))
             )
         );
 

@@ -2,7 +2,7 @@
 
 /**
  *
- *  Bu sınıf GemFramework'e ait bir sınıftır.GemFrameworkde kullanıcı login işlemini tutar.
+ * Bu sınıf GemFramework'e ait bir sınıftır.GemFrameworkde kullanıcı login işlemini tutar.
  * @author vahitserifsaglam
  * @copyright (c) 2015, vahit şerif sağlam
  * @package Gem\Components
@@ -11,132 +11,81 @@
 
 namespace Gem\Components;
 
-use Gem\Components\Facade\Database;
+use Gem\Components\Database\Base;
+use Gem\Components\Auth\SchemaBag;
 use Gem\Components\Database\Mode\Read;
-use PDO;
+use Gem\Components\Http\UserManager;
 use Gem\Components\Session;
 use Gem\Components\Cookie;
-use Gem\Components\Http\UserManager;
-
-class Auth
+class Auth extends SchemaBag
 {
 
-    /**
-     *
-     * Username ve password ile kullanıcı girişi yapar
-     * @param string $name
-     * @param string $password
-     * @param boolean $remember
-     * @return boolean
-     */
-    public static function login($username, $password, $remember = false)
-    {
+    private $db;
+    private $tables;
 
-        $login = Database::read('user', function (Read $mode) use ($username, $password) {
+    public function __construct(){
+
+        $this->db = new Base();
+        parent::__construct();
+        $this->tables = $this->getDecodedSchema();
+
+    }
+
+    /**
+     * $username ve $password ile user.yaml deki login değerlerine göre giriş işlemi yapar,
+     * eğer $remember true girilirse cookie 'e giriş değeri atanır
+     * @param $username
+     * @param $password
+     * @param bool $remember
+     * @return mixed
+     */
+    public function login($username, $password, $remember = false){
+
+        $loginParams = $this->tables['login'];
+        $userParam = $loginParams[0];
+        $passParam = $loginParams[1];
+        $tableName = $this->tables['table'];
+        $getTables = $this->tables['column'];
+        $role = $this->tables['access'];
+        $getTables = array_merge($getTables, $role);
+        $login = $this->db->read($tableName, function(Read $mode) use ($getTables,$userParam, $passParam,$username,$password){
 
             return $mode->where([
+                [$userParam,'=',$username],
+                [$passParam,'=',$password]
+            ])->select($getTables)->build();
 
-                ['username', '=', $username],
-                ['password', '=', $password]
-            ])->select('*')->rowCount();
         });
 
+        if($login->rowCount())
+        {
 
-        if ($login) {
+            $fetch = $login->fetch();
 
-            if ($login->rowCount()) {
+            Session::set(UserManager::LOGIN, $fetch);
+            if($remember){
 
-                $fetch = $login->fetch(PDO::FETCH_OBJ);
-                if (isset($fetch->role)) {
+                Cookie::set('login', serialize($fetch));
 
-                    if ($fetch->role == '')
-                        $role = 'all';
-                    else
-
-                        if($fetch->role !== ''){
-                            $role = unserialize($fetch->role);
-                        }
-
-                }
-
-                $username = $fetch->username;
-                $array = [
-                    'username' => $username,
-                    'role' => $role
-                ];
-                Session::set(UserManager::LOGIN, $array);
-
-
-                if ($remember) {
-
-                    Cookie::set(UserManager::LOGIN, serialize($array), time() + 3600);
-                }
-
-                return $array;
-            } else {
-
-                return false;
             }
+
+            return $fetch;
+
         }
-    }
-
-    /**
-     * Kullanıcının sahip olduğu yetkileri atar
-     * @param string $username
-     * @param array $role
-     */
-    public static function setRole(array $role = [])
-    {
-
-        $role = serialize($role);
-
-            if ($role) {
-
-                $_SESSION[UserManager::LOGIN]['role'] = $role;
-                return true;
-
-            } else {
-
-                return false;
-
-            }
 
     }
 
     /**
-     * Kullanıcı girişi yapılmışmı diye kontrol eder
-     * @param boolean $remember
-     * @return boolean
+     * Giriş yapılıp yapılmadığını kontrol eder
+     * @return bool
      */
-    public static function check($remember = false)
-    {
+    public function isLogined(){
 
-        if (Session::has(self::LOGIN)) {
+        if(Session::has(UserManager::LOGIN) || Cookie::has(UserManager::LOGIN)){
 
             return true;
 
         }
-        if ($remember) {
-
-            if (Cookie::has(self::LOGIN)) {
-
-                return true;
-
-            }
-
-        }
-
     }
-
-    public static function logout($remember = false){
-
-        Session::delete(UserManager::LOGIN);
-
-        if($remember){
-            Cookie::delete(UserManager::LOGIN);
-        }
-
-    }
-
-
 }
+

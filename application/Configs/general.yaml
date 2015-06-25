@@ -1,0 +1,4 @@
+alias:
+    Auth: Gem\Components\Auth
+providers:
+    - Gem\Manager\Providers\Event

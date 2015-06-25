@@ -1,6 +1,6 @@
 <?php
 
-namespace Gem\Application\Manager\Access;
+namespace Gem\Manager\Access;
 use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
 use Gem\Components\Request;
 /**

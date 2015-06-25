@@ -8,10 +8,10 @@
 
 namespace Gem\Components;
 
-use Gem\Components\File;
+use Gem\Components\Filesystem;
 use Exception;
 
-class Cache extends File
+class Cache extends Filesystem
 {
 
     private $time = 3600;
@@ -24,16 +24,27 @@ class Cache extends File
 
 
         if (!$this->exists($this->cacheFolder)) {
-            $this->createDirectory($this->cacheFolder);
+            $this->mkdir($this->cacheFolder);
         }
 
 
-        if (!is_readable($this->inPath($this->cacheFolder)) || !is_writable($this->inPath($this->cacheFolder))) {
+        if ($this->cacheFolder) {
             $this->chmod($this->cacheFolder, 0744);
         }
 
-        $this->in($this->cacheFolder);
         parent::__construct();
+
+    }
+
+    /**
+     * Sınıfta kullanılmak üzere cache dosyalarını hazırlar
+     * @param $path
+     * @return string
+     */
+    private function inPath($path)
+    {
+
+        return $this->cacheFolder . '/' . $path;
 
     }
 
@@ -41,7 +52,8 @@ class Cache extends File
      * Yeni bir instance döndürür
      * @return static
      */
-    public static function getInstance(){
+    public static function getInstance()
+    {
 
         return new static();
 
@@ -52,7 +64,8 @@ class Cache extends File
      * @param int $time
      * @return $this
      */
-    public function setTime($time = 3600){
+    public function setTime($time = 3600)
+    {
 
         $this->time = $time;
         return $this;
@@ -64,7 +77,8 @@ class Cache extends File
      * @param $folder
      * @return $this
      */
-    public function setCacheFolder($folder){
+    public function setCacheFolder($folder)
+    {
 
         $this->cacheFolder = $folder;
         return $this;
@@ -77,7 +91,8 @@ class Cache extends File
      * @param $ext
      * @return $this
      */
-    public function setCacheExt($ext){
+    public function setCacheExt($ext)
+    {
 
         $this->cacheExt = $ext;
         return $this;
@@ -96,6 +111,7 @@ class Cache extends File
     {
 
         $file = $this->cacheFileNameGenaretor($name);
+        $file = $this->inPath($file);
         if ($this->exists($file)) {
 
             if ($this->checkTime($file)) {
@@ -131,6 +147,7 @@ class Cache extends File
     {
 
         $file = $this->cacheFileNameGenaretor($name);
+        $file = $this->inPath($file);
         if (!$this->exists($file))
             $this->create($file);
 
@@ -148,14 +165,15 @@ class Cache extends File
      * @param string $name
      * @return bool
      */
-    public function delete($name = ''){
+    public function delete($name = '')
+    {
 
         $file = $this->cacheFileNameGenaretor($name);
-
-        if($this->exists($file)){
+        $file = $this->inPath($file);
+        if ($this->exists($file)) {
             $this->delete($file);
             return true;
-        }else{
+        } else {
             return false;
         }
 
@@ -164,11 +182,13 @@ class Cache extends File
     /**
      * Tüm önbellek dosyalarını siler
      */
-    public function flush(){
+    public function flush()
+    {
 
         $this->delete($this->cacheFolder);
 
     }
+
     /**
      * Girilen parametreye göre dosyanın yolunu hazırlar
      * @param $file
@@ -191,9 +211,10 @@ class Cache extends File
     private function checkTime($fileName = '')
     {
 
+        $fileName = $this->inPath($fileName);
         if (!$this->exists($fileName)) {
 
-            throw new Exception(sprintf('%s isimli bir dosya bulunamadı', $fileName));
+            return false;
 
         }
 

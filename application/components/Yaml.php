@@ -10,88 +10,49 @@ namespace Gem\Components;
  */
 use BadFunctionCallException;
 use Gem\Components\Patterns\Singleton;
+use Symfony\Component\Yaml\Yaml as Symfony;
 use RuntimeException;
 use Exception;
 
 class Yaml
 {
 
-    public function __construct()
-    {
-        if (!function_exists('yaml_parse')) {
-            throw new BadFunctionCallException('yaml_parse fonksiyonu sisteminzde olmadığı için
-                    bu sınıfı kullanamassınız');
-        }
-    }
 
     /**
-     *
-     * @param sting $string
-     * @return array
-     * @throws RuntimeException
-     */
-    public function decode($string = '')
-    {
-
-        try {
-
-            $parsed = yaml_parse($string);
-            return $parsed;
-
-        } catch (Exception $ex) {
-
-            throw new RuntimeException('String verisi parçalanırken bir hata oluştu,');
-
-        }
-
-    }
-
-    /**
-     * Girilen dosyayı parçalar
-     * @param string $file
+     * Girilen yaml içeriğini parçalar
+     * @param string $content
      * @return array
      * @throws Exception
      */
-    public function rende($file = '')
+    public static function decode($content = '')
     {
 
-        $file = Singleton::make('Gem\Components\File');
-        if ($file->exists($file)) {
+        if('' !== $content){
 
-            $content = $file->read($file);
-            $parse = $this->string($content);
-            return $parse;
-        } else {
+            return Symfony::parse($content);
 
-            throw new Exception(sprintf('%s adlı dosya yok yada yazdırılabilir değil', $file));
+        }else{
+
+            throw new Exception(
+                'Boş bir içerik rende edilemez'
+            );
 
         }
 
     }
 
     /**
-     * Girilen urldeki içeriği çekerek kullanır
-     * @param string $url
-     * @return array
-     */
-    public function url($url)
-    {
-
-        return yaml_parse_url($url);
-
-    }
-
-    /**
      *
+     * Girilen array içeriğini yaml dosyası türüne dönüştürür
      * @param array $data
      * @return string
      *
      */
-    public function encode(array $data)
+    public static function encode(array $data = [])
     {
 
         try {
-            $encoded = yaml_emit($data);
+            $encoded = Symfony::dump($data);
             return $encoded;
         } catch (Exception $e) {
 
@@ -100,4 +61,5 @@ class Yaml
         }
 
     }
+
 }

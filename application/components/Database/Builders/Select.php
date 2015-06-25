@@ -21,6 +21,7 @@ class Select
     public function select($select = null, $base = null)
     {
 
+        $s = '';
         ## de�er dizi ise string e �eviriyoruz
 
         if (is_string($select)) {
@@ -28,7 +29,6 @@ class Select
             $s = $this->replaceString(".", ",", $select);
         } elseif (is_array($select)) {
 
-            $s = '';
             foreach ($select as $sel) {
 
                 if (is_string($sel)) {
@@ -60,7 +60,7 @@ class Select
     {
 
 
-        $response = $select($base);
+        $response = call_user_func_array($select,$base);
         $as = $response->getAs();
         $query = $response->getQuery();
         $select = "($query) as $as";
