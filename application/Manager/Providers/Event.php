@@ -9,14 +9,27 @@
 namespace Gem\Manager\Providers;
 /**
  *
- *  GemFramework Event Provider : Event Component' ini kullanıma hazırlar
+ *  GemFramework Events Provider : Events Component' ini kullanıma hazırlar
  *
  */
 use Gem\Components\Application;
-
 class Event {
+
+    protected $events = [
+
+        'Gem\Events\TestEvent' => [
+            'Gem\Listeners\TestEventListener'
+        ]];
+
+    /**
+     * Events sınıfını oluşturur ve listener ları atar
+     * @param Application $application
+     */
     public function __construct(Application $application){
-        $application->singleton('Gem\Components\Event', [$application]);
-        $application->runEvent();
+        $event = $application->singleton('Gem\Components\Event\EventCollector', [$application]);
+        $event->setListeners($this->events);
+        $application->singleton('Gem\Components\Event',[$event]);
+
+
     }
 }

@@ -79,16 +79,13 @@ class Facade
      */
     public static function __callStatic($method, $parametres)
     {
-
-
         $instanceName = static::getFacedeRoot();
-
 
         if (!is_object($instanceName)) {
 
             $instance = Singleton::make($instanceName);
-
             static::$instance[$instanceName] = $instance;
+
         } else {
 
             $instance = $instanceName;

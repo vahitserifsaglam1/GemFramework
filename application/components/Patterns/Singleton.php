@@ -38,21 +38,34 @@ class Singleton
     public static function make($instance, array $parametres = [])
     {
 
-        if (!is_object($instance)) {
-            $classs = new ReflectionClass($instance);
-            $setParameters = $classs->newInstanceArgs($parametres);
-            $instance_name = $instance;
-            $instance = $setParameters;
-        } else
-            $instance_name = get_class($instance);
 
-        if (!isset(self::$instances[$instance_name])) {
+        if(is_string($instance))
+        {
+            if(isset(static::$instances[$instance])){
 
-            self::$instances[$instance_name] = $instance;
+                return static::$instances[$instance];
+
+            }else{
+
+                $createReflectionInstance = new ReflectionClass($instance);
+                $setParamsToCreatedReflectionInstance = $createReflectionInstance->newInstanceArgs($parametres);
+                static::$instances[$instance] = $setParamsToCreatedReflectionInstance;
+                return static::$instances[$instance];
+
+            }
+        }elseif(is_object($instance))
+        {
+            $getClassNameFromObject = get_class($instance);
+            if(isset(static::$instances[$getClassNameFromObject]))
+            {
+                return static::$instances[$getClassNameFromObject];
+            }else{
+
+                static::$instances[$getClassNameFromObject] = $instance;
+                return $instance;
+
+            }
         }
-
-        self::$instances_count++;
-        return self::$instances[$instance_name];
     }
 
     /**
@@ -64,4 +77,11 @@ class Singleton
         return self::$instances_count;
 
     }
+
+    public static function getInstances(){
+
+        return self::$instances;
+
+    }
 }
+

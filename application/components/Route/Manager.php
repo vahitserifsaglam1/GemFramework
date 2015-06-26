@@ -312,11 +312,8 @@ class Manager
 
 
     /**
-     *
-     * Karşılaştırır ve yürütür
-     * @param string $url
-     * @param string $replaced
-     * @param array $collection
+     * @param $collection
+     * @param $params
      */
     private function beforeAndRun($collection, $params)
     {

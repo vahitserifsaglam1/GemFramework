@@ -50,14 +50,14 @@ class CookieJar
 
         if ($expires instanceof DateTime) {
             $expires = $expires->format('U');
-        } elseif(is_string($expires)) {
+        } elseif (is_string($expires)) {
             $expires = strtotime($expires);
             if (false === $expires || -1 === $expires) {
                 throw new InvalidArgumentException('Cookie e girmiş olduğunuz geçerlilik süresi yanlış.');
             }
-        }else{
+        } else {
 
-            $expires = (new DateTime())->setTimestamp(time()+$expires)->format('U');
+            $expires = (new DateTime())->setTimestamp(time() + $expires)->format('U');
 
         }
 
@@ -81,40 +81,32 @@ class CookieJar
 
         $cookie = urlencode($this->name) . '=';
 
-        if ('' === $this->value)
-        {
+        if ('' === $this->value) {
             $cookie .= 'deleted; expires=' . gmdate('D, d-M-Y H:i:s T', time() - 31536001);
-        }
-        else
-        {
+        } else {
 
             $cookie .= urlencode($this->value);
-            if (0 !== $this->expires)
-            {
+            if (0 !== $this->expires) {
 
-                $cookie .= '; expires='.gmdate('D, d-M-Y H:i:s T', time() + $this->expires);
+                $cookie .= '; expires=' . gmdate('D, d-M-Y H:i:s T', time() + $this->expires);
 
             }
 
         }
 
-        if($this->path)
-        {
-            $cookie .= '; path='.$this->path;
+        if ($this->path) {
+            $cookie .= '; path=' . $this->path;
         }
 
-        if($this->domain)
-        {
-            $cookie .= '; domain='.$this->domain;
+        if ($this->domain) {
+            $cookie .= '; domain=' . $this->domain;
         }
 
-        if(true === $this->secure)
-        {
+        if (true === $this->secure) {
             $cookie .= '; secure';
         }
 
-        if(true === $this->httpOnly)
-        {
+        if (true === $this->httpOnly) {
 
             $cookie .= '; httponly';
 

@@ -1,4 +1,6 @@
 alias:
     Auth: Gem\Components\Auth
+    Cookie: Gem\Components\Cookie
+    Event: Gem\Components\Event
 providers:
     - Gem\Manager\Providers\Event

@@ -9,6 +9,6 @@ class Event extends Facade {
     protected static function getFacadeClass()
     {
 
-        return Singleton::make('Gem\Components\Event');
+        return 'Event';
     }
 }

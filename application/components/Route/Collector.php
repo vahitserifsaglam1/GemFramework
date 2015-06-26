@@ -16,7 +16,7 @@ class Collector
     {
 
 
-        $this->router = Singleton::make('Gem\Components\Route\Manager', []);
+        $this->router = Singleton::make('Gem\Components\Route\Manager');
     }
 
 
@@ -41,6 +41,7 @@ class Collector
      */
     public function get($url, $use)
     {
+
 
         $this->router->add('get', [$url, $use]);
         return $this;

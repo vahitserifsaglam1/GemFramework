@@ -30,6 +30,4 @@ class ServerBag extends RequestHeadersBag{
 
     }
 
-
-
 }

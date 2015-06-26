@@ -31,6 +31,12 @@ class Application
     private $starter;
     private $frameworkVersion;
 
+    /**
+     * Framework 'un adı ve versionu girilir,
+     * Ve framework başlatılır
+     * @param string $frameworkName
+     * @param int $frameworkVersion
+     */
     public function __construct($frameworkName = '',$frameworkVersion = 1)
     {
 
@@ -69,6 +75,7 @@ class Application
      */
     public function singleton($instance, array $parameters = [])
     {
+
         return Singleton::make($instance, $parameters);
     }
 
@@ -78,18 +85,9 @@ class Application
     public function run()
     {
 
-        if (count($this->starter->getAlias()) > 0) {
-
-            $this->runFacades();
-        }
-
-        if (count($this->starter->getProviders()) > 0) {
-
-            $this->runProviders();
-        }
-
         ## rotalandırmanın başlamı
-        Singleton::make('Gem\Components\Route\Manager',[])->run();
+        $make = Singleton::make('Gem\Components\Route\Manager');
+        $make->run();
 
     }
 
@@ -104,6 +102,25 @@ class Application
         Facade::$instance = $this->starter->getAlias();
     }
 
+    /**
+     * Providers ve Facade'leri yürütür
+     */
+
+    private function  runOthers()
+    {
+
+        if (count($this->starter->getProviders()) > 0) {
+
+            $this->runProviders();
+        }
+
+        if (count($this->starter->getAlias()) > 0) {
+
+            $this->runFacades();
+        }
+
+
+    }
     /**
      *
      * Providersları yürütür
@@ -129,22 +146,6 @@ class Application
         $class = "Gem\\Application\\Managers\\" . $class;
         $class = new $class();
         return $class;
-
-    }
-
-    /**
-     * Event Dosyalarını çağırır
-     */
-    public function runEvent()
-    {
-
-        $event = APP . 'events.php';
-
-        if (file_exists($event)) {
-
-            include($event);
-
-        }
 
     }
 
@@ -186,6 +187,7 @@ class Application
 
         if (file_exists($filePath)) {
 
+            $this->runOthers();
             include($filePath);
             $this->run();
         } else {

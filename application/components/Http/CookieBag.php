@@ -8,22 +8,24 @@
 
 namespace Gem\Components\Http;
 use Gem\Components\Http\RequestHeadersBag;
-class CookieBag extends RequestHeadersBag{
+class CookieBag extends RequestHeadersBag
+{
 
     private $cookies;
 
     /**
      * Cookie değerlerini atar
      */
-    public function __construct(){
+    public function __construct()
+    {
 
         parent::__construct();
         $get = $this->getHeaders();
-        if(isset($get['Cookie'])){
+        if (isset($get['Cookie'])) {
 
             $this->cookies = $this->rendeCookieString($get['Cookie']);
 
-        }else{
+        } else {
 
             $this->cookies = [];
 
@@ -36,16 +38,15 @@ class CookieBag extends RequestHeadersBag{
      * @param string $cookie
      * @return array
      */
-    private function rendeCookieString($cookie = ''){
+    private function rendeCookieString($cookie = '')
+    {
 
-        if($cookie !== '')
-        {
+        if ($cookie !== '') {
 
             $explode = explode(";", $cookie);
             $cookies = [];
 
-            foreach($explode as $ex)
-            {
+            foreach ($explode as $ex) {
 
                 $ex = explode('=', $ex);
                 $cookies[$ex[0]] = $ex[1];
@@ -61,7 +62,8 @@ class CookieBag extends RequestHeadersBag{
      * Cookileri döndürür
      * @return array
      */
-    public function getCookies(){
+    public function getCookies()
+    {
 
         return $this->cookies;
 

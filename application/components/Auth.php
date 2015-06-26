@@ -16,7 +16,7 @@ use Gem\Components\Auth\SchemaBag;
 use Gem\Components\Database\Mode\Read;
 use Gem\Components\Http\UserManager;
 use Gem\Components\Session;
-use Gem\Components\Cookie;
+use Gem\Components\Facade\Cookie;
 class Auth extends SchemaBag
 {
 
@@ -88,4 +88,3 @@ class Auth extends SchemaBag
         }
     }
 }
-

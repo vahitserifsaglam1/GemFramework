@@ -145,5 +145,4 @@ class Sender extends PHPMailer
         return $this;
     }
 
-
 }

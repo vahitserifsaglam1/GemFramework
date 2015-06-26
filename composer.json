@@ -8,7 +8,9 @@
       "Gem\\Components\\": "Application/Components/",
       "Gem\\Manager\\": "Application/Manager/",
       "Gem\\Controllers\\": "Application/Controllers/",
-      "Gem\\Models\\": "Application/Models/"
+      "Gem\\Models\\": "Application/Models/",
+      "Gem\\Events\\":"Application/Events/",
+      "Gem\\Listeners\\":"Application/Listeners/"
     },
     "classmap": [
       "vendor"
