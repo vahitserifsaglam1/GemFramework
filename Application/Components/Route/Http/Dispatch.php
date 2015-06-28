@@ -172,7 +172,7 @@ class Dispatch
     private function response($response = '')
     {
 
-        if($response instanceof ShouldBeResponse)
+        if($response instanceof ShouldBeResponseInterface)
         {
             $response->execute();
         }
