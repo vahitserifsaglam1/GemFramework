@@ -108,6 +108,4 @@ class PathPackpage implements AssetInterface
         return $this->manager->getUrl($file, $this->getPrefix());
 
     }
-
-
 }

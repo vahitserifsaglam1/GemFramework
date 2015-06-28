@@ -86,8 +86,4 @@ class UrlPackpage{
         return $this->getUrlString().$v;
 
     }
-
-
-
-
 }

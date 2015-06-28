@@ -133,4 +133,11 @@ class RouteCollector {
         return $this;
 
     }
+
+    public function getFilter()
+    {
+
+        return $this->filter;
+
+    }
 }

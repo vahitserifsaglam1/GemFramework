@@ -41,11 +41,7 @@ class TypeHint
                 {
 
                     $arg = $explode[1] - 1;
-                    $function = $explode[4];
                     $mustType = $explode[10];
-
-                    $pos = strpos($function, '()');
-                    $type = substr($function, 0, $pos);
 
                     $back = debug_backtrace()[1];
                     $explode = explode('\\', $mustType);
@@ -57,7 +53,7 @@ class TypeHint
 
                     if (gettype($arg) != $getLastType) {
 
-                        if ($dump = call_user_func(static::$types[$getLastType], $arg)) {
+                        if (call_user_func(static::$types[$getLastType], $arg)) {
 
                             return true;
                         }else{

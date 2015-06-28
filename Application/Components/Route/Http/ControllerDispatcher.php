@@ -30,5 +30,4 @@ class ControllerDispatcher extends Dispatch{
         throw new Exception('%s sınıfından callable ataması yapamassınız', __CLASS__);
 
     }
-
 }

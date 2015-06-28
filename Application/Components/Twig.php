@@ -13,11 +13,11 @@ use Gem\Components\Vıew\Connector;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 use Gem\Components\Http\Response;
-use Gem\Components\View\ShouldBeView;
+use Gem\Components\View\ShouldBeViewInterface;
 use Gem\Components\View\HeaderBag;
 use Gem\Components\View\FooterBag;
 
-class Twig extends Connector implements ShouldBeView
+class Twig extends Connector implements ShouldBeViewInterface
 {
 
     use Config;
@@ -78,8 +78,6 @@ class Twig extends Connector implements ShouldBeView
         if (true === $this->autoload) {
 
             $content .= $this->loadFooterFiles();
-            #$content .= $twig->render('inc/footer.php', $this->params);
-
         }
 
 

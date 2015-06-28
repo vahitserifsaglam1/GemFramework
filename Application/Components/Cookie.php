@@ -10,7 +10,6 @@
 
 namespace Gem\Components;
 
-use InvalidArgumentException;
 use Gem\Components\Http\CookieJar;
 use Gem\Components\Patterns\Singleton;
 class Cookie

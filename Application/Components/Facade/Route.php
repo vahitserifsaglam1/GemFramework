@@ -8,7 +8,6 @@
 
 namespace Gem\components\Facade;
 use Gem\Components\Patterns\Facade;
-use Gem\Components\Patterns\Singleton;
 class Route extends Facade {
 
     protected static function getFacadeClass(){

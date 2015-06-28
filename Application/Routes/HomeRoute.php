@@ -8,7 +8,6 @@
 namespace Gem\Routes;
 use Gem\Components\Route\RouteHandleInterface;
 use Gem\Components\Route\Http\ControllerDispatcher;
-use Gem\Components\Http\Response;
 use Gem\Manager\Access\Auth;
 
 /**

@@ -15,6 +15,4 @@ class CallableDispatcher extends GeneralDispatcher {
         $this->setContent(call_user_func_array($call, $params));
 
     }
-
-
 }

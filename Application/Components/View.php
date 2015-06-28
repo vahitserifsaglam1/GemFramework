@@ -10,12 +10,11 @@ namespace Gem\Components;
 
 
 use Exception;
-use Gem\Components\Http\Response;
 use Gem\Components\Patterns\Singleton;
 use Gem\Components\View\Connector;
-use Gem\Components\View\ShouldBeView;
+use Gem\Components\View\ShouldBeViewInterface;
 
-class View extends Connector implements ShouldBeView
+class View extends Connector implements ShouldBeViewInterface
 {
 
     private $file;

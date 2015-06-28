@@ -8,8 +8,6 @@ namespace Gem\Components;
  * @version 1
  * 
  */
-use BadFunctionCallException;
-use Gem\Components\Patterns\Singleton;
 use Symfony\Component\Yaml\Yaml as Symfony;
 use RuntimeException;
 use Exception;

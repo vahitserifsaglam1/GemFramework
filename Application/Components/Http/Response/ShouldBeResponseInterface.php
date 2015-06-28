@@ -9,7 +9,7 @@ namespace Gem\Components\Http\Response;
  * Interface ShouldBeResponse
  * @package Gem\Components\Http\Response
  */
-interface ShouldBeResponse{
+interface ShouldBeResponseInterface{
 
     public function execute();
 

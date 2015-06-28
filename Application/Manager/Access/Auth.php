@@ -2,7 +2,6 @@
 
 namespace Gem\Manager\Access;
 use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
-use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
 use Gem\Components\Redirect;
 use Gem\Components\Http\Request;
 /**

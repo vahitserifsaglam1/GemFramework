@@ -28,7 +28,7 @@ class Event
 
     /**
      *
-     * @var Container
+     * @var EventCollector
      */
     private $collector;
 
@@ -38,7 +38,7 @@ class Event
 
 
         $this->collector = $collector;
-        $this->listeners = $collector->getListeners();
+        $this->listeners = $this->collector->getListeners();
     }
 
     /**
@@ -56,7 +56,6 @@ class Event
 
             if ($eventName instanceof EventDispatch)
             {
-                $eventInstance = $eventName;
                 $eventName = get_class($eventName);
             }
             elseif (is_string($eventName))
@@ -65,6 +64,7 @@ class Event
             }
             if ($this->hasListiner($eventName))
             {
+                $eventInstance = $eventName;
                 $listeners = $this->getListeners($eventName);
                 $response = $this->runListenersHandle($listeners, $eventInstance);
                 if (count($response) === 1)

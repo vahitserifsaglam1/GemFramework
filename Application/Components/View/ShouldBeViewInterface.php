@@ -6,7 +6,7 @@ namespace Gem\Components\View;
  * Interface ShouldBeView
  * @package Gem\Components\View
  */
-interface ShouldBeView{
+interface ShouldBeViewInterface{
 
     public static function make($fileName = '', $params = []);
     public function execute();

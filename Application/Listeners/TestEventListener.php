@@ -11,6 +11,8 @@ namespace Gem\Listeners;
 use Gem\Events\TestEvent;
 class TestEventListener extends  EventListener{
 
+
+    private $event;
     public function __construct()
     {
        //
@@ -22,7 +24,8 @@ class TestEventListener extends  EventListener{
     public function handle(TestEvent $event)
     {
 
-        print_r($event->user);
+        $this->event = $event;
+        $this->event;
 
     }
 

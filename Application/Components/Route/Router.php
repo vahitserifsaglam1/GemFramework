@@ -27,12 +27,14 @@ class Router {
     private $basePath;
     private  $routes;
     private $collector;
+    private $filter;
     public function __construct()
     {
         $this->listener = Singleton::make('Gem\Components\Route\RouteListener');
         $this->basePath = $this->findBasePath();
         $this->routes = $this->listener->getRoutes();
         $this->collector = Singleton::make('Gem\Components\Route\RouteCollector');
+        $this->filter = $this->collector->getFilter();
     }
 
     /**
@@ -48,7 +50,7 @@ class Router {
 
     public function getFilter($name = '')
     {
-        return $this->collector->filter[$name];
+        return $this->filter[$name];
     }
 
     /**
