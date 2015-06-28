@@ -2,7 +2,6 @@
 /**
  * Bu sınıf GemFramework'un örnek bir model sınıfıdır.
  * 
- * @packpage Gem\Models
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
  * 
  */

@@ -13,3 +13,9 @@ column:
     - email
     - name
     - username
+register:
+    -username
+    -password
+    -email
+    -name
+    -username

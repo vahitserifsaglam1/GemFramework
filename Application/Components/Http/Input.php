@@ -62,4 +62,12 @@ class Input
 
     }
 
+    /**
+     * @return mixed Post verilerini döndürür
+     */
+    public function getAll()
+    {
+        return $_POST;
+    }
+
 }

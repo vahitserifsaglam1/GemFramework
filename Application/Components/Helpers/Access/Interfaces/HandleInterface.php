@@ -13,6 +13,6 @@ use Gem\Components\Http\Request;
 interface HandleInterface
 {
 
-    public function handle(Request $request, $next = null, $role = null);
+    public function handle(Request $request,callable $next = null, $role = null);
 
 }

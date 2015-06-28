@@ -11,12 +11,12 @@ namespace Gem\components\Http;
 use HttpResponseException;
 use Gem\Components\View;
 use Gem\Components\Twig;
-use Gem\Components\Http\Response\ExcutableResponseInterface;
+use Gem\Components\Http\Response\ShouldBeResponse;
 use Gem\Components\Http\JsonResponse;
-use Gem\Components\View\ExcutableViewInterface;
+use Gem\Components\View\ShouldBeView;
 use Gem\Components\Patterns\Singleton;
 use Gem\Components\Cookie;
-class Response implements ExcutableResponseInterface{
+class Response implements ShouldBeResponse{
 
     private $contentType = 'text/html';
     private $protocolVersion;
@@ -205,7 +205,7 @@ class Response implements ExcutableResponseInterface{
     public function setContent($content = ''){
 
 
-        if($content instanceof ExcutableViewInterface){
+        if($content instanceof ShouldBeView){
             $content = $content->execute();
         }
 

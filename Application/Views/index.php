@@ -1,1 +1,1 @@
-aaa bohda çıkabilir yani güvenmiyorumda 
+aaa bohda çıkabilir yani güvenmiyorumda

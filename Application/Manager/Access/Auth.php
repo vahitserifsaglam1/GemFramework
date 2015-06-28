@@ -2,6 +2,8 @@
 
 namespace Gem\Manager\Access;
 use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
+use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
+use Gem\Components\Redirect;
 use Gem\Components\Http\Request;
 /**
  * 
@@ -9,15 +11,22 @@ use Gem\Components\Http\Request;
  * 
  */
 class Auth implements HandleInterface{
-    
-    public function handle(Request $request, $next = null, $role = null) {
+
+    /**
+     * @param Request $request Ön tanımlı olarak gelen Http\Request 'e ait bir örnek.
+     * @param callable $next Rötalandırma sınıfında ->setNext() ile atanan değer
+     * @param null $role  Rötalandırma sınıfında ->setRole() ile atanan değer
+     */
+
+    public function handle(Request $request,callable $next = null, $role = null) {
 
         $user = $request->user();
         if(!$user->hasRole('read')){
 
-            echo 'yok';
+            Redirect::to('/index');
 
         }
         
     }
+
 }

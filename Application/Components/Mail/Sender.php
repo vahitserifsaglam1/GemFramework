@@ -17,9 +17,8 @@ namespace Gem\Components\Mail;
 
 use Gem\Components\Helpers\String\Builder;
 use Gem\Components\Helpers\Config;
-use Gem\Components\Mail\Content\Manager;
+use Gem\Components\Mail\Content\ManagerInterface;
 use PHPMailer;
-use RuntimeException;
 
 class Sender extends PHPMailer
 {
@@ -133,10 +132,10 @@ class Sender extends PHPMailer
 
     /**
      * İçerik ataması yapar.
-     * @param Manager $content
+     * @param ManagerInterface $content
      * @return \Gem\Components\Mail\Sender
      */
-    public function content(Manager $content)
+    public function content(ManagerInterface $content)
     {
 
         $contents = $content->getContent();

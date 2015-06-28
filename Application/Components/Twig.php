@@ -13,11 +13,11 @@ use Gem\Components\Vıew\Connector;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 use Gem\Components\Http\Response;
-use Gem\Components\View\ExcutableViewInterface;
+use Gem\Components\View\ShouldBeView;
 use Gem\Components\View\HeaderBag;
 use Gem\Components\View\FooterBag;
 
-class Twig extends Connector implements ExcutableViewInterface
+class Twig extends Connector implements ShouldBeView
 {
 
     use Config;

@@ -13,9 +13,9 @@ use Exception;
 use Gem\Components\Http\Response;
 use Gem\Components\Patterns\Singleton;
 use Gem\Components\View\Connector;
-use Gem\Components\View\ExcutableViewInterface;
+use Gem\Components\View\ShouldBeView;
 
-class View extends Connector implements ExcutableViewInterface
+class View extends Connector implements ShouldBeView
 {
 
     private $file;

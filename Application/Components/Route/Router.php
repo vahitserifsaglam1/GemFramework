@@ -114,6 +114,7 @@ class Router {
                             $router = new $router();
                             $router->setParams($params);
                             $router->handle();
+                            $router->dispatch();
 
                         }else{
                             throw new Exception(sprintf('%s adında bir router kayıtlı değil', $collection['callback']));

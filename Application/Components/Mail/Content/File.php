@@ -2,7 +2,7 @@
 namespace Gem\Components\Mail\Content;
 
 use Gem\Components\Mail\Content\Manager;
-use Gem\Components\File as FileSystem;
+use Gem\Components\Filesystem;
 
 /**
  *  belirli bir metinden yada uzak sunucudan veri çekmek için kullanılır.
@@ -19,7 +19,7 @@ class File implements ManagerInterface
     public function __construct($filename = '')
     {
 
-        $this->file = FileSystem::boot();
+        $this->file = Filesystem::getInstance();
         if ($read = $this->file->read($filename, true)) {
 
             $this->content = $read;
@@ -27,6 +27,10 @@ class File implements ManagerInterface
         }
     }
 
+    /**
+     * İçeriği döndürür
+     * @return mixed
+     */
     public function getContent()
     {
 

@@ -5,8 +5,11 @@
  *
  */
 namespace Gem\Components\Http\Response;
-
-interface ExcutableResponseInterface{
+/**
+ * Interface ShouldBeResponse
+ * @package Gem\Components\Http\Response
+ */
+interface ShouldBeResponse{
 
     public function execute();
 

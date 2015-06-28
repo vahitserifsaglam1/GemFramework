@@ -12,7 +12,7 @@ use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
 use Gem\Components\Route\Http\Dispatchers\CallableDispatcher;
 use Gem\Components\Route\Http\Dispatchers\ControllerDispatcher;
 use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
-use Gem\Components\Http\Response\ExcutableResponseInterface;
+use Gem\Components\Http\Response\ShouldBeResponse;
 use Gem\Components\Http\Request;
 use Exception;
 
@@ -172,7 +172,7 @@ class Dispatch
     private function response($response = '')
     {
 
-        if($response instanceof ExcutableResponseInterface)
+        if($response instanceof ShouldBeResponse)
         {
             $response->execute();
         }

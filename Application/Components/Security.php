@@ -18,7 +18,7 @@ class Security
         $data = str_replace(['"', "'", "<", ">", "&lt;"], '', $data);
         if (!is_string($data)) {
 
-            echo sprintf('%s veri tipi %s fonksiyonunda kullanılamaz', gettype($data), __FUNCTION__);
+            throw new \Exception(sprintf('%s veri tipi %s fonksiyonunda kullanılamaz', gettype($data), __FUNCTION__));
 
         }
 

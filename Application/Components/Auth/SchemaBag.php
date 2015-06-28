@@ -15,6 +15,7 @@ class SchemaBag
     private $decoded;
     private $yamlFile = APP.'Database/user.yaml';
 
+
     public function __construct()
     {
 

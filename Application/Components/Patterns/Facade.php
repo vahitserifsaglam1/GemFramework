@@ -95,4 +95,28 @@ class Facade
         return call_user_func_array([$instance, $method], $parametres);
     }
 
+    /**
+     * @param $method
+     * @param $parametres
+     * @return mixed
+     *  Dönen sınıfdan istediğimiz methodu static olarak çağırmaya yarar
+     */
+    public function _call($method, $parametres)
+    {
+        $instanceName = static::getFacedeRoot();
+
+        if (!is_object($instanceName)) {
+
+            $instance = Singleton::make($instanceName);
+            static::$instance[$instanceName] = $instance;
+
+        } else {
+
+            $instance = $instanceName;
+        }
+
+
+        return call_user_func_array([$instance, $method], $parametres);
+    }
+
 }

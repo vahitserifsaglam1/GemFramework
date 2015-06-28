@@ -21,12 +21,15 @@ class PathPackpage implements AssetInterface
 
     private $manager;
     private $prefix;
+    private $pattern;
 
     public function __construct($prefix = '', AssetInterface $manager = null)
     {
 
         $this->setManager($manager);
         $this->setPrefix($prefix);
+        $this->pattern = $this->manager->getPattern();
+        $this->version = $this->manager->getVersion();
 
     }
 
@@ -70,6 +73,28 @@ class PathPackpage implements AssetInterface
      */
     public function getPrefix(){
         return $this->prefix;
+    }
+
+    /**
+     * Versionu döndürür
+     * @return mixed
+     */
+    public function getVersion()
+    {
+
+        return $this->version;
+
+    }
+
+    /**
+     * Pattern'i döndürür
+     * @return string
+     */
+
+    public function getPattern(){
+
+        return $this->pattern;
+
     }
 
     /**
