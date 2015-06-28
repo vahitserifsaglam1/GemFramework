@@ -1,6 +1,0 @@
-<?php 
-include "vendor/autoload.php";
-use Gem\Components\Patterns\Singleton;
-
-$console = Singleton::make('Gem\Components\Console', [$args, $argc]);
-$console->run();
