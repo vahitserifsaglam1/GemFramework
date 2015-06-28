@@ -2,7 +2,7 @@
 
 namespace Gem\Manager\Access;
 use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
-use Gem\Components\Request;
+use Gem\Components\Http\Request;
 /**
  * 
  * GemFramework accessManager test dosyası

@@ -1,18 +1,16 @@
 <?php
 
-
-
 namespace Gem\Components\Helpers\Access\Interfaces;
 
-use Gem\Components\Request;
+use Gem\Components\Http\Request;
 
 /**
  *
  * @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
-interface HandleInterface
+interface TerminateInterface
 {
 
-    public function handle(Request $request, $next = null, $role = null);
+    public function terminate(Request $request);
 
 }

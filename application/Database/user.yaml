@@ -2,6 +2,11 @@ table: user
 login:
     - username
     - password
+register:
+    - username
+    - password
+    - email
+    - name
 access:
     - role
 column:

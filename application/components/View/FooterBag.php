@@ -12,7 +12,7 @@ namespace Gem\Components\View;
 class FooterBag {
     private $viewFooters = [
 
-        'inc/header.php'
+        'inc/footer'
 
     ];
 

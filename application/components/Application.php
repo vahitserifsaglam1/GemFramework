@@ -14,6 +14,7 @@ use Gem\Components\Patterns\Singleton;
 use Gem\Components\Patterns\Facade;
 use Gem\Components\Helpers\Server;
 use Gem\Components\Security\TypeHint;
+use Gem\Routes\Collect;
 use Exception;
 
 /**
@@ -85,8 +86,9 @@ class Application
     public function run()
     {
 
-        ## rotalandırmanın başlamı
-        $make = Singleton::make('Gem\Components\Route\Manager');
+        $this->runOthers();
+        new Collect();
+        $make = $this->singleton('Gem\Components\Route\Router');
         $make->run();
 
     }
@@ -175,30 +177,6 @@ class Application
         return $this;
     }
 
-
-    /**
-     * Rötalandırma işleminin nerden devam edeceğine karar verir
-     * @param $filePath
-     * @return $this
-     * @throws Exception
-     */
-    function routesFromFile($filePath = self::ROUTEFILE)
-    {
-
-        if (file_exists($filePath)) {
-
-            $this->runOthers();
-            include($filePath);
-            $this->run();
-        } else {
-
-            throw new Exception(
-                sprintf("girmiş olduğunuz %s dosyası bulunmadı", $filePath)
-            );
-        }
-
-        return $this;
-    }
 
     /**
      * İçeriği belirtilen dosya yolundan çeker

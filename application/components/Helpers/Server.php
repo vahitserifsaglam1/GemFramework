@@ -32,6 +32,13 @@ trait Server
         'protocol' => 'SERVER_PROTOCOL'
     ];
 
+    public function getMethod()
+    {
+
+        return $this->method;
+
+    }
+
     /**
      * Özel terimlerden getirme
      * @param string $name

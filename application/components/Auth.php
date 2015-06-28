@@ -14,16 +14,20 @@ namespace Gem\Components;
 use Gem\Components\Database\Base;
 use Gem\Components\Auth\SchemaBag;
 use Gem\Components\Database\Mode\Read;
+use Gem\Components\Database\Mode\Insert;
 use Gem\Components\Http\UserManager;
 use Gem\Components\Session;
 use Gem\Components\Facade\Cookie;
+use InvalidArgumentException;
+
 class Auth extends SchemaBag
 {
 
     private $db;
     private $tables;
 
-    public function __construct(){
+    public function __construct()
+    {
 
         $this->db = new Base();
         parent::__construct();
@@ -39,7 +43,8 @@ class Auth extends SchemaBag
      * @param bool $remember
      * @return mixed
      */
-    public function login($username, $password, $remember = false){
+    public function login($username, $password, $remember = false)
+    {
 
         $loginParams = $this->tables['login'];
         $userParam = $loginParams[0];
@@ -48,22 +53,21 @@ class Auth extends SchemaBag
         $getTables = $this->tables['column'];
         $role = $this->tables['access'];
         $getTables = array_merge($getTables, $role);
-        $login = $this->db->read($tableName, function(Read $mode) use ($getTables,$userParam, $passParam,$username,$password){
+        $login = $this->db->read($tableName, function (Read $mode) use ($getTables, $userParam, $passParam, $username, $password) {
 
             return $mode->where([
-                [$userParam,'=',$username],
-                [$passParam,'=',$password]
+                [$userParam, '=', $username],
+                [$passParam, '=', $password]
             ])->select($getTables)->build();
 
         });
 
-        if($login->rowCount())
-        {
+        if ($login->rowCount()) {
 
             $fetch = $login->fetch();
 
             Session::set(UserManager::LOGIN, $fetch);
-            if($remember){
+            if ($remember) {
 
                 Cookie::set('login', serialize($fetch));
 
@@ -76,12 +80,44 @@ class Auth extends SchemaBag
     }
 
     /**
+     * Girilen parametrelere göre kayıt işlemi yapılır
+     * @param array $input bu değer user.yaml dosyasındaki değerlerle aynı değerleri içermelidir
+     * @return bool
+     */
+    public function register(array $input = [])
+    {
+        $registerParams = $this->tables['register'];
+        $tableName = $this->tables['table'];
+
+        if (count($registerParams) === count($input)) {
+            $inputValues = array_values($input);
+            if (count(array_diff($inputValues, $registerParams)) > 0) {
+                throw new InvalidArgumentException('Register parametreleriniz user.yaml dosyasındakilerle aynı olmalıdır.');
+
+            } else {
+
+                $insert = $this->db->insert($tableName, function (Insert $mode) use ($input) {
+                    $mode->set($input)
+                         ->run();
+                });
+
+                return ($insert) ? true:false;
+
+            }
+
+        } else {
+            throw new InvalidArgumentException('Register parametreleriniz user.yaml dosyasındakilerle aynı olmalıdır.');
+        }
+    }
+
+    /**
      * Giriş yapılıp yapılmadığını kontrol eder
      * @return bool
      */
-    public function isLogined(){
+    public function isLogined()
+    {
 
-        if(Session::has(UserManager::LOGIN) || Cookie::has(UserManager::LOGIN)){
+        if (Session::has(UserManager::LOGIN) || Cookie::has(UserManager::LOGIN)) {
 
             return true;
 

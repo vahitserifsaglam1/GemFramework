@@ -18,7 +18,7 @@ class HeaderBag {
 
     private $viewHeaders = [
 
-        'inc/header.php'
+        'inc/header'
 
     ];
 

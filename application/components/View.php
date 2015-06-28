@@ -14,8 +14,6 @@ use Gem\Components\Http\Response;
 use Gem\Components\Patterns\Singleton;
 use Gem\Components\View\Connector;
 use Gem\Components\View\ExcutableViewInterface;
-use Gem\Components\View\HeaderBag;
-use Gem\Components\View\FooterBag;
 
 class View extends Connector implements ExcutableViewInterface
 {
@@ -27,6 +25,7 @@ class View extends Connector implements ExcutableViewInterface
     {
 
 
+        parent::__construct();
         $this->file = Singleton::make('Gem\Components\Filesystem');
 
 

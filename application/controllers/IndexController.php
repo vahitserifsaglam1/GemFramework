@@ -5,13 +5,13 @@
  *  @author vahitserifsaglam <vahit.serif119@gmail.com>
  */
 namespace Gem\Controllers;
+use Gem\Components\Http\Response;
+class IndexController{
 
-class Index extends MainController{
 
+    public function boot(Response $response = null){
 
-    public function boot(){
-
-        echo 'hello world';
+        return $response->make($response->view('index')->autoload(true));
 
     }
 

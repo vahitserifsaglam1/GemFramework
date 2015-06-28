@@ -12,6 +12,6 @@ use Gem\Components\Patterns\Singleton;
 class Route extends Facade {
 
     protected static function getFacadeClass(){
-        return Singleton::make('Gem\Components\Route\Collector');
+        return 'Route';
     }
 }
