@@ -1,0 +1,8 @@
+alias:
+    Auth: Gem\Components\Auth
+    Cookie: Gem\Components\Cookie
+    Event: Gem\Components\Event
+    Route: Gem\Components\Route\RouteCollector
+providers:
+    - Gem\Manager\Providers\Route
+    - Gem\Manager\Providers\Event
