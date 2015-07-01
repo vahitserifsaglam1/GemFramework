@@ -34,23 +34,9 @@
 			*/
 		  public function __construct ()
 		  {
-				$this->db = new Base();
-				$this->table = $this->findCalledClassTableVariable();
-		  }
+				$this->db = new Base();}
 
-		  /**
-			* Hangi sınıftan çağrıldığını ve o sınıftaki table değerini çeker
-			* @return mixed
-			*/
-		  private function findCalledClassTableVariable()
-		  {
-				$class = get_called_class();
-				$vars = get_class_vars($class);
-				if(isset($vars[self::TABLE]))
-				{
-					 return $vars[self::TABLE];
-				}
-		  }
+
 
 		  /**
 			* Sorguya where komutu ekler
@@ -110,6 +96,16 @@
 				return $this;
 		  }
 
+		  /**
+			* Kullanılacak tabloyu atar
+			* @param string $table
+			* @return $this
+			*/
+		  public function setTable($table = '')
+		  {
+				$this->table = $table;
+				return $this;
+		  }
 		  /**
 			* @param array $limit
 			* @return $this
