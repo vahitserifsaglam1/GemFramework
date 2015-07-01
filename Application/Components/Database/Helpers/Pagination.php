@@ -1,90 +1,92 @@
 <?php
 
-/**
- *
- *  Gem Framework Pagination sınıfı -> Sayfalama İşlemlerinde Kullanılır
- *
- * @package Gem\Components\Database\Helpers
- * @copyright (c) 2015, MyfcYazilim
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- * @version 1.0
- */
+	 /**
+	  *
+	  *  Gem Framework Pagination sınıfı -> Sayfalama İşlemlerinde Kullanılır
+	  *
+	  * @package Gem\Components\Database\Helpers
+	  * @copyright (c) 2015, MyfcYazilim
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  * @version 1.0
+	  */
 
-namespace Gem\Components\Database\Helpers;
+	 namespace Gem\Components\Database\Helpers;
 
-use Gem\Components\Helpers\String\Builder;
-use Gem\Components\Helpers\Config;
+	 use Gem\Components\Helpers\Config;
+	 use Gem\Components\Helpers\String\Builder;
 
-class Pagination
-{
+	 class Pagination
+	 {
 
-    use Builder,
-        Config;
+		  use Builder,
+				Config;
 
-    private $options;
-    private $count;
+		  private $options;
+		  private $count;
 
-    public function __construct()
-    {
+		  public function __construct ()
+		  {
 
-        $this->options = $this->getConfig('pagination');
+				$this->options = $this->getConfig ('pagination');
 
-    }
+		  }
 
-    public function setCount($count)
-    {
+		  public function setCount ($count)
+		  {
 
-        $this->count = $count;
-        return $this;
-    }
+				$this->count = $count;
 
-    private function chieldString($i, $url, $search)
-    {
+				return $this;
+		  }
 
-        $url = $this->replaceString($search, $i, $url);
-        return "\n <a class='{$this->options['chieldClass']}' href='$url'>$i</a>";
-    }
+		  private function chieldString ($i, $url, $search)
+		  {
 
-    public function paginate($action)
-    {
+				$url = $this->replaceString ($search, $i, $url);
+
+				return "\n <a class='{$this->options['chieldClass']}' href='$url'>$i</a>";
+		  }
+
+		  public function paginate ($action)
+		  {
 
 
-        $url = $this->clearLastSlash($action['url']);
+				$url = $this->clearLastSlash ($action['url']);
 
-        $count = $this->count;
+				$count = $this->count;
 
-        $any = preg_match("/:(\w+)/", $url, $finded);
-        if (!$any) {
+				$any = preg_match ("/:(\w+)/", $url, $finded);
+				if ( !$any ) {
 
-            $url .= "/:page";
-            $search = ":page";
-        } else {
+					 $url .= "/:page";
+					 $search = ":page";
+				} else {
 
-            $search = $finded[0];
-        }
-        if (isset($action['now']))
-            $now = $action['now'];
-        else
-            $now = 1;
+					 $search = $finded[0];
+				}
+				if ( isset( $action['now'] ) )
+					 $now = $action['now'];
+				else
+					 $now = 1;
 
-        $s = "<div class='{$this->options['parentClass']}'>";
+				$s = "<div class='{$this->options['parentClass']}'>";
 
-        if ($count < $this->options['limit']) {
-            $limit = 1;
-        } else {
+				if ( $count < $this->options['limit'] ) {
+					 $limit = 1;
+				} else {
 
-            $limit = ceil($count / $this->options['limit']);
-        }
+					 $limit = ceil ($count / $this->options['limit']);
+				}
 
-        echo $now;
-        for ($i = $now; $i <= $limit; $i++) {
+				echo $now;
+				for ( $i = $now; $i <= $limit; $i++ ) {
 
-            $s .= $this->chieldString($i, $url, $search);
-        }
+					 $s .= $this->chieldString ($i, $url, $search);
+				}
 
-        $s .= "\n</div>";
+				$s .= "\n</div>";
 
-        return $s;
-    }
+				return $s;
+		  }
 
-}
+	 }

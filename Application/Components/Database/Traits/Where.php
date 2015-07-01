@@ -1,69 +1,69 @@
 <?php
 
-namespace Gem\Components\Database\Traits;
+	 namespace Gem\Components\Database\Traits;
 
-trait Where
-{
+	 trait Where
+	 {
 
-    /**
-     *
-     * @param array $args
-     * @param string $start
-     * @return multitype:string multitype:mixed
-     */
-    private function databaseStringBuilderWithStart(array $args, $start)
-    {
+		  /**
+			*
+			* @param array $args
+			* @param string $start
+			* @return multitype:string multitype:mixed
+			*/
+		  private function databaseStringBuilderWithStart (array $args, $start)
+		  {
 
-        $s = '';
-        $arr = [];
-
-
-        foreach ($args as $arg) {
+				$s = '';
+				$arr = [ ];
 
 
-            $s .= " {$arg[0]} {$arg[1]} ? $start";
-            $arr[] = $arg[2];
-        }
+				foreach ( $args as $arg ) {
 
 
-        if (!count($args) === 1) {
-
-            $s = $start . $s;
-        }
-
-        $s = rtrim($s, $start);
-
-        return [
-
-            'content' => $s,
-            'array' => $arr
-        ];
-    }
-
-    /**
-     * Set verisi olu�turur
-     * @param unknown $set
-     * @return multitype:string multitype:array
-     */
-    private function databaseSetBuilder($set)
-    {
+					 $s .= " {$arg[0]} {$arg[1]} ? $start";
+					 $arr[] = $arg[2];
+				}
 
 
-        $s = '';
-        $arr = [];
+				if ( !count ($args) === 1 ) {
+
+					 $s = $start . $s;
+				}
+
+				$s = rtrim ($s, $start);
+
+				return [
+
+					 'content' => $s,
+					 'array'   => $arr
+				];
+		  }
+
+		  /**
+			* Set verisi olu�turur
+			* @param unknown $set
+			* @return multitype:string multitype:array
+			*/
+		  private function databaseSetBuilder ($set)
+		  {
 
 
-        foreach ($set as $key => $value) {
-            $s .= "$key = ?,";
-            $arr[] = $value;
-        }
+				$s = '';
+				$arr = [ ];
 
 
-        return [
+				foreach ( $set as $key => $value ) {
+					 $s .= "$key = ?,";
+					 $arr[] = $value;
+				}
 
-            'content' => rtrim($s, ","),
-            'array' => $arr
-        ];
-    }
 
-}
+				return [
+
+					 'content' => rtrim ($s, ","),
+					 'array'   => $arr
+				];
+		  }
+
+	 }

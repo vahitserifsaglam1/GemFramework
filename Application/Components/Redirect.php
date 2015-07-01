@@ -1,61 +1,62 @@
 <?php
 
-/**
- *
- *  Bu Dosya GemFramework'un bir dosyasıdır,
- *
- *  İstenildiği gibi alınıp kullanılabilir.
- *
- * @package Gem\Components
- * @author  vahitserifsaglam <vahit.serif119@gmail.com>
- * @copyright (c)  GemFramework, vahit serif saglam
- *
- *
- */
+	 /**
+	  *
+	  *  Bu Dosya GemFramework'un bir dosyasıdır,
+	  *
+	  *  İstenildiği gibi alınıp kullanılabilir.
+	  *
+	  * @package Gem\Components
+	  * @author  vahitserifsaglam <vahit.serif119@gmail.com>
+	  * @copyright (c)  GemFramework, vahit serif saglam
+	  *
+	  *
+	  */
 
-namespace Gem\Components;
+	 namespace Gem\Components;
 
-class Redirect
-{
+	 class Redirect
+	 {
 
-    /**
-     *
-     * Yönlendirme işlemi yapar
-     * @param string $adress
-     * @param integer $time
-     */
-    public static function to($adress, $time = null)
-    {
+		  /**
+			*
+			* Yönlendirme işlemi yapar
+			* @param string $adress
+			* @param integer $time
+			*/
+		  public static function to ($adress, $time = null)
+		  {
 
-        if ($time === null) {
+				if ( $time === null ) {
 
-            static::location($adress);
-        } else {
+					 static::location ($adress);
+				} else {
 
-            static::refresh($adress, $time);
-        }
-    }
+					 static::refresh ($adress, $time);
+				}
+		  }
 
-    /**
-     *  Eski sayfaya geri döndürür
-     */
+		  /**
+			*  Eski sayfaya geri döndürür
+			*/
 
-    public static function back(){
+		  public static function back ()
+		  {
 
-        self::to($_SERVER['HTTP_REFERER']);
+				self::to ($_SERVER['HTTP_REFERER']);
 
-    }
+		  }
 
-    private static function refresh($url, $time)
-    {
+		  private static function refresh ($url, $time)
+		  {
 
-        header("Refresh:{$time},url=$url");
-    }
+				header ("Refresh:{$time},url=$url");
+		  }
 
-    private static function location($url)
-    {
+		  private static function location ($url)
+		  {
 
-        header("Location:$url");
-    }
+				header ("Location:$url");
+		  }
 
-}
+	 }

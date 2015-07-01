@@ -1,72 +1,64 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vserifsaglam
- * Date: 25.6.2015
- * Time: 18:50
- */
 
-namespace Gem\Components\Http;
-use Gem\Components\Http\RequestHeadersBag;
-class CookieBag extends RequestHeadersBag
-{
+	 /**
+	  *  Bu Sınıf GemFramework'de cookie işlemlerinin yapılması için yapılmıştır
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  */
+	 namespace Gem\Components\Http;
+	 class CookieBag extends RequestHeadersBag
+	 {
 
-    private $cookies;
+		  private $cookies;
 
-    /**
-     * Cookie değerlerini atar
-     */
-    public function __construct()
-    {
+		  /**
+			* Cookie değerlerini atar
+			*/
+		  public function __construct ()
+		  {
 
-        parent::__construct();
-        $get = $this->getHeaders();
-        if (isset($get['Cookie'])) {
+				parent::__construct ();
+				$get = $this->getHeaders ();
+				if ( isset( $get['Cookie'] ) ) {
+					 $this->cookies = $this->rendeCookieString ($get['Cookie']);
+				} else {
+					 $this->cookies = [ ];
+				}
 
-            $this->cookies = $this->rendeCookieString($get['Cookie']);
+		  }
 
-        } else {
+		  /**
+			* Cookie verilerini parçalar
+			* @param string $cookie
+			* @return array
+			*/
+		  private function rendeCookieString ($cookie = '')
+		  {
 
-            $this->cookies = [];
+				if ( $cookie !== '' ) {
 
-        }
+					 $explode = explode (";", $cookie);
+					 $cookies = [ ];
 
-    }
+					 foreach ( $explode as $ex ) {
 
-    /**
-     * Cookie verilerini parçalar
-     * @param string $cookie
-     * @return array
-     */
-    private function rendeCookieString($cookie = '')
-    {
+						  $ex = explode ('=', $ex);
+						  $cookies[ $ex[0] ] = $ex[1];
 
-        if ($cookie !== '') {
+					 }
 
-            $explode = explode(";", $cookie);
-            $cookies = [];
+					 return $cookies;
+				}
 
-            foreach ($explode as $ex) {
+		  }
 
-                $ex = explode('=', $ex);
-                $cookies[$ex[0]] = $ex[1];
+		  /**
+			* Cookileri döndürür
+			* @return array
+			*/
+		  public function getCookies ()
+		  {
+				return $this->cookies;
 
-            }
+		  }
+	 }
 
-            return $cookies;
-        }
-
-    }
-
-    /**
-     * Cookileri döndürür
-     * @return array
-     */
-    public function getCookies()
-    {
-
-        return $this->cookies;
-
-    }
-
-}

@@ -1,147 +1,151 @@
 <?php
 
-/**
- *
- *  Bu Sınıf GemFramework' e ait bir sınıftır, istenilirse kopyalanılıp ayrı olarak kullanılabilir.
- *
- *  Bu sınıf ile phpmailer altyapısı ile stmp üzerinden mail gönderilir.
- *
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- * @copyright (c) 2015, vahit serif saglam
- * @package Gem\Components\Mail
- * @see https://github.com/PHPMailer/PHPMailer
- *
- */
+	 /**
+	  *
+	  *  Bu Sınıf GemFramework' e ait bir sınıftır, istenilirse kopyalanılıp ayrı olarak kullanılabilir.
+	  *
+	  *  Bu sınıf ile phpmailer altyapısı ile stmp üzerinden mail gönderilir.
+	  *
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  * @copyright (c) 2015, vahit serif saglam
+	  * @package Gem\Components\Mail
+	  * @see https://github.com/PHPMailer/PHPMailer
+	  *
+	  */
 
-namespace Gem\Components\Mail;
+	 namespace Gem\Components\Mail;
 
-use Gem\Components\Helpers\String\Builder;
-use Gem\Components\Helpers\Config;
-use Gem\Components\Mail\Content\ManagerInterface;
-use PHPMailer;
+	 use Gem\Components\Helpers\Config;
+	 use Gem\Components\Helpers\String\Builder;
+	 use Gem\Components\Mail\Content\ManagerInterface;
+	 use PHPMailer;
 
-class Sender extends PHPMailer
-{
+	 class Sender extends PHPMailer
+	 {
 
-    use Builder;
-    use Config;
+		  use Builder;
+		  use Config;
 
-    private $configs;
+		  private $configs;
 
-    /**
-     * Başlatıcı fonksiyondur, $optipns => host, username, password gibi bilgiler girilebilir
-     * @param array|string $options
-     * @param boolean $exceptions
-     */
-    public function __construct($options = [], $exceptions = false)
-    {
-        $this->getConfig('mail');
-        parent::__construct($exceptions);
-        $this->isSMTP();
-        $this->SMTPAuth = true;
-        $this->setOptions(
-            $this->getOptions($options)
-        );
-    }
+		  /**
+			* Başlatıcı fonksiyondur, $optipns => host, username, password gibi bilgiler girilebilir
+			* @param array|string $options
+			* @param boolean $exceptions
+			*/
+		  public function __construct ($options = [ ], $exceptions = false)
+		  {
+				$this->getConfig ('mail');
+				parent::__construct ($exceptions);
+				$this->isSMTP ();
+				$this->SMTPAuth = true;
+				$this->setOptions (
+					 $this->getOptions ($options)
+				);
+		  }
 
-    /**
-     * Eğer $options array ise kendisini döndürür, eğer değilse mail ayarlarından string e göre veri çeker.
-     * @see application/Configs/mail.php
-     * @param array|string $options
-     * @return array
-     */
-    private function getOptions($options)
-    {
+		  /**
+			* Eğer $options array ise kendisini döndürür, eğer değilse mail ayarlarından string e göre veri çeker.
+			* @see application/Configs/mail.php
+			* @param array|string $options
+			* @return array
+			*/
+		  private function getOptions ($options)
+		  {
 
-        if (is_array($options)) {
+				if ( is_array ($options) ) {
 
-            return $options;
+					 return $options;
 
-        } elseif (is_string($options)) {
+				} elseif ( is_string ($options) ) {
 
-            if(isset($this->configs[$options])){
-                return $this->configs[$options];
-            }
-        }
-    }
+					 if ( isset( $this->configs[ $options ] ) ) {
+						  return $this->configs[ $options ];
+					 }
+				}
+		  }
 
-    /**
-     * PHPMailer sınıfa bazı bilgileri gönderir.
-     * @param array $options
-     */
-    private function setOptions(array $options = [])
-    {
+		  /**
+			* PHPMailer sınıfa bazı bilgileri gönderir.
+			* @param array $options
+			*/
+		  private function setOptions (array $options = [ ])
+		  {
 
-        foreach ($options as $key => $value) {
+				foreach ( $options as $key => $value ) {
 
-            $this->$key = $value;
-        }
-    }
+					 $this->$key = $value;
+				}
+		  }
 
-    /**
-     *
-     * Mesajın kimden gittiğini gösteren bilgiler atanır
-     * @param string $adress
-     * @param string $name
-     * @return \Gem\Components\Mail\Sender
-     */
-    public function from($address, $name = '')
-    {
+		  /**
+			*
+			* Mesajın kimden gittiğini gösteren bilgiler atanır
+			* @param string $adress
+			* @param string $name
+			* @return \Gem\Components\Mail\Sender
+			*/
+		  public function from ($address, $name = '')
+		  {
 
-        $this->setFrom($address, $name);
-        return $this;
-    }
+				$this->setFrom ($address, $name);
 
-    /**
-     *
-     * Sınıfın kime gideceğini atar, birden çok kullanımda birden çok adress atanır
-     * @param string $address
-     * @param string $name
-     * @return \Gem\Components\Mail\Sender
-     */
-    public function to($address, $name = '')
-    {
+				return $this;
+		  }
 
-        $this->addAddress($address, $name);
-        return $this;
-    }
+		  /**
+			*
+			* Sınıfın kime gideceğini atar, birden çok kullanımda birden çok adress atanır
+			* @param string $address
+			* @param string $name
+			* @return \Gem\Components\Mail\Sender
+			*/
+		  public function to ($address, $name = '')
+		  {
 
-    /**
-     * Mail'e konu ataması yapar
-     * @param string $subject
-     * @return \Gem\Components\Mail\Sender
-     */
-    public function subject($subject)
-    {
+				$this->addAddress ($address, $name);
 
-        $this->Subject = $subject;
-        return $this;
-    }
+				return $this;
+		  }
 
-    /**
-     * Mail'in hangi charset ile gönderileceğini atar.
-     * @param string $charset
-     * @return \Gem\Components\Mail\Sender
-     */
-    public function charset($charset)
-    {
+		  /**
+			* Mail'e konu ataması yapar
+			* @param string $subject
+			* @return \Gem\Components\Mail\Sender
+			*/
+		  public function subject ($subject)
+		  {
 
-        $this->CharSet = $charset;
-        return $this;
-    }
+				$this->Subject = $subject;
 
-    /**
-     * İçerik ataması yapar.
-     * @param ManagerInterface $content
-     * @return \Gem\Components\Mail\Sender
-     */
-    public function content(ManagerInterface $content)
-    {
+				return $this;
+		  }
 
-        $contents = $content->getContent();
-        $this->msgHTML($contents);
+		  /**
+			* Mail'in hangi charset ile gönderileceğini atar.
+			* @param string $charset
+			* @return \Gem\Components\Mail\Sender
+			*/
+		  public function charset ($charset)
+		  {
 
-        return $this;
-    }
+				$this->CharSet = $charset;
 
-}
+				return $this;
+		  }
+
+		  /**
+			* İçerik ataması yapar.
+			* @param ManagerInterface $content
+			* @return \Gem\Components\Mail\Sender
+			*/
+		  public function content (ManagerInterface $content)
+		  {
+
+				$contents = $content->getContent ();
+				$this->msgHTML ($contents);
+
+				return $this;
+		  }
+
+	 }

@@ -1,15 +1,16 @@
 <?php
 
-/**
- * Bu ınterface PathPackpage, UrlPackpage gibi assets dosyalarında kullanılmak üzere tasarlanmıştır.
- * Interface AssetInterface
- *
- */
+	 /**
+	  * Bu ınterface PathPackpage, UrlPackpage gibi assets dosyalarında kullanılmak üzere tasarlanmıştır.
+	  * Interface AssetInterface
+	  *
+	  */
 
-namespace Gem\Components\Assets;
+	 namespace Gem\Components\Assets;
 
-interface AssetInterface{
+	 interface AssetInterface
+	 {
 
-    public function getUrl($file = '');
+		  public function getUrl ($file = '');
 
-}
+	 }

@@ -1,45 +1,61 @@
 <?php
 
-namespace Gem\Components\Database\Mode;
+	 namespace Gem\Components\Database\Mode;
 
-use Gem\Components\Database\Base;
-use Gem\Components\Database\Mode\ModeManager;
-use Gem\Components\Database\Traits\Where as TraitWhere;
+	 use Gem\Components\Database\Base;
+	 use Gem\Components\Database\Traits\Where as TraitWhere;
 
-class Insert extends ModeManager
-{
+	 class Insert extends ModeManager
+	 {
 
-    use TraitWhere;
+		  use TraitWhere;
 
-    public function __construct(Base $base)
-    {
+		  public function __construct (Base $base)
+		  {
 
-        $this->setBase($base);
+				$this->setBase ($base);
 
 
-        $this->string = [
+				$this->string = [
 
-            'from' => $this->getBase()->getTable(),
-            'insert' => null,
-            'parameters' => [],
-        ];
+					 'from'       => $this->getBase ()->getTable (),
+					 'insert'     => null,
+					 'parameters' => [ ],
+				];
 
-        $this->setChield($this);
+				$this->setChield ($this);
 
-        $this->setChieldPattern('insert');
-    }
+				$this->setChieldPattern ('insert');
+		  }
 
-    /**
-     *
-     * @param array $set
-     */
-    public function set($set = [])
-    {
+		  /**
+			* Veritabanındaki role kısmının atamasını hazırlar
+			* @param array $role
+			* @return mixed
+			*/
+		  public function role (array $role = [ ])
+		  {
+				$role = implode (',', $role);
 
-        $insert = $this->databaseSetBuilder($set);
-        $this->string['insert'] .= $insert['content'];
-        $this->string['parameters'] = array_merge($this->string['parameters'], $insert['array']);
-        return $this;
-    }
+				return $this->set ([
+					 'role' => $role
+				]);
+		  }
 
-}
+
+		  /**
+			*
+			* @param array $set
+			* @return $this
+			*/
+		  public function set ($set = [ ])
+		  {
+
+				$insert = $this->databaseSetBuilder ($set);
+				$this->string['insert'] .= $insert['content'];
+				$this->string['parameters'] = array_merge ($this->string['parameters'], $insert['array']);
+
+				return $this;
+		  }
+
+	 }

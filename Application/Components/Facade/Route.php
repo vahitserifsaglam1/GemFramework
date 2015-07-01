@@ -1,16 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vserifsaglam
- * Date: 21.6.2015
- * Time: 00:45
- */
+	 /**
+	  * Created by PhpStorm.
+	  * User: vserifsaglam
+	  * Date: 21.6.2015
+	  * Time: 00:45
+	  */
 
-namespace Gem\components\Facade;
-use Gem\Components\Patterns\Facade;
-class Route extends Facade {
+	 namespace Gem\components\Facade;
 
-    protected static function getFacadeClass(){
-        return 'Route';
-    }
-}
+	 use Gem\Components\Patterns\Facade;
+
+	 class Route extends Facade
+	 {
+
+		  protected static function getFacadeClass ()
+		  {
+				return 'Route';
+		  }
+	 }

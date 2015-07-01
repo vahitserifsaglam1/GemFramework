@@ -1,48 +1,65 @@
 <?php
 
-namespace Gem\Components\Database\Mode;
+	 namespace Gem\Components\Database\Mode;
 
-use Gem\Components\Database\Mode\ModeManager;
-use Gem\Components\Database\Builders\Where;
-use Gem\Components\Database\Base;
-use Gem\Components\Database\Traits\Where as TraitWhere;
-class Update extends ModeManager
-{
+	 use Gem\Components\Database\Base;
+	 use Gem\Components\Database\Builders\Where;
+	 use Gem\Components\Database\Traits\Where as TraitWhere;
 
-    use TraitWhere;
-    public function __construct(Base $base)
-    {
+	 class Update extends ModeManager
+	 {
 
-        $this->setBase($base);
+		  use TraitWhere;
 
-        $this->useBuilders([
-            'where' => new Where()
-        ]);
+		  public function __construct (Base $base)
+		  {
 
-        $this->string = [
+				$this->setBase ($base);
 
-            'from' => $this->getBase()->getTable(),
-            'update' => null,
-            'where' => null,
-            'parameters' => [],
-        ];
+				$this->useBuilders ([
+					 'where' => new Where()
+				]);
 
-        $this->setChield($this);
+				$this->string = [
 
-        $this->setChieldPattern('update');
-    }
+					 'from'       => $this->getBase ()->getTable (),
+					 'update'     => null,
+					 'where'      => null,
+					 'parameters' => [ ],
+				];
 
-    /**
-     *
-     * @param array $set
-     */
-    public function set($set = [])
-    {
+				$this->setChield ($this);
 
-        $update = $this->databaseSetBuilder($set);
-        $this->string['update'] .= $update['content'];
-        $this->string['parameters'] = array_merge($this->string['parameters'], $update['array']);
-        return $this;
-    }
+				$this->setChieldPattern ('update');
+		  }
 
-}
+		  /**
+			* Veritabanındaki role kısmının atamasını hazırlar
+			* @param array $role
+			* @return mixed
+			*/
+		  public function role (array $role = [ ])
+		  {
+				$role = implode (',', $role);
+
+				return $this->set ([
+					 'role' => $role
+				]);
+		  }
+
+		  /**
+			*
+			* @param array $set
+			* @return $this
+			*/
+		  public function set ($set = [ ])
+		  {
+
+				$update = $this->databaseSetBuilder ($set);
+				$this->string['update'] .= $update['content'];
+				$this->string['parameters'] = array_merge ($this->string['parameters'], $update['array']);
+
+				return $this;
+		  }
+
+	 }

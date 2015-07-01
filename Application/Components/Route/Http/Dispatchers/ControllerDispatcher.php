@@ -1,44 +1,45 @@
 <?php
 
-/**
- *
- * Controller'i yürüyür.
- *
- */
-namespace Gem\Components\Route\Http\Dispatchers;
-use Gem\Components\Route\Http\Dispatchers\GeneralDispatcher;
-class ControllerDispatcher extends GeneralDispatcher
-{
+	 /**
+	  *
+	  * Controller'i yürüyür.
+	  *
+	  */
+	 namespace Gem\Components\Route\Http\Dispatchers;
 
-    public function __construct($controller = null, array $params = [])
-    {
+	 class ControllerDispatcher extends GeneralDispatcher
+	 {
 
-        parent::__construct();
-        if (is_string($controller)) {
-            list($controller, $method) = $this->parseControllerString($controller);
+		  public function __construct ($controller = null, array $params = [ ])
+		  {
 
-            $controller = "Gem\\Controllers\\" . $controller;
-            $controller = new $controller();
-        } else {
-            $method = "handle";
-        }
+				if ( is_string ($controller) ) {
+					 list( $controller, $method ) = $this->parseControllerString ($controller);
 
-        $params[] = $this->getResponse();
+					 $controller = "Gem\\Controllers\\" . $controller;
+					 $controller = new $controller();
+				} else {
+					 $method = "handle";
+				}
 
-        $this->setContent(call_user_func_array([$controller, $method], $params));
+				$this->setContent (call_user_func_array ([ $controller, $method ], $params));
+		  }
 
-    }
+		  /**
+			* Veriyi :: ile parçalar
+			* @param string $controller
+			* @return array
+			*/
+		  private function parseControllerString ($controller = '')
+		  {
 
-    private function parseControllerString($controller = '')
-    {
+				$parse = explode ('::', $controller);
+				if ( count ($parse) == 1 ) {
+					 $parse[1] = "handle";
+				}
 
-        $parse = explode('::', $controller);
-        if (count($parse) == 1) {
-            $parse[1] = "handle";
-        }
+				return $parse;
 
-        return $parse;
-
-    }
-}
+		  }
+	 }
 

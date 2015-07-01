@@ -1,204 +1,197 @@
 <?php
 
-/**
- * Bu Sınıf GemFramework'un başlangıç sınıfıdr
- * Framework le ilgili olaylar ilk olarak bu s�n�fta ger�ekle�ir
- *
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- * @version 1.0.0
- * @package Gem\Components
- */
+	 /**
+	  * Bu Sınıf GemFramework'un başlangıç sınıfıdr
+	  * Framework le ilgili olaylar ilk olarak bu s�n�fta ger�ekle�ir
+	  *
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  * @version 1.0.0
+	  * @package Gem\Components
+	  */
 
-namespace Gem\Components;
-use Gem\Components\Patterns\Singleton;
-use Gem\Components\Patterns\Facade;
-use Gem\Components\Helpers\Server;
-use Gem\Components\Security\TypeHint;
-use Gem\Routes\Collect;
-use Exception;
+	 namespace Gem\Components;
 
-/**
- *
- * @class Application
- *
- */
-class Application
-{
+	 use Gem\Components\Helpers\Config;
+	 use Gem\Components\Helpers\Server;
+	 use Gem\Components\Patterns\Facade;
+	 use Gem\Components\Patterns\Singleton;
+	 use Gem\Components\Security\TypeHint;
+	 use Gem\Routes\Collect;
 
-    use Server;
-    const ROUTEFILE = 'Application/routes.php';
+	 /**
+	  *
+	  * @class Application
+	  *
+	  */
+	 final class Application
+	 {
 
-    private $frameworkName;
-    private $starter;
-    private $frameworkVersion;
+		  use Server, Config;
+		  private $frameworkName;
+		  private $starter;
+		  private $frameworkVersion;
 
-    /**
-     * Framework 'un adı ve versionu girilir,
-     * Ve framework başlatılır
-     * @param string $frameworkName
-     * @param int $frameworkVersion
-     */
-    public function __construct($frameworkName = '',$frameworkVersion = 1)
-    {
+		  /**
+			* Framework 'un adı ve versionu girilir,
+			* Ve framework başlatılır
+			* @param string $frameworkName
+			* @param int $frameworkVersion
+			*/
+		  public function __construct ($frameworkName = '', $frameworkVersion = 1)
+		  {
 
+				$this->$frameworkName = $frameworkName;
+				$this->frameworkVersion = $frameworkVersion;
+				define( 'FRAMEWORK_NAME', $this->frameworkName );
+				define( 'FRAMEWORK_VERSION', $this->frameworkVersion );
+				$this->starter = $this->singleton ('Gem\Manager\Starter');
+				$this->getProvidersAndAlias ();
 
-        $this->$frameworkName = $frameworkName;
-        $this->frameworkVersion = $frameworkVersion;
-        define('FRAMEWORK_NAME', $this->frameworkName);
-        define('FRAMEWORK_VERSION', $this->frameworkVersion);
-        $this->starter = $this->singleton('Gem\Manager\Starter');
-
-    }
-
-
-    /**
-     * $bool girilirse fonksiyonlar tip yakalaması gerçekleşir
-     * @param bool $bool
-     *
-     */
-    public function typeHint($bool = true){
-
-        if(true === $bool)
-        {
-            TypeHint::setErrorHandler();
-
-        }
-
-    }
+		  }
 
 
-    /**
-     * Yeni bir singleton objesi oluşturur
-     * @param mixed $instance
-     * @param mixed ...$parameters
-     * @return Object
-     *
-     */
-    public function singleton($instance, array $parameters = [])
-    {
+		  /**
+			* $bool girilirse fonksiyonlar tip yakalaması gerçekleşir
+			* @param bool $bool
+			*
+			*/
+		  public function typeHint ($bool = true)
+		  {
 
-        return Singleton::make($instance, $parameters);
-    }
+				if ( true === $bool ) {
+					 TypeHint::setErrorHandler ();
 
+				}
 
-    ## tetikleyici
-
-    public function run()
-    {
-
-        $this->runOthers();
-        new Collect();
-        $make = $this->singleton('Gem\Components\Route\Router');
-        $make->run();
-
-    }
-
-    /**
-     *
-     * Facadeleri yürütür
-     *
-     */
-    private function runFacades()
-    {
-
-        Facade::$instance = $this->starter->getAlias();
-    }
-
-    /**
-     * Providers ve Facade'leri yürütür
-     */
-
-    private function  runOthers()
-    {
-
-        if (count($this->starter->getProviders()) > 0) {
-
-            $this->runProviders();
-        }
-
-        if (count($this->starter->getAlias()) > 0) {
-
-            $this->runFacades();
-        }
+		  }
 
 
-    }
-    /**
-     *
-     * Providersları yürütür
-     *
-     */
-    private function runProviders()
-    {
+		  /**
+			* Yeni bir singleton objesi oluşturur
+			* @param mixed $instance
+			* @param mixed ...$parameters
+			* @return Object
+			*
+			*/
+		  public function singleton ($instance, array $parameters = [ ])
+		  {
 
-        foreach ($this->starter->getProviders() as $provider) {
-
-            new $provider($this);
-        }
-    }
-
-    /**
-     * Yeni bir manager objesi döndürür
-     * @param $class
-     * @return mixed
-     */
-    public function makeManager($class)
-    {
-
-        $class = "Gem\\Application\\Managers\\" . $class;
-        $class = new $class();
-        return $class;
-
-    }
-
-    /**
-     *
-     * @param array $facedes
-     * @return \Gem\Components\Application
-     */
-    public function facede($facedes = [])
-    {
-
-        if (!is_array($facedes))
-            $facedes = (array)$facedes;
-
-        $this->starter->setAlias($facedes);
-        return $this;
-    }
+				return Singleton::make ($instance, $parameters);
+		  }
 
 
-    public function provider($provider = [])
-    {
+		  ## tetikleyici
 
-        if (!is_array($provider))
-            $provider = (array)$provider;
+		  public function run ()
+		  {
 
-        $this->starter->setProviders($provider);
-        return $this;
-    }
+				$this->runOthers ();
+				new Collect();
+				$make = $this->singleton ('Gem\Components\Route\Router');
+				$make->run ();
+
+		  }
+
+		  /**
+			*
+			* Facadeleri yürütür
+			*
+			*/
+		  private function runFacades ()
+		  {
+
+				Facade::$instance = $this->starter->getAlias ();
+		  }
+
+		  /**
+			* Providers ve Facade'leri yürütür
+			*/
+
+		  private function  runOthers ()
+		  {
+
+				if ( count ($this->starter->getProviders ()) > 0 ) {
+
+					 $this->runProviders ();
+				}
+
+				if ( count ($this->starter->getAlias ()) > 0 ) {
+
+					 $this->runFacades ();
+				}
 
 
-    /**
-     * İçeriği belirtilen dosya yolundan çeker
-     * @param string $filePath
-     * @throws Exception
-     */
-    public function getProvidersAndAliasFromFile($filePath = ''){
+		  }
 
-        if(file_exists($filePath)){
+		  /**
+			*
+			* Providersları yürütür
+			*
+			*/
+		  private function runProviders ()
+		  {
 
-            $rende = Yaml::decode(file_get_contents($filePath));
-            $this->starter->setAlias($rende['alias']);
-            $this->starter->setProviders($rende['providers']);
+				foreach ( $this->starter->getProviders () as $provider ) {
 
-        }else{
+					 new $provider($this);
+				}
+		  }
 
-            throw new Exception(sprintf(
-                'Girdiğiniz %s url\' inde herhangi bir dosya yok',$filePath
-            ));
+		  /**
+			* Yeni bir manager objesi döndürür
+			* @param $class
+			* @return mixed
+			*/
+		  public function makeManager ($class)
+		  {
 
-        }
+				$class = "Gem\\Application\\Managers\\" . $class;
+				$class = new $class();
 
-    }
+				return $class;
 
-}
+		  }
+
+		  /**
+			* Uygulamaya dinamik olarak facede ekler
+			* @param array $facedes
+			* @return \Gem\Components\Application
+			*/
+		  public function facede ($facedes = [ ])
+		  {
+
+				if ( !is_array ($facedes) )
+					 $facedes = (array)$facedes;
+
+				$this->starter->setAlias ($facedes);
+				return $this;
+		  }
+
+
+		  /**
+			* Uygulamaya dinamik olarak provider ekler
+			* @param array $provider
+			* @return $this
+			*/
+		  public function provider ($provider = [ ])
+		  {
+
+				if ( !is_array ($provider) )
+					 $provider = (array)$provider;
+
+				$this->starter->setProviders ($provider);
+				return $this;
+		  }
+
+
+		  /**
+			* İçeriği belirtilen dosya yolundan çeker
+			*/
+		  private function getProvidersAndAlias ()
+		  {
+				$rende = $this->getConfig ('general');
+				$this->starter->setAlias ($rende['alias']);
+				$this->starter->setProviders ($rende['providers']);
+		  }
+
+	 }

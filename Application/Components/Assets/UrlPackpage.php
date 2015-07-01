@@ -1,89 +1,93 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vserifsaglam
- * Date: 24.6.2015
- * Time: 07:08
- */
+	 /**
+	  * Created by PhpStorm.
+	  * User: vserifsaglam
+	  * Date: 24.6.2015
+	  * Time: 07:08
+	  */
 
-namespace Gem\Components\Assets;
+	 namespace Gem\Components\Assets;
 
-use Gem\Components\Assets\AssetInterface;
-class UrlPackpage{
+	 class UrlPackpage
+	 {
 
-    private $manager;
-    private $url;
+		  private $manager;
+		  private $url;
 
-    public function __construct($url = '', AssetInterface $manager = null)
-    {
+		  public function __construct ($url = '', AssetInterface $manager = null)
+		  {
 
-        $this->setManager($manager);
-        $this->setUrlString($url);
+				$this->setManager ($manager);
+				$this->setUrlString ($url);
 
-    }
+		  }
 
-    /**
-     * Manager'i döndürür
-     * @return AssetInterface
-     */
-    public function getManager()
-    {
+		  /**
+			* Manager'i döndürür
+			* @return AssetInterface
+			*/
+		  public function getManager ()
+		  {
 
-        return $this->manager;
+				return $this->manager;
 
-    }
+		  }
 
-    /**
-     * Url 'i oluşturucak ana yönetici
-     * @param AssetInterface $manager
-     * @return $this
-     */
-    public function setManager(AssetInterface $manager = null)
-    {
+		  /**
+			* Url 'i oluşturucak ana yönetici
+			* @param AssetInterface $manager
+			* @return $this
+			*/
+		  public function setManager (AssetInterface $manager = null)
+		  {
 
-        $this->manager = $manager;
-        return $this;
+				$this->manager = $manager;
 
-    }
+				return $this;
 
-    /**
-     * url ataması yapar
-     * @return string
-     */
-    public function setUrlString($url = ''){
+		  }
 
-        $this->url = $url;
-        return $this;
-    }
+		  /**
+			* url ataması yapar
+			* @return string
+			*/
+		  public function setUrlString ($url = '')
+		  {
 
-    /**
-     * Atanan url' i döndürür
-     * @return string
-     */
-    public function getUrlString(){
-        return $this->url;
-    }
+				$this->url = $url;
 
-    /**
-     * Url'i oluşturur
-     * @param string $file
-     * @return mixed
-     */
-    public function getUrl($file = '')
-    {
+				return $this;
+		  }
 
-        $version = $this->manager->getVersion();
-        $pattern = $this->manager->getPattern();
+		  /**
+			* Atanan url' i döndürür
+			* @return string
+			*/
+		  public function getUrlString ()
+		  {
+				return $this->url;
+		  }
 
-        /** Search Params
-         *  %f => $file
-         *  %v => $version
-         */
+		  /**
+			* Url'i oluşturur
+			* @param string $file
+			* @return mixed
+			*/
+		  public function getUrl ($file = '')
+		  {
 
-        $f = str_replace('%f', $file, $pattern);
-        $v = str_replace('%v', $version, $f);
+				$version = $this->manager->getVersion ();
+				$pattern = $this->manager->getPattern ();
 
-        return $this->getUrlString().$v;
+				/** Search Params
+				 *  %f => $file
+				 *  %v => $version
+				 */
 
-    }
-}
+				$f = str_replace ('%f', $file, $pattern);
+				$v = str_replace ('%v', $version, $f);
+
+				return $this->getUrlString () . $v;
+
+		  }
+	 }

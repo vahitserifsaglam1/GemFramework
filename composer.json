@@ -7,11 +7,12 @@
     "psr-4": {
       "Gem\\Components\\": "Application/Components/",
       "Gem\\Manager\\": "Application/Manager/",
-      "Gem\\Controllers\\": "Application/Controllers/",
-      "Gem\\Models\\": "Application/Models/",
-      "Gem\\Events\\":"Application/Events/",
-      "Gem\\Listeners\\":"Application/Listeners/",
-      "Gem\\Routes\\":"Application/Routes"
+      "Gem\\Controllers\\": "Application/MVC/Controllers/",
+      "Gem\\Models\\": "Application/MVC/Models/",
+      "Gem\\Events\\":"Application/Event/Events/",
+      "Gem\\Listeners\\":"Application/Event/Listeners/",
+      "Gem\\Routes\\":"Application/Routes",
+      "Gem\\System\\":"System/"
     },
     "classmap": [
       "vendor"
@@ -21,6 +22,6 @@
     "php": ">=5.4",
     "phpmailer/phpmailer": "~5.2",
     "twig/twig" : "~1.0",
-    "symfony/yaml":"dev-master"
+	"particle/validator":"dev-master"
   }
 }

@@ -1,235 +1,241 @@
 <?php
 
-namespace Gem\Components;
-use Exception;
-use Gem\Components\Adapter\AdapterInterface;
-/**
- * Class Adapter
- * @package Adapter
- *
- */
+	 namespace Gem\Components;
 
-class Adapter
-{
-    /**
-     * @var
-     */
-    public $adapter;
+	 use Exception;
+	 use Gem\Components\Adapter\AdapterInterface;
 
-    /**
-     * @var string
-     */
+	 /**
+	  * Class Adapter
+	  * @package Adapter
+	  *
+	  */
+	 class Adapter
+	 {
+		  /**
+			* @var
+			*/
+		  public $adapter;
 
-    public $page;
+		  /**
+			* @var string
+			*/
 
-    /**
-     * @param string $page
-     */
-    public function __construct($page = ' ')
-    {
-        $this->page = $page;
-    }
+		  public $page;
 
-    /**
-     * @param string $page
-     * @return $this
-     */
+		  /**
+			* @param string $page
+			*/
+		  public function __construct ($page = ' ')
+		  {
+				$this->page = $page;
+		  }
 
-    public function setPage($page = '')
-    {
-        $this->page = $page;
-        return $this;
-    }
+		  /**
+			* @param string $page
+			* @return $this
+			*/
 
+		  public function setPage ($page = '')
+		  {
+				$this->page = $page;
 
-    public function isAdapter($name)
-    {
-
-        (isset($this->adapter[$this->page][$name])) ? true : false;
-
-    }
-
-    /**
-     *  call the boot method all adapters
-     */
-
-    public function alLAdaptersBoot()
-    {
-        foreach ($this->adapter[$this->page] as $key => $values) {
-
-            $values['adapter']->boot();
-
-        }
-
-    }
-
-    /**
-     * @param $adapter
-     * @param int $priority
-     * @return $this
-     */
-
-    public function addAdapter(AdapterInterface $adapter, $priority = 0)
-    {
+				return $this;
+		  }
 
 
-        $this->adapter[$this->page][$adapter->getName()] = [
-            'adapter' => $adapter,
-            'priority' => $priority,
-            'selected' => false,
-        ];
+		  public function isAdapter ($name)
+		  {
 
-        return $this;
+				( isset( $this->adapter[ $this->page ][ $name ] ) ) ? true : false;
 
-    }
+		  }
 
-    /**
-     * @param $name
-     * @return $this
-     */
+		  /**
+			*  call the boot method all adapters
+			*/
 
-    public function setSelect($name)
-    {
-        $this->resetAdapterSelection();
-        $this->adapter[$this->page][$name]['selected'] = true;
-        return $this;
-    }
+		  public function alLAdaptersBoot ()
+		  {
+				foreach ( $this->adapter[ $this->page ] as $key => $values ) {
+
+					 $values['adapter']->boot ();
+
+				}
+
+		  }
+
+		  /**
+			* @param $adapter
+			* @param int $priority
+			* @return $this
+			*/
+
+		  public function addAdapter (AdapterInterface $adapter, $priority = 0)
+		  {
 
 
-    /**
-     *  Adapterleri s�ralama yapar
-     * @return number
-     */
-    public function sortAdapter()
-    {
-        uasort($this->adapter[$this->page], function (array $a, array $b) {
-            if ($a['selected'] || $b['selected']) {
-                return $a['selected'] ? -1 : 1;
-            }
+				$this->adapter[ $this->page ][ $adapter->getName () ] = [
+					 'adapter'  => $adapter,
+					 'priority' => $priority,
+					 'selected' => false,
+				];
 
-            return $a['priority'] > $b['priority'] ? -1 : 1;
-        });
-    }
+				return $this;
 
-    /**
-     *  use 1. adapter
-     */
+		  }
 
-    public function useBestAdapter()
-    {
-        $this->resetAdapterSelection();
-        return $this->sortAdapter();
-    }
+		  /**
+			* @param $name
+			* @return $this
+			*/
 
-    /**
-     *
-     *  Reset the selected adapter
-     *
-     */
+		  public function setSelect ($name)
+		  {
+				$this->resetAdapterSelection ();
+				$this->adapter[ $this->page ][ $name ]['selected'] = true;
 
-    public function resetAdapterSelection()
-    {
-        $this->adapter[$this->page] = array_map(function ($pro) {
-            $pro['selected'] = false;
-            return $pro;
-        }, $this->adapter[$this->$page]);
-    }
+				return $this;
+		  }
 
-    /**
-     * @param $adapter
-     * @param callable $call
-     * @return $this
-     * @throws Exception
-     */
 
-    public function buildAdapter($adapter, Callable $call)
-    {
+		  /**
+			*  Adapterleri s�ralama yapar
+			* @return number
+			*/
+		  public function sortAdapter ()
+		  {
+				uasort ($this->adapter[ $this->page ], function (array $a, array $b) {
+					 if ( $a['selected'] || $b['selected'] ) {
+						  return $a['selected'] ? -1 : 1;
+					 }
 
-        if (!is_object($adapter)) {
+					 return $a['priority'] > $b['priority'] ? -1 : 1;
+				});
+		  }
 
-            if (isset($this->adapter[$this->page][$adapter])) {
-                $adapter = $this->adapter[$this->page][$adapter]['adapter'];
+		  /**
+			*  use 1. adapter
+			*/
 
-            } else {
-                throw new Exception(" $adapter Adında bir adapter bulunamadı ");
-            }
+		  public function useBestAdapter ()
+		  {
+				$this->resetAdapterSelection ();
 
-        }
+				return $this->sortAdapter ();
+		  }
 
-        $call($adapter);
+		  /**
+			*
+			*  Reset the selected adapter
+			*
+			*/
 
-        return $this;
-    }
+		  public function resetAdapterSelection ()
+		  {
+				$this->adapter[ $this->page ] = array_map (function ($pro) {
+					 $pro['selected'] = false;
 
-    /**
-     * @return array
-     */
+					 return $pro;
+				}, $this->adapter[ $this->$page ]);
+		  }
 
-    public function getAdapters()
-    {
-        return array_values(array_map(function (array $adapter) {
-            return $adapter['adapter'];
-        }, $this->adapter[$this->page]));
-    }
+		  /**
+			* @param $adapter
+			* @param callable $call
+			* @return $this
+			* @throws Exception
+			*/
 
-    /**
-     * @param $name
-     * @return mixed
-     */
+		  public function buildAdapter ($adapter, Callable $call)
+		  {
 
-    public function getAdapter($name)
-    {
-        return $this->adapter[$this->page][$name]['adapter'];
-    }
+				if ( !is_object ($adapter) ) {
 
-    /**
-     * @param $name
-     */
+					 if ( isset( $this->adapter[ $this->page ][ $adapter ] ) ) {
+						  $adapter = $this->adapter[ $this->page ][ $adapter ]['adapter'];
 
-    public function removeAdapter($name)
-    {
-        if (isset($this->adapter[$this->page][$name])) unset($this->adapter[$this->page][$name]);
-    }
+					 } else {
+						  throw new Exception(" $adapter Adında bir adapter bulunamadı ");
+					 }
 
-    /**
-     * Seçilen sayfayı değiştirir
-     * @param string $page
-     * @return \Myfc\Adapter
-     */
-    public function setSelectedPage($page)
-    {
+				}
 
-        $this->page = $page;
-        return $this;
+				$call($adapter);
 
-    }
+				return $this;
+		  }
 
-    /**
-     *
-     */
+		  /**
+			* @return array
+			*/
 
-    public function removeAdapters()
-    {
-        $this->adapter[$this->page] = array();
-    }
+		  public function getAdapters ()
+		  {
+				return array_values (array_map (function (array $adapter) {
+					 return $adapter['adapter'];
+				}, $this->adapter[ $this->page ]));
+		  }
 
-    /**
-     * @return mixed
-     */
+		  /**
+			* @param $name
+			* @return mixed
+			*/
 
-    public function returnAdapterList()
-    {
-        return $this->adapter[$this->page];
-    }
+		  public function getAdapter ($name)
+		  {
+				return $this->adapter[ $this->page ][ $name ]['adapter'];
+		  }
 
-    /**
-     * @param $name
-     * @return mixed
-     */
+		  /**
+			* @param $name
+			*/
 
-    public function __get($name)
-    {
+		  public function removeAdapter ($name)
+		  {
+				if ( isset( $this->adapter[ $this->page ][ $name ] ) ) unset( $this->adapter[ $this->page ][ $name ] );
+		  }
 
-        return $this->adapter[$this->page][$name]['adapter'];
-    }
-}
+		  /**
+			* Seçilen sayfayı değiştirir
+			* @param string $page
+			* @return \Myfc\Adapter
+			*/
+		  public function setSelectedPage ($page)
+		  {
+
+				$this->page = $page;
+
+				return $this;
+
+		  }
+
+		  /**
+			*
+			*/
+
+		  public function removeAdapters ()
+		  {
+				$this->adapter[ $this->page ] = [ ];
+		  }
+
+		  /**
+			* @return mixed
+			*/
+
+		  public function returnAdapterList ()
+		  {
+				return $this->adapter[ $this->page ];
+		  }
+
+		  /**
+			* @param $name
+			* @return mixed
+			*/
+
+		  public function __get ($name)
+		  {
+
+				return $this->adapter[ $this->page ][ $name ]['adapter'];
+		  }
+	 }

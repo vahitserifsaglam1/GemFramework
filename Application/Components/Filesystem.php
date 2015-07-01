@@ -1,313 +1,318 @@
 <?php
 
-namespace Gem\Components;
+	 namespace Gem\Components;
 
-use Exception;
-use ArrayObject;
+	 use ArrayObject;
+	 use Exception;
 
-class Filesystem
-{
+	 class Filesystem
+	 {
 
 
-    /**
-     * @param mixed $files
-     * @return \ArrayObject
-     */
-    private function toIterator($files)
-    {
+		  /**
+			* @param mixed $files
+			* @return \ArrayObject
+			*/
+		  private function toIterator ($files)
+		  {
 
-        if (!$files instanceof \Traversable) {
-            $files = new ArrayObject(is_array($files) ? $files : array($files));
-        }
-        return $files;
+				if ( !$files instanceof \Traversable ) {
+					 $files = new ArrayObject(is_array ($files) ? $files : [ $files ]);
+				}
 
-    }
+				return $files;
 
+		  }
 
-    /**
-     * Dosyaya metni girmeye yarar
-     * @param string $data
-     * @param mixed $filename
-     * @param boolean|string $append
-     * @return boolean
-     */
-    public function write($filename, $data, $append = false)
-    {
 
+		  /**
+			* Dosyaya metni girmeye yarar
+			* @param string $data
+			* @param mixed $filename
+			* @param boolean|string $append
+			* @return boolean
+			*/
+		  public function write ($filename, $data, $append = false)
+		  {
 
-        if (!$append) {
-            $mode = "w";
-        } else {
-            $mode = "a";
-        }
-        if ($handle = fopen($filename, $mode)) {
-            fwrite($handle, $data);
-            fclose($handle);
-            return true;
-        }
-        return false;
-    }
 
+				if ( !$append ) {
+					 $mode = "w";
+				} else {
+					 $mode = "a";
+				}
+				if ( $handle = fopen ($filename, $mode) ) {
+					 fwrite ($handle, $data);
+					 fclose ($handle);
 
-    /**
-     *
-     * Girilen dosya yolundaki içeriği okur
-     * @param string $fileName
-     * @param bool $fread
-     * @return string
-     * @throws Exception
-     *
-     */
-    public function read($fileName = '', $fread = false)
-    {
+					 return true;
+				}
 
-        if ($this->exists($fileName)) {
+				return false;
+		  }
 
-            if (false === $fread) {
 
-                return file_get_contents($fileName);
+		  /**
+			*
+			* Girilen dosya yolundaki içeriği okur
+			* @param string $fileName
+			* @param bool $fread
+			* @return string
+			* @throws Exception
+			*
+			*/
+		  public function read ($fileName = '', $fread = false)
+		  {
 
-            } elseif (true === $fread) {
+				if ( $this->exists ($fileName) ) {
 
-                $open = fopen($fread, 'r');
-                $read = fgetss($fread, filesize($fileName));
-                fclose($open);
+					 if ( false === $fread ) {
 
-                return $read;
+						  return file_get_contents ($fileName);
 
-            }
+					 } elseif ( true === $fread ) {
 
-        } else {
+						  $open = fopen ($fread, 'r');
+						  $read = fgetss ($fread, filesize ($fileName));
+						  fclose ($open);
 
-            throw new Exception(
-                sprintf('Girdiğiniz %s dosyası bulunamadı', $fileName)
-            );
+						  return $read;
 
-        }
+					 }
 
-    }
+				} else {
 
-    public function exists($fileName = '')
-    {
+					 throw new Exception(
+						  sprintf ('Girdiğiniz %s dosyası bulunamadı', $fileName)
+					 );
 
-        foreach ($this->toIterator($fileName) as $file) {
+				}
 
-            if (!file_exists($file))
-                return false;
+		  }
 
-        }
+		  public function exists ($fileName = '')
+		  {
 
-        return true;
+				foreach ( $this->toIterator ($fileName) as $file ) {
 
-    }
+					 if ( !file_exists ($file) )
+						  return false;
 
-    /**
-     * $filePath ile girilen yolda bir dosya oluşturur, $over  true girilirse dosya silinip yeni dosya oluştururlu.
-     * @param string $filePath
-     * @param bool $over
-     * @return bool
-     *
-     */
-    public function touch($filePath = '', $over = false)
-    {
+				}
 
-        if (false === $over) {
+				return true;
 
-            if (false === $this->exists($filePath)) {
+		  }
 
-                return touch($filePath);
+		  /**
+			* $filePath ile girilen yolda bir dosya oluşturur, $over  true girilirse dosya silinip yeni dosya oluştururlu.
+			* @param string $filePath
+			* @param bool $over
+			* @return bool
+			*
+			*/
+		  public function touch ($filePath = '', $over = false)
+		  {
 
-            }
+				if ( false === $over ) {
 
-        } else {
+					 if ( false === $this->exists ($filePath) ) {
 
-            if (true === $this->exists($filePath)) {
+						  return touch ($filePath);
 
-                $this->delete($filePath);
+					 }
 
-            }
+				} else {
 
-            return touch($filePath);
+					 if ( true === $this->exists ($filePath) ) {
 
-        }
+						  $this->delete ($filePath);
 
+					 }
 
-    }
+					 return touch ($filePath);
 
-    /**
-     * Girilen $dir yolundaki dosyayı siler
-     * @param string $dir
-     * @return bool
-     */
-    public function delete($dir = '')
-    {
+				}
 
-        foreach ($this->toIterator($dir) as $dirs) {
 
-            if (!file_exists($dirs)) {
-                return false;
-            }
+		  }
 
-            if (is_file($dirs)) {
+		  /**
+			* Girilen $dir yolundaki dosyayı siler
+			* @param string $dir
+			* @return bool
+			*/
+		  public function delete ($dir = '')
+		  {
 
-                if (true !== unlink($dirs)) {
+				foreach ( $this->toIterator ($dir) as $dirs ) {
 
-                    continue;
+					 if ( !file_exists ($dirs) ) {
+						  return false;
+					 }
 
-                }
+					 if ( is_file ($dirs) ) {
 
-            } elseif (is_dir($dirs)) {
+						  if ( true !== unlink ($dirs) ) {
 
-                if (true !== rmdir($dirs)) {
+								continue;
 
-                    continue;
+						  }
 
-                }
+					 } elseif ( is_dir ($dirs) ) {
 
-            }
+						  if ( true !== rmdir ($dirs) ) {
 
-        }
+								continue;
 
-        return true;
+						  }
 
-    }
+					 }
 
-    /**
-     * $filepath ile girilen yola $mode değişkenindeki izinleri atar
-     * @param string $filePath
-     * @param int $mode
-     * @return bool
-     */
-    public function chmod($filePath = '', $mode = 0777)
-    {
+				}
 
-        if (true === $this->exists($filePath)) {
+				return true;
 
-            return chmod($filePath, $mode);
+		  }
 
-        }
+		  /**
+			* $filepath ile girilen yola $mode değişkenindeki izinleri atar
+			* @param string $filePath
+			* @param int $mode
+			* @return bool
+			*/
+		  public function chmod ($filePath = '', $mode = 0777)
+		  {
 
-    }
+				if ( true === $this->exists ($filePath) ) {
 
-    /**
-     * Dosya Kopyalama İşlemini yapar
-     * @param string $src
-     * @param string $desc
-     * @throws Exception
-     */
-    public function copy($src = '', $desc = '')
-    {
+					 return chmod ($filePath, $mode);
 
-        if (!is_file($src)) {
+				}
 
-            throw new Exception(
-                sprintf('girdiğiniz %s bir dosya değil', $src));
+		  }
 
-        }
+		  /**
+			* Dosya Kopyalama İşlemini yapar
+			* @param string $src
+			* @param string $desc
+			* @throws Exception
+			*/
+		  public function copy ($src = '', $desc = '')
+		  {
 
-        $this->mkdir($desc);
+				if ( !is_file ($src) ) {
 
-        if (true !== copy($src, $desc)) {
+					 throw new Exception(
+						  sprintf ('girdiğiniz %s bir dosya değil', $src));
 
-            $error = error_get_last();
-            throw new Exception(
-                sprintf('Dosya kopyalama sırasında bir hata oluştu: %s', $error['message'])
-            );
+				}
 
-        }
+				$this->mkdir ($desc);
 
-    }
+				if ( true !== copy ($src, $desc) ) {
 
+					 $error = error_get_last ();
+					 throw new Exception(
+						  sprintf ('Dosya kopyalama sırasında bir hata oluştu: %s', $error['message'])
+					 );
 
-    /**
-     * Girilen $dir değişkenine göre yeni bir dosya oluşturur
-     * @param string $dir
-     * @param int $mode
-     * @throws Exception
-     * @return bool
-     */
-    public function mkdir($dir = '', $mode = 0777)
-    {
+				}
 
-        foreach ($this->toIterator($dir) as $dirs) {
+		  }
 
-            if (is_dir($dirs)) {
-                continue;
-            }
 
-            if (true !== mkdir($dir, $mode, true)) {
+		  /**
+			* Girilen $dir değişkenine göre yeni bir dosya oluşturur
+			* @param string $dir
+			* @param int $mode
+			* @throws Exception
+			* @return bool
+			*/
+		  public function mkdir ($dir = '', $mode = 0777)
+		  {
 
-                $error = error_get_last();
-                throw new Exception(sprintf(
-                    'Dosya oluşturma sırasında bir hata oluştu, hata : %s', $error['message']
-                ));
+				foreach ( $this->toIterator ($dir) as $dirs ) {
 
-            }
+					 if ( is_dir ($dirs) ) {
+						  continue;
+					 }
 
-            return true;
+					 if ( true !== mkdir ($dir, $mode, true) ) {
 
-        }
+						  $error = error_get_last ();
+						  throw new Exception(sprintf (
+								'Dosya oluşturma sırasında bir hata oluştu, hata : %s', $error['message']
+						  ));
 
-    }
+					 }
 
-    /**
-     * Dosyaya yeni bir isim veri
-     * @param string $oldFile
-     * @param string $newName
-     * @throws Exception
-     * @return bool
-     */
-    public function reName($oldFile = '', $newName = ''){
+					 return true;
 
-        foreach($this->toIterator($oldFile) as $file){
+				}
 
-            if(false === $this->exists($file))
-                continue;
+		  }
 
-            if(false === rename($oldFile, $newName)){
+		  /**
+			* Dosyaya yeni bir isim veri
+			* @param string $oldFile
+			* @param string $newName
+			* @throws Exception
+			* @return bool
+			*/
+		  public function reName ($oldFile = '', $newName = '')
+		  {
 
-                $error = error_get_last();
-                throw new Exception(
-                    sprintf('İsim değiştirme işlemi sırasında bir hata oluştu: %s', $error['message'])
-                );
+				foreach ( $this->toIterator ($oldFile) as $file ) {
 
+					 if ( false === $this->exists ($file) )
+						  continue;
 
-            }
+					 if ( false === rename ($oldFile, $newName) ) {
 
-        }
+						  $error = error_get_last ();
+						  throw new Exception(
+								sprintf ('İsim değiştirme işlemi sırasında bir hata oluştu: %s', $error['message'])
+						  );
 
-        return true;
 
-    }
+					 }
 
-    /**
-     * Yeni bir örnek oluşturur
-     * @return static
-     */
-    public static function getInstance()
-    {
+				}
 
-        return new static();
+				return true;
 
-    }
+		  }
 
-    /**
-     * Girilen parametre ve dosya ile include işlemi yapar
-     * @param $fileName
-     * @param array $parametres
-     * @return mixed
-     */
-    public function inc($fileName, $parametres = []){
+		  /**
+			* Yeni bir örnek oluşturur
+			* @return static
+			*/
+		  public static function getInstance ()
+		  {
 
-        if(true === $this->exists($fileName)){
+				return new static();
 
-            if(count($parametres) > 0)
-                extract($parametres);
+		  }
 
-            return include($fileName);
+		  /**
+			* Girilen parametre ve dosya ile include işlemi yapar
+			* @param $fileName
+			* @param array $parametres
+			* @return mixed
+			*/
+		  public function inc ($fileName, $parametres = [ ])
+		  {
 
-        }
+				if ( true === $this->exists ($fileName) ) {
 
+					 if ( count ($parametres) > 0 )
+						  extract ($parametres);
 
-    }
-}
+					 return include ( $fileName );
+
+				}
+
+
+		  }
+	 }

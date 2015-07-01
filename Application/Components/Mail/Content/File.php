@@ -1,49 +1,50 @@
 <?php
-namespace Gem\Components\Mail\Content;
+	 namespace Gem\Components\Mail\Content;
 
-use Gem\Components\Mail\Content\Manager;
-use Gem\Components\Filesystem;
+	 use Gem\Components\Filesystem;
+	 use Gem\Components\Mail\Content\Manager;
 
-/**
- *  belirli bir metinden yada uzak sunucudan veri çekmek için kullanılır.
- * @package Gem\Components\Mail\Content
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- */
-class File implements ManagerInterface
-{
+	 /**
+	  *  belirli bir metinden yada uzak sunucudan veri çekmek için kullanılır.
+	  * @package Gem\Components\Mail\Content
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  */
+	 class File implements ManagerInterface
+	 {
 
-    private $file;
-    private $content;
+		  private $file;
+		  private $content;
 
 
-    public function __construct($filename = '')
-    {
+		  public function __construct ($filename = '')
+		  {
 
-        $this->file = Filesystem::getInstance();
-        if ($read = $this->file->read($filename, true)) {
+				$this->file = Filesystem::getInstance ();
+				if ( $read = $this->file->read ($filename, true) ) {
 
-            $this->content = $read;
+					 $this->content = $read;
 
-        }
-    }
+				}
+		  }
 
-    /**
-     * İçeriği döndürür
-     * @return mixed
-     */
-    public function getContent()
-    {
+		  /**
+			* İçeriği döndürür
+			* @return mixed
+			*/
+		  public function getContent ()
+		  {
 
-        return $this->content;
+				return $this->content;
 
-    }
+		  }
 
-    public function setContent($content)
-    {
+		  public function setContent ($content)
+		  {
 
-        $this->content = $content;
-        return $this;
+				$this->content = $content;
 
-    }
+				return $this;
 
-}
+		  }
+
+	 }

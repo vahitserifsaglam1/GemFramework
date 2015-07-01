@@ -1,228 +1,231 @@
 <?php
 
-/**
- * GemFramework Captcha oluşturma sınıfı
- *
- * @package  Gem\Components;
- * @author  vahitserifsaglam <vahit.serif119@gmail.com>
- *
- */
+	 /**
+	  * GemFramework Captcha oluşturma sınıfı
+	  *
+	  * @package  Gem\Components;
+	  * @author  vahitserifsaglam <vahit.serif119@gmail.com>
+	  *
+	  */
 
-namespace Gem\Components;
+	 namespace Gem\Components;
 
-use Gem\Components\Session;
+	 class Captcha
+	 {
 
-class Captcha
-{
+		  /**
+			* Geni�li�i tutar
+			* @var int
+			*/
+		  private $width = 200;
 
-    /**
-     * Geni�li�i tutar
-     * @var int
-     */
-    private $width = 200;
+		  /**
+			* Uzunlu�u tutar
+			* @var int
+			*/
+		  private $height = 200;
 
-    /**
-     * Uzunlu�u tutar
-     * @var int
-     */
-    private $height = 200;
+		  /**
+			*
+			* @var array
+			*/
+		  private $font;
 
-    /**
-     *
-     * @var array
-     */
-    private $font;
+		  /**
+			*
+			* @var int
+			*/
+		  private $min = 1;
 
-    /**
-     *
-     * @var int
-     */
-    private $min = 1;
+		  /**
+			*
+			* @var number
+			*/
+		  private $max = 9999999;
 
-    /**
-     *
-     * @var number
-     */
-    private $max = 9999999;
+		  public function __construct ($configs = [ ])
+		  {
 
-    public function __construct($configs = [])
-    {
+				$this->setConfigs ($configs);
+		  }
 
-        $this->setConfigs($configs);
-    }
+		  /**
+			* Ayar atamas� yapar
+			* @param array $configs
+			* @return \Myfc\Captcha
+			*/
+		  public function setConfigs (array $configs = [ ])
+		  {
 
-    /**
-     * Ayar atamas� yapar
-     * @param array $configs
-     * @return \Myfc\Captcha
-     */
-    public function setConfigs(array $configs = [])
-    {
-
-        $this->setWidth($configs['width']);
-        $this->setHeight($configs['height']);
-        $this->setFont((isset($configs['font'])) ? $configs['font'] : 'public/fonts/HoboStd.otf');
+				$this->setWidth ($configs['width']);
+				$this->setHeight ($configs['height']);
+				$this->setFont (( isset( $configs['font'] ) ) ? $configs['font'] : 'public/fonts/HoboStd.otf');
 
 
-        return $this;
-    }
+				return $this;
+		  }
 
-    /**
-     * Geni�lik atamas� yapar
-     * @param number $width
-     */
-    public function setWidth($width = 200)
-    {
+		  /**
+			* Geni�lik atamas� yapar
+			* @param number $width
+			*/
+		  public function setWidth ($width = 200)
+		  {
 
-        $this->width = $width;
-        return $this;
-    }
+				$this->width = $width;
 
-    /**
-     *
-     * @param number $height
-     * @return \Myfc\Captcha
-     */
-    public function setHeight($height = 200)
-    {
+				return $this;
+		  }
 
-        $this->height = $height;
-        return $this;
-    }
+		  /**
+			*
+			* @param number $height
+			* @return \Myfc\Captcha
+			*/
+		  public function setHeight ($height = 200)
+		  {
 
-    /**
-     * ayarlamalar� yapar
-     * @param String $font
-     * @return \Myfc\Captcha
-     */
-    public function setFont($font)
-    {
+				$this->height = $height;
 
-        $this->font = $font;
-        return $this;
-    }
+				return $this;
+		  }
 
-    /**
-     *
-     * @param number $max
-     * @return \Myfc\Captcha
-     */
-    public function setMax($max = 1)
-    {
+		  /**
+			* ayarlamalar� yapar
+			* @param String $font
+			* @return \Myfc\Captcha
+			*/
+		  public function setFont ($font)
+		  {
 
-        $this->max = $max;
-        return $this;
-    }
+				$this->font = $font;
 
-    /**
-     *
-     * @param number $min
-     * @return \Myfc\Captcha
-     */
-    public function setMin($min = 1)
-    {
+				return $this;
+		  }
 
-        $this->min = $min;
-        return $this;
-    }
+		  /**
+			*
+			* @param number $max
+			* @return \Myfc\Captcha
+			*/
+		  public function setMax ($max = 1)
+		  {
 
-    /**
-     * geni�lik de�erlerini d�nd�r�r
-     * @return number
-     */
-    public function getWidth()
-    {
+				$this->max = $max;
 
-        return $this->width;
-    }
+				return $this;
+		  }
 
-    /**
-     * Font u getirir
-     * @return multitype:String
-     */
-    public function getFont()
-    {
+		  /**
+			*
+			* @param number $min
+			* @return \Myfc\Captcha
+			*/
+		  public function setMin ($min = 1)
+		  {
 
-        return $this->font;
-    }
+				$this->min = $min;
 
-    /**
-     * metnin ba�lang�� de�erlerini d�nd�r�r
-     * @return number
-     */
-    public function getMin()
-    {
+				return $this;
+		  }
 
-        return $this->min;
-    }
+		  /**
+			* geni�lik de�erlerini d�nd�r�r
+			* @return number
+			*/
+		  public function getWidth ()
+		  {
 
-    /**
-     * metnin geni�lik de�erini d�nd�r�r
-     * @return int
-     */
-    public function getMax()
-    {
+				return $this->width;
+		  }
 
-        return $this->max;
-    }
+		  /**
+			* Font u getirir
+			* @return multitype:String
+			*/
+		  public function getFont ()
+		  {
 
-    /**
-     * uzunluk de�erini d�nd�r�r
-     * @return number
-     */
-    public function getHeight()
-    {
+				return $this->font;
+		  }
 
-        return $this->height;
-    }
+		  /**
+			* metnin ba�lang�� de�erlerini d�nd�r�r
+			* @return number
+			*/
+		  public function getMin ()
+		  {
 
-    /**
-     * Captcha olu�turur
-     */
-    public function generate()
-    {
+				return $this->min;
+		  }
 
+		  /**
+			* metnin geni�lik de�erini d�nd�r�r
+			* @return int
+			*/
+		  public function getMax ()
+		  {
 
-        $harfler = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "y", "x", "w", "z");
+				return $this->max;
+		  }
 
-        $rastgeleharf = rand(0, 26);
+		  /**
+			* uzunluk de�erini d�nd�r�r
+			* @return number
+			*/
+		  public function getHeight ()
+		  {
 
-        $rastgelesayi = rand($this->getMin(), $this->getMax());
+				return $this->height;
+		  }
 
-        $resimmetni = $harfler[$rastgeleharf] . $rastgelesayi;
-
-        $resimmetni = md5($resimmetni);
-
-        $yeniresimmetni = substr($resimmetni, rand(1, 4), rand(7, 9));
-
-        Session::set('captcha', $yeniresimmetni);
+		  /**
+			* Captcha olu�turur
+			*/
+		  public function generate ()
+		  {
 
 
-        $resim = imagecreatetruecolor($this->getWidth(), $this->getHeight());
+				$harfler = [ "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "y", "x", "w", "z" ];
 
-        $arkaplanrenk = imagecolorallocate($resim, rand(1, 255), rand(1, 255), rand(1, 255));
+				$rastgeleharf = rand (0, 26);
 
-        $fontrenk = imagecolorallocate($resim, rand(1, 255), rand(1, 255), rand(1, 255));
+				$rastgelesayi = rand ($this->getMin (), $this->getMax ());
+
+				$resimmetni = $harfler[ $rastgeleharf ] . $rastgelesayi;
+
+				$resimmetni = md5 ($resimmetni);
+
+				$yeniresimmetni = substr ($resimmetni, rand (1, 4), rand (7, 9));
+
+				Session::set ('captcha', $yeniresimmetni);
 
 
-        imagefill($resim, 0, 0, $arkaplanrenk);
+				$resim = imagecreatetruecolor ($this->getWidth (), $this->getHeight ());
+
+				$arkaplanrenk = imagecolorallocate ($resim, rand (1, 255), rand (1, 255), rand (1, 255));
+
+				$fontrenk = imagecolorallocate ($resim, rand (1, 255), rand (1, 255), rand (1, 255));
 
 
-        imagestring($resim, rand(4, 9), rand($this->getWidth() / rand(20, 40), $this->getWidth() / rand(5, 10)), rand($this->getHeight() / 4, 22), $yeniresimmetni, $fontrenk);
+				imagefill ($resim, 0, 0, $arkaplanrenk);
 
-        header("Cache-Control: no-cache");
 
-        header("Content-type: image/png");
+				imagestring ($resim, rand (4, 9), rand ($this->getWidth () / rand (20, 40), $this->getWidth () / rand (5, 10)), rand ($this->getHeight () / 4, 22), $yeniresimmetni, $fontrenk);
 
-        imagepng($resim);
+				header ("Cache-Control: no-cache");
 
-        imagedestroy($resim);
-    }
+				header ("Content-type: image/png");
 
-    public static function check($string = '')
-    {
+				imagepng ($resim);
 
-        ($string === Session::get('captcha')) ? true : false;
-    }
+				imagedestroy ($resim);
+		  }
 
-}
+		  public static function check ($string = '')
+		  {
+
+				( $string === Session::get ('captcha') ) ? true : false;
+		  }
+
+	 }

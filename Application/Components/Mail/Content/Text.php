@@ -1,40 +1,41 @@
 <?php
 
 
-namespace Gem\Components\Mail\Content;
+	 namespace Gem\Components\Mail\Content;
 
-use Gem\Components\Mail\Content\Manager;
+	 use Gem\Components\Mail\Content\Manager;
 
-/**
- *  belirli bir metin için kullanılır
- * @package Gem\Components\Mail\Content
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- */
-class Text implements ManagerInterface
-{
+	 /**
+	  *  belirli bir metin için kullanılır
+	  * @package Gem\Components\Mail\Content
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  */
+	 class Text implements ManagerInterface
+	 {
 
-    private $content;
+		  private $content;
 
 
-    public function __construct($content = '')
-    {
+		  public function __construct ($content = '')
+		  {
 
-        $this->content = $content;
-    }
+				$this->content = $content;
+		  }
 
-    public function getContent()
-    {
+		  public function getContent ()
+		  {
 
-        return $this->content;
+				return $this->content;
 
-    }
+		  }
 
-    public function setContent($content)
-    {
+		  public function setContent ($content)
+		  {
 
-        $this->content = $content;
-        return $this;
+				$this->content = $content;
 
-    }
+				return $this;
 
-}
+		  }
+
+	 }

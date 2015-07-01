@@ -1,18 +1,16 @@
 <?php
-/**
- *
- *  Çağrılabilir Fonksiyon'u çalıştırır
- */
-namespace Gem\Components\Route\Http\Dispatchers;
-use Gem\Components\Route\Http\Dispatchers\GeneralDispatcher;
-class CallableDispatcher extends GeneralDispatcher {
+	 /**
+	  *
+	  *  Çağrılabilir Fonksiyon'u çalıştırır
+	  */
+	 namespace Gem\Components\Route\Http\Dispatchers;
 
-    public function __construct(callable $call = null, array $params = [])
-    {
+	 class CallableDispatcher extends GeneralDispatcher
+	 {
 
-        parent::__construct();
-        $params[] = $this->getResponse();
-        $this->setContent(call_user_func_array($call, $params));
+		  public function __construct (callable $call = null, array $params = [ ])
+		  {
+				$this->setContent (call_user_func_array ($call, $params));
 
-    }
-}
+		  }
+	 }

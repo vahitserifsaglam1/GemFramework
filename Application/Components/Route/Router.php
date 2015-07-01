@@ -1,139 +1,138 @@
 <?php
 
-/**
- * Bu sınıf GemFramework'de rötalama işlemi'ni yapan ana sınıftır
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- *
- */
-namespace Gem\Components\Route;
-use Gem\Components\Patterns\Singleton;
-use Gem\Components\Helpers\Server;
-use Gem\Components\Helpers\String\Parser;
-use Gem\Components\Helpers\String\Builder;
-use Exception;
-/**
- * Class Router
- * @package Gem\Components\Route
- */
+	 /**
+	  * Bu sınıf GemFramework'de rötalama işlemi'ni yapan ana sınıftır
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  *
+	  */
+	 namespace Gem\Components\Route;
 
-class Router {
+	 use Exception;
+	 use Gem\Components\Helpers\Server;
+	 use Gem\Components\Helpers\String\Builder;
+	 use Gem\Components\Helpers\String\Parser;
+	 use Gem\Components\Patterns\Singleton;
 
-    use Server, Parser, Builder;
-    /**
-     * Rötalama koleksiyonları'nın tutalacağı yer
-     * @var RouteListener $listener
-     */
-    private $listener;
-    private $basePath;
-    private  $routes;
-    private $collector;
-    private $filter;
-    public function __construct()
-    {
-        $this->listener = Singleton::make('Gem\Components\Route\RouteListener');
-        $this->basePath = $this->findBasePath();
-        $this->routes = $this->listener->getRoutes();
-        $this->collector = Singleton::make('Gem\Components\Route\RouteCollector');
-        $this->filter = $this->collector->getFilter();
-    }
+	 /**
+	  * Class Router
+	  * @package Gem\Components\Route
+	  */
+	 class Router
+	 {
 
-    /**
-     * Koleksiyonları Döndürür
-     * @return array
-     */
-    public function getCollections()
-    {
+		  use Server, Parser, Builder;
+		  /**
+			* Rötalama koleksiyonları'nın tutalacağı yer
+			* @var RouteListener $listener
+			*/
+		  private $listener;
+		  private $basePath;
+		  private $routes;
+		  private $collector;
+		  private $filter;
 
-        return $this->collector->getCollections();
+		  public function __construct ()
+		  {
+				$this->listener = Singleton::make ('Gem\Components\Route\RouteListener');
+				$this->basePath = $this->findBasePath ();
+				$this->routes = $this->listener->getRoutes ();
+				$this->collector = Singleton::make ('Gem\Components\Route\RouteCollector');
+				$this->filter = $this->collector->getFilter ();
+		  }
 
-    }
+		  /**
+			* Koleksiyonları Döndürür
+			* @return array
+			*/
+		  public function getCollections ()
+		  {
 
-    public function getFilter($name = '')
-    {
-        return $this->filter[$name];
-    }
+				return $this->collector->getCollections ();
 
-    /**
-     * Regex i döndürür
-     * @return mixed
-     */
-    private function getRegex($url)
-    {
+		  }
 
-        return preg_replace_callback("/:(\w+)/", [$this, 'substituteFilter'], $url);
-    }
+		  public function getFilter ($name = '')
+		  {
+				return $this->filter[ $name ];
+		  }
 
-    /**
-     *
-     * @param array $matches
-     * @return string
-     */
-    private function substituteFilter(array $matches = [])
-    {
+		  /**
+			* Regex i döndürür
+			* @return mixed
+			*/
+		  private function getRegex ($url)
+		  {
 
-        return isset($this->collector->filter[$matches[1]]) ? "({$this->getFilter($matches[1])})" : "([\w-%]+)";
-    }
+				return preg_replace_callback ("/:(\w+)/", [ $this, 'substituteFilter' ], $url);
+		  }
 
-    public function run()
-    {
-        $collections = $this->getCollections();
-        $url = $this->getUrl();
-        if(isset($collections[$this->getMethod()]))
-        {
+		  /**
+			*
+			* @param array $matches
+			* @return string
+			*/
+		  private function substituteFilter (array $matches = [ ])
+		  {
 
-            if(count($collections)>0)
-            {
+				return isset( $this->collector->filter[ $matches[1] ] ) ? "({$this->getFilter($matches[1])})" : "([\w-%]+)";
+		  }
 
-                foreach($collections as $collection)
-                {
+		  public function run ()
+		  {
+				$collections = $this->getCollections ();
+				$url = $this->getUrl ();
+				if ( isset( $collections[ $this->getMethod () ] ) ) {
 
-                    $regex = $this->getRegex($collection['action']);
-                    if ($regex !== '') {
-                        if (!preg_match("@^" . $regex . "*$@i", $url, $matches)) {
-                            continue;
-                        }
-                    }
-                    $get = $this->routeGenerateParams($url, $collection['action']);
-                    $argument_keys = $get['args'];
-                    $params = $get['params'];
-                    
-                    if ($url == '/') {
-                        $url = '';
-                    }
-                    $url = $this->basePath . $url;
+					 if ( count ($collections) > 0 ) {
 
+						  foreach ( $collections as $collection ) {
 
-                    if ($this->routeGenareteNewUrl($argument_keys,
-                        $params,
-                        $url,
-                        $this->basePath . $collection['action']))
-                    {
+								$regex = $this->getRegex ($collection['action']);
+								if ( $regex !== '' ) {
+									 if ( !preg_match ("@^" . $regex . "*$@i", $url, $matches) ) {
+										  continue;
+									 }
+								}
+								$get = $this->routeGenerateParams ($url, $collection['action']);
+								$argument_keys = $get['args'];
+								$params = $get['params'];
+
+								if ( $url == '/' ) {
+									 $url = '';
+								}
+								$url = $this->basePath . $url;
 
 
-                        if(isset($this->routes[$collection['callback']]))
-                        {
-                            $router = $this->routes[$collection['callback']];
-                            $router = new $router();
-                            $router->setParams($params);
-                            $router->handle();
-                            $router->dispatch();
+								if ( $this->routeGenareteNewUrl ($argument_keys,
+									 $params,
+									 $url,
+									 $this->basePath . $collection['action'])
+								) {
 
-                        }else{
-                            throw new Exception(sprintf('%s adında bir router kayıtlı değil', $collection['callback']));
-                        }
 
-                    }
+									 if ( isset( $this->routes[ $collection['callback'] ] ) ) {
+										  $router = $this->routes[ $collection['callback'] ];
+										  $router = new $router();
+										  $router->setParams ($params);
+										  $router->handle ();
+										  $router->dispatch ();
 
-                }
+									 } else {
+										  throw new Exception(sprintf ('%s adında bir router kayıtlı değil', $collection['callback']));
+									 }
 
-            }
+								}
 
-        }else{
+						  }
 
-            //
+					 }
 
-        }
+				} else {
 
-    }
+					 //
 
-}
+				}
+
+		  }
+
+	 }

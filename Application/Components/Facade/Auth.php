@@ -1,16 +1,17 @@
 <?php
 
-namespace Gem\Components\Facade;
-use Gem\Components\Patterns\Facade;
+	 namespace Gem\Components\Facade;
 
-class Auth  extends Facade
-{
+	 use Gem\Components\Patterns\Facade;
 
-    protected static function getFacadeClass()
-    {
+	 class Auth extends Facade
+	 {
 
-        return "Auth";
+		  protected static function getFacadeClass ()
+		  {
 
-    }
-}
+				return "Auth";
+
+		  }
+	 }
 

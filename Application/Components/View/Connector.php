@@ -1,93 +1,130 @@
 <?php
 
-namespace Gem\Components\View;
-use Gem\Components\Helpers\String\Parser;
-use Gem\Components\Helpers\String\Builder;
+	 namespace Gem\Components\View;
 
-/**
- * Bu sınıf GemFramework'deki view sınıflarını bağlar.
- * Class Connector
- * @package Gem\Components\Vıew
- */
-class Connector {
+	 use Gem\Components\Helpers\Config;
+	 use Gem\Components\Helpers\String\Builder;
+	 use Gem\Components\Helpers\String\Parser;
 
-    use Parser, Builder;
+	 /**
+	  * Bu sınıf GemFramework'deki view sınıflarını bağlar.
+	  * Class Connector
+	  * @package Gem\Components\Vıew
+	  */
+	 class Connector
+	 {
 
-    protected $autoload;
-    protected $fileName;
-    protected $params;
-    protected $headerBag;
-    protected $footerBag;
+		  use Parser, Builder, Config;
 
-    public function __construct(){
+		  protected $autoload;
+		  protected $fileName;
+		  protected $params;
+		  protected $headerBag;
+		  protected $footerBag;
 
-        $this->headerBag = new HeaderBag();
-        $this->footerBag = new FooterBag();
+		  public function __construct ()
+		  {
+				$this->headerBag = new HeaderBag();
+				$this->footerBag = new FooterBag();
+				$view = $this->getConfig ('general')['view'];
+				$this->headerFile ($view['headerFiles']);
+				$this->footerFile ($view['footerFiles']);
+		  }
 
-    }
+		  /**
+			* Autoload yapılıp yapılmayacağını kontrol eder
+			* @param bool $au
+			* @return $this
+			*/
+		  public function autoload ($au = false)
+		  {
 
-    /**
-     * Autoload yapılıp yapılmayacağını kontrol eder
-     * @param bool $au
-     * @return $this
-     */
-    public function autoload($au = false)
-    {
+				$this->autoload = $au;
 
-        $this->autoload = $au;
-        return $this;
-    }
+				return $this;
+		  }
 
-    /**
-     * Header dosyalarının atamasını yapar
-     * @param array $file
-     * @return $this
-     */
-    public function headerFile($file = []){
+		  /**
+			* Header dosyalarının atamasını yapar
+			* @param array $file
+			* @return $this
+			*/
+		  public function headerFile ($file = [ ])
+		  {
 
-        $this->headerBag->setViewHeaders($file);
-        return $this;
+				$this->headerBag->setViewHeaders ($file);
 
-    }
+				return $this;
 
-    public function footerFile($file = []){
+		  }
 
-        $this->footerBag->setViewFooters($file);
-        return $this;
+		  public function footerFile ($file = [ ])
+		  {
 
-    }
-    /**
-     *
-     * @param array $language
-     * @return \Gem\Components\View
-     *
-     *  [ 'dil' => [
-     *   'file1','file2'
-     *  ]
-     */
-    public function language($language)
-    {
+				$this->footerBag->setViewFooters ($file);
 
-        if (count($language) > 0 && is_array($language)) {
+				return $this;
 
-            foreach ($language as $lang) {
+		  }
 
-                ## alt par�alama
-                foreach ($lang as $langfile) {
+		  /**
+			*
+			* @param array $language
+			* @return \Gem\Components\View
+			*
+			*  [ 'dil' => [
+			*   'file1','file2'
+			*  ]
+			*/
+		  public function language ($language)
+		  {
 
-                    $file = $this->joinDotToUrl($langfile);
-                    $fileName = LANG . $langfile . '/' . $file . ".php";
+				if ( count ($language) > 0 && is_array ($language) ) {
 
-                    if (file_exists($fileName)) {
+					 foreach ( $language as $lang ) {
 
-                        $newParams = include $fileName;
-                        $this->params = array_merge($this->params, $newParams);
-                    }
-                }
-            }
-        }
+						  ## alt par�alama
+						  foreach ( $lang as $langfile ) {
+
+								$file = $this->joinDotToUrl ($langfile);
+								$fileName = LANG . $langfile . '/' . $file . ".php";
+
+								if ( file_exists ($fileName) ) {
+
+									 $newParams = include $fileName;
+									 $this->params = array_merge ($this->params, $newParams);
+								}
+						  }
+					 }
+				}
 
 
-        return $this;
-    }
-}
+				return $this;
+
+		  }
+
+		  /**
+			* Dosya  adını atar
+			* @param string $fileName
+			* @return $this
+			*/
+		  public function setFileName ($fileName = '')
+		  {
+				$this->fileName = $fileName;
+
+				return $this;
+		  }
+
+		  /**
+			* Kullanılacak parametreleri atar
+			* @param array $params
+			* @return $this
+			*/
+		  public function setParams ($params = [ ])
+		  {
+				$this->params = $params;
+
+				return $this;
+		  }
+
+	 }

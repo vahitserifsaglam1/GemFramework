@@ -1,9 +1,9 @@
 <?php
 
-return [
-    
-    'parentClass' => 'pagination',
-    'chieldClass' => 'pagi',
-    'limit'       => 50
-    
-];
+	 return [
+
+		  'parentClass' => 'pagination',
+		  'chieldClass' => 'pagi',
+		  'limit'       => 50
+
+	 ];

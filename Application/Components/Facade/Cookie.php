@@ -1,20 +1,23 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vserifsaglam
- * Date: 25.6.2015
- * Time: 20:48
- */
+	 /**
+	  * Created by PhpStorm.
+	  * User: vserifsaglam
+	  * Date: 25.6.2015
+	  * Time: 20:48
+	  */
 
-namespace Gem\Components\Facade;
-use Gem\Components\Patterns\Facade;
+	 namespace Gem\Components\Facade;
 
-class Cookie extends Facade{
+	 use Gem\Components\Patterns\Facade;
 
-    protected static function getFacadeClass(){
+	 class Cookie extends Facade
+	 {
 
-        return "Cookie";
+		  protected static function getFacadeClass ()
+		  {
 
-    }
+				return "Cookie";
 
-}
+		  }
+
+	 }

@@ -1,59 +1,65 @@
 <?php
-/**
- *
- * Bu sınıf Eventler'i denl
- *
- */
-namespace Gem\Components\Event;
-use Gem\Components\Application;
-class EventCollector {
+	 /**
+	  *
+	  * Bu sınıf Eventler'i denl
+	  *
+	  */
+	 namespace Gem\Components\Event;
 
-    protected $application;
-    private $listeners;
-    /**
-     * Uygulamayı atar
-     * @param Application $application
-     */
+	 use Gem\Components\Application;
 
-    public function __construct(Application $application)
-    {
+	 class EventCollector
+	 {
 
-        $this->application = $application;
+		  protected $application;
+		  private $listeners;
 
-    }
+		  /**
+			* Uygulamayı atar
+			* @param Application $application
+			*/
 
-    /**
-     * Dinleyicileri $this->listeners değerine atar
-     * @param array $listeners
-     * @return $this
-     */
-    public function setListeners(array $listeners = []){
+		  public function __construct (Application $application)
+		  {
 
-        $this->listeners = $listeners;
-        return $this;
+				$this->application = $application;
 
-    }
+		  }
 
-    /**
-     * Dinleyicileri Döndürür
-     * @return mixed
-     */
-    public function getListeners()
-    {
+		  /**
+			* Dinleyicileri $this->listeners değerine atar
+			* @param array $listeners
+			* @return $this
+			*/
+		  public function setListeners (array $listeners = [ ])
+		  {
 
-        return $this->listeners;
+				$this->listeners = $listeners;
 
-    }
+				return $this;
 
-    /**
-     * Uygulama' yı döndürür
-     * @return Application
-     */
-    public function getApplication()
-    {
+		  }
 
-        return $this->application;
+		  /**
+			* Dinleyicileri Döndürür
+			* @return mixed
+			*/
+		  public function getListeners ()
+		  {
 
-    }
+				return $this->listeners;
 
-}
+		  }
+
+		  /**
+			* Uygulama' yı döndürür
+			* @return Application
+			*/
+		  public function getApplication ()
+		  {
+
+				return $this->application;
+
+		  }
+
+	 }

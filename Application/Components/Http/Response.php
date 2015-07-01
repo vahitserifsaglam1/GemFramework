@@ -1,380 +1,395 @@
 <?php
 
-/**
- *
- *  Bu Dosya GemFramework'un bir parçasıdır, GemFramework'de Yapılan isteklere gönderilecek cevabı belirler.
- *
- */
-
-namespace Gem\components\Http;
-
-use HttpResponseException;
-use Gem\Components\View;
-use Gem\Components\Twig;
-use Gem\Components\Http\Response\ShouldBeResponseInterface;
-use Gem\Components\Http\JsonResponse;
-use Gem\Components\View\ShouldBeViewInterface;
-use Gem\Components\Patterns\Singleton;
-use Gem\Components\Cookie;
-class Response implements ShouldBeResponseInterface{
-
-    private $contentType = 'text/html';
-    private $protocolVersion;
-    private $charset = 'utf-8';
-    private $statusTexts = array(
-        100 => 'Continue',
-        101 => 'Switching Protocols',
-        102 => 'Processing',            // RFC2518
-        200 => 'OK',
-        201 => 'Created',
-        202 => 'Accepted',
-        203 => 'Non-Authoritative Information',
-        204 => 'No Content',
-        205 => 'Reset Content',
-        206 => 'Partial Content',
-        207 => 'Multi-Status',          // RFC4918
-        208 => 'Already Reported',      // RFC5842
-        226 => 'IM Used',               // RFC3229
-        300 => 'Multiple Choices',
-        301 => 'Moved Permanently',
-        302 => 'Found',
-        303 => 'See Other',
-        304 => 'Not Modified',
-        305 => 'Use Proxy',
-        306 => 'Reserved',
-        307 => 'Temporary Redirect',
-        308 => 'Permanent Redirect',    // RFC7238
-        400 => 'Bad Request',
-        401 => 'Unauthorized',
-        402 => 'Payment Required',
-        403 => 'Forbidden',
-        404 => 'Not Found',
-        405 => 'Method Not Allowed',
-        406 => 'Not Acceptable',
-        407 => 'Proxy Authentication Required',
-        408 => 'Request Timeout',
-        409 => 'Conflict',
-        410 => 'Gone',
-        411 => 'Length Required',
-        412 => 'Precondition Failed',
-        413 => 'Request Entity Too Large',
-        414 => 'Request-URI Too Long',
-        415 => 'Unsupported Media Type',
-        416 => 'Requested Range Not Satisfiable',
-        417 => 'Expectation Failed',
-        418 => 'I\'m a teapot',                                               // RFC2324
-        422 => 'Unprocessable Entity',                                        // RFC4918
-        423 => 'Locked',                                                      // RFC4918
-        424 => 'Failed Dependency',                                           // RFC4918
-        425 => 'Reserved for WebDAV advanced collections expired proposal',   // RFC2817
-        426 => 'Upgrade Required',                                            // RFC2817
-        428 => 'Precondition Required',                                       // RFC6585
-        429 => 'Too Many Requests',                                           // RFC6585
-        431 => 'Request Header Fields Too Large',                             // RFC6585
-        500 => 'Internal Server Error',
-        501 => 'Not Implemented',
-        502 => 'Bad Gateway',
-        503 => 'Service Unavailable',
-        504 => 'Gateway Timeout',
-        505 => 'HTTP Version Not Supported',
-        506 => 'Variant Also Negotiates (Experimental)',                      // RFC2295
-        507 => 'Insufficient Storage',                                        // RFC4918
-        508 => 'Loop Detected',                                               // RFC5842
-        510 => 'Not Extended',                                                // RFC2774
-        511 => 'Network Authentication Required',                             // RFC6585
-    );
-    private $content = '';
-    private $statusCode = 200;
-    private $gemFrameworkHeaders = [
-
-        'GemFrameworkVersion' => FRAMEWORK_VERSION,
-        'GemFrameworkProjectName' => FRAMEWORK_NAME
-
-    ];
-
-
-
-    private $standartHeaders = [
-        'Content-Language' => 'en',
-         'X-Powered-By' => 'PHP/'.PHP_VERSION,
-    ];
-
-    private $headersBag;
-    private $cookie;
-
-    /**
-     * Sınıfı başlatır.
-     * @param string $content
-     * @param int $statusCode
-     */
-    public function __construct($content = '', $statusCode = 200){
+	 /**
+	  *
+	  *  Bu Dosya GemFramework'un bir parçasıdır, GemFramework'de Yapılan isteklere gönderilecek cevabı belirler.
+	  *
+	  */
+
+	 namespace Gem\components\Http;
+
+	 use Gem\Components\Cookie;
+	 use Gem\Components\Http\Response\ShouldBeResponseInterface;
+	 use Gem\Components\Patterns\Singleton;
+	 use Gem\Components\Twig;
+	 use Gem\Components\View;
+	 use Gem\Components\View\ShouldBeViewInterface;
+	 use HttpResponseException;
+	 class Response implements ShouldBeResponseInterface
+	 {
+
+		  private $contentType = 'text/html';
+		  private $protocolVersion;
+		  private $charset = 'utf-8';
+		  private $statusTexts = [
+				100 => 'Continue',
+				101 => 'Switching Protocols',
+				102 => 'Processing',            // RFC2518
+				200 => 'OK',
+				201 => 'Created',
+				202 => 'Accepted',
+				203 => 'Non-Authoritative Information',
+				204 => 'No Content',
+				205 => 'Reset Content',
+				206 => 'Partial Content',
+				207 => 'Multi-Status',          // RFC4918
+				208 => 'Already Reported',      // RFC5842
+				226 => 'IM Used',               // RFC3229
+				300 => 'Multiple Choices',
+				301 => 'Moved Permanently',
+				302 => 'Found',
+				303 => 'See Other',
+				304 => 'Not Modified',
+				305 => 'Use Proxy',
+				306 => 'Reserved',
+				307 => 'Temporary Redirect',
+				308 => 'Permanent Redirect',    // RFC7238
+				400 => 'Bad Request',
+				401 => 'Unauthorized',
+				402 => 'Payment Required',
+				403 => 'Forbidden',
+				404 => 'Not Found',
+				405 => 'Method Not Allowed',
+				406 => 'Not Acceptable',
+				407 => 'Proxy Authentication Required',
+				408 => 'Request Timeout',
+				409 => 'Conflict',
+				410 => 'Gone',
+				411 => 'Length Required',
+				412 => 'Precondition Failed',
+				413 => 'Request Entity Too Large',
+				414 => 'Request-URI Too Long',
+				415 => 'Unsupported Media Type',
+				416 => 'Requested Range Not Satisfiable',
+				417 => 'Expectation Failed',
+				418 => 'I\'m a teapot',                                               // RFC2324
+				422 => 'Unprocessable Entity',                                        // RFC4918
+				423 => 'Locked',                                                      // RFC4918
+				424 => 'Failed Dependency',                                           // RFC4918
+				425 => 'Reserved for WebDAV advanced collections expired proposal',   // RFC2817
+				426 => 'Upgrade Required',                                            // RFC2817
+				428 => 'Precondition Required',                                       // RFC6585
+				429 => 'Too Many Requests',                                           // RFC6585
+				431 => 'Request Header Fields Too Large',                             // RFC6585
+				500 => 'Internal Server Error',
+				501 => 'Not Implemented',
+				502 => 'Bad Gateway',
+				503 => 'Service Unavailable',
+				504 => 'Gateway Timeout',
+				505 => 'HTTP Version Not Supported',
+				506 => 'Variant Also Negotiates (Experimental)',                      // RFC2295
+				507 => 'Insufficient Storage',                                        // RFC4918
+				508 => 'Loop Detected',                                               // RFC5842
+				510 => 'Not Extended',                                                // RFC2774
+				511 => 'Network Authentication Required',                             // RFC6585
+		  ];
+		  private $content = '';
+		  private $statusCode = 200;
+		  private $gemFrameworkHeaders = [
+
+				'GemFrameworkVersion'     => FRAMEWORK_VERSION,
+				'GemFrameworkProjectName' => FRAMEWORK_NAME
+
+		  ];
+
+
+		  private $standartHeaders = [
+				'Content-Language' => 'en',
+				'X-Powered-By'     => 'PHP/' . PHP_VERSION,
+		  ];
+
+		  private $headersBag;
+		  private $cookie;
+
+		  /**
+			* Sınıfı başlatır.
+			* @param string $content
+			* @param int $statusCode
+			*/
+		  public function __construct ($content = '', $statusCode = 200)
+		  {
 
-        $this->setContent($content);
-        $this->setStatusCode($statusCode);
-        $this->setProtocolVersion('1.1');
-        $this->headersBag = Singleton::make('Gem\Components\Http\Response\HeadersBag');
-        $this->headersBag->headers = array_merge($this->gemFrameworkHeaders, $this->headersBag->headers);
-        $this->headersBag->headers = array_merge($this->standartHeaders, $this->headersBag->headers);
-        $this->cookieBag =  new Cookie();
+				$this->setContent ($content);
+				$this->setStatusCode ($statusCode);
+				$this->setProtocolVersion ('1.1');
+				$this->headersBag = Singleton::make ('Gem\Components\Http\Response\HeadersBag');
+				$this->headersBag->headers = array_merge ($this->gemFrameworkHeaders, $this->headersBag->headers);
+				$this->headersBag->headers = array_merge ($this->standartHeaders, $this->headersBag->headers);
+				$this->cookieBag = new Cookie();
 
-    }
+		  }
 
-    /**
-     * Cookie Ataması yapar
-     * @param CookieJar $cookieJar
-     * @return $this
-     */
-    public function setCookie(CookieJar $cookieJar)
-    {
+		  /**
+			* Charset'i döndürür
+			* @return string
+			*/
+		  public function getCharset ()
+		  {
 
-        $this->headersBag->setCookie($cookieJar);
-        return $this;
-    }
+				return $this->charset;
 
-    /**
-     * Charset'i döndürür
-     * @return string
-     */
-    public function getCharset(){
+		  }
 
-        return $this->charset;
 
-    }
+		  /**
+			* Cookileri döndürür
+			* @return array
+			*/
+		  public function getCookies ()
+		  {
 
+				return $this->cookie->cookies;
 
-    /**
-     * Cookileri döndürür
-     * @return array
-     */
-    public function getCookies(){
+		  }
 
-        return $this->cookie->cookies;
+		  /**
+			* @param string $type
+			* @return $this
+			*/
+		  public function setContentType ($type = '')
+		  {
 
-    }
+				$this->contentType = $type;
 
-    /**
-     * @param string $type
-     * @return $this
-     */
-    public function setContentType($type = ''){
+				return $this;
 
-        $this->contentType = $type;
-        return $this;
+		  }
 
-    }
+		  /**
+			* @return string
+			*/
+		  public function getContentType ()
+		  {
 
-    /**
-     * @return string
-     */
-    public function getContentType(){
+				return $this->contentType;
 
-        return $this->contentType;
+		  }
 
-    }
+		  /**
+			* Charset ataması yapar
+			* @param string $charset
+			* @return $this
+			*/
 
-    /**
-     * Charset ataması yapar
-     * @param string $charset
-     * @return $this
-     */
+		  public function setCharset ($charset = 'utf-8')
+		  {
 
-    public function setCharset($charset = 'utf-8'){
+				$this->charset = $charset;
 
-        $this->charset = $charset;
-        return $this;
+				return $this;
 
-    }
+		  }
 
-    /**
-     * Http Protocol'unun version'unu ayarlar
-     * @param string $version
-     * @return $this
-     */
-    public function setProtocolVersion($version = ''){
+		  /**
+			* Http Protocol'unun version'unu ayarlar
+			* @param string $version
+			* @return $this
+			*/
+		  public function setProtocolVersion ($version = '')
+		  {
 
-        $this->protocolVersion = $version;
-        return $this;
+				$this->protocolVersion = $version;
 
-    }
-    /**
-     * İçeriği tanımlar
-     * @param string $content
-     * @return $this
-     */
+				return $this;
 
-    public function setContent($content = ''){
+		  }
 
+		  /**
+			* İçeriği tanımlar
+			* @param string $content
+			* @return $this
+			*/
 
-        if($content instanceof ShouldBeViewInterface){
-            $content = $content->execute();
-        }
+		  public function setContent ($content = '')
+		  {
 
-        $this->content = $content;
-        return $this;
-    }
 
+				if ( $content instanceof ShouldBeViewInterface ) {
+					 $content = $content->execute ();
+				}
 
-    public function jsonResponse($content = '', $statusCode = 200){
+				$this->content = $content;
 
+				return $this;
+		  }
 
-        return new JsonResponse($content,$statusCode);
 
-    }
+		  public function jsonResponse ($content = '', $statusCode = 200)
+		  {
 
-    /**
-     * Durum Kodunu tanımlar
-     * @param int $code
-     * @return $this
-     */
-    public function setStatusCode($code=200){
 
-        $this->statusCode = $code;
-        return $this;
+				return new JsonResponse($content, $statusCode);
 
-    }
+		  }
 
+		  /**
+			* Durum Kodunu tanımlar
+			* @param int $code
+			* @return $this
+			*/
+		  public function setStatusCode ($code = 200)
+		  {
 
-    private function generateHeaderString($key, $value = ''){
+				$this->statusCode = $code;
 
+				return $this;
 
-        return sprintf("%s: %s", settype($key,"string"), settype($key, "string"));
+		  }
 
-    }
 
-    /**
-     * Headerları atar
-     */
+		  private function generateHeaderString ($key, $value = '')
+		  {
 
-    private function runHeaders(){
 
-        header(
-          sprintf("Content-Type: %s; charset=%s", $this->getContentType(), $this->getCharset())
-        );
-        foreach($this->headersBag->getHeaders() as $header => $value){
+				return sprintf ("%s: %s", settype ($key, "string"), settype ($key, "string"));
 
-            header($this->generateHeaderString($header, $value));
+		  }
 
-        }
+		  /**
+			* Headerları atar
+			*/
 
-    }
+		  private function runHeaders ()
+		  {
 
-    /**
-     *
-     * Cookieleri atar
-     *
-     */
-    private function useCookies(){
+				header (
+					 sprintf ("Content-Type: %s; charset=%s", $this->getContentType (), $this->getCharset ())
+				);
+				foreach ( $this->headersBag->getHeaders () as $header => $value ) {
 
-        $cookies = $this->headersBag->getCookies();
+					 header ($this->generateHeaderString ($header, $value));
 
-        foreach($cookies as $cookie){
+				}
 
-            header(sprintf("Set-Cookies:%s", $cookie));
+		  }
 
-        }
-    }
+		  /**
+			*
+			* Cookieleri atar
+			*
+			*/
+		  private function useCookies ()
+		  {
 
-    /**
-     *
-     * Protocol version ve code atamasını yapar
-     *
-     */
-    private function setProtocolAndCode()
-    {
+				$cookies = $this->headersBag->getCookies ();
+				foreach ( $cookies as $cookie ) {
 
-        $code = $this->statusCode;
-        if(isset($this->statusTexts[$code]))
-            $text = $this->statusTexts[$code];
-        else
-            $text = '';
-        header(sprintf("%s %d %s ", $this->protocolVersion, $code, $text));
-    }
-    /**
-     * Çıktıyı Gönderiri
-     * @throws HttpResponseException
-     */
+					 $cookie = sprintf('Set-Cookie: %s', $cookie);
+					 header ($cookie);
 
-    public function execute(){
+				}
+		  }
 
-        $this->setProtocolAndCode();
-        $this->useCookies();
-        if(!headers_sent()){
+		  /**
+			*
+			* Protocol version ve code atamasını yapar
+			*
+			*/
+		  private function setProtocolAndCode ()
+		  {
 
-            $this->runHeaders();
-            echo $this->content;
+				$code = $this->statusCode;
+				if ( isset( $this->statusTexts[ $code ] ) )
+					 $text = $this->statusTexts[ $code ];
+				else
+					 $text = '';
+				header (sprintf ("%s %d %s ", $this->protocolVersion, $code, $text));
+				http_response_code ($code);
+		  }
 
-        }else{
+		  /**
+			* Çıktıyı Gönderiri
+			* @throws HttpResponseException
+			*/
 
-            throw new HttpResponseException(
-                'Başlıklar  zaten gönderilimiş, bu işlem gerçekleştirilemez'
-            );
+		  public function execute ()
+		  {
 
-        }
+				$this->setProtocolAndCode ();
+				$this->useCookies ();
+				if ( !headers_sent () ) {
 
+					 $this->runHeaders ();
+					 echo $this->content;
 
-    }
+				} else {
 
-    /**
-     * Sayfayı 404 yapar.
-     * @return $this
-     *
-     */
-    public function setPage404(){
+					 throw new HttpResponseException(
+						  'Başlıklar  zaten gönderilimiş, bu işlem gerçekleştirilemez'
+					 );
 
-        $this->statusCode = 404;
-        return $this;
+				}
 
-    }
 
-    /**
-     * yeni bir view objesi döndürür
-     * @param $fileName
-     * @param array $params
-     * @return $this
-     */
-    public function view($fileName, $params = []){
+		  }
 
-        return View::make($fileName, $params);
+		  /**
+			* Sayfayı 404 yapar.
+			* @return $this
+			*
+			*/
+		  public function setPage404 ()
+		  {
 
-    }
+				$this->statusCode = 404;
 
-    /**
-     * Twig objesi döndürür
-     * @param $fileName
-     * @param array $params
-     * @return $this
-     */
-    public function twig($fileName, $params = []){
+				return $this;
 
-        return Twig::make($fileName, $params);
+		  }
 
-    }
+		  /**
+			* yeni bir view objesi döndürür
+			* @param $fileName
+			* @param array $params
+			* @return $this
+			*/
+		  public function view ($fileName, $params = [ ])
+		  {
 
-    /**
-     * Yeni bir response objesi oluşturur
-     * @param string $content
-     * @param int $statusCode
-     * @return static
-     */
-    public function make($content = '', $statusCode = 200){
+				return View::make ($fileName, $params);
 
-        return new static($content, $statusCode);
+		  }
 
-    }
+		  /**
+			* Twig objesi döndürür
+			* @param $fileName
+			* @param array $params
+			* @return $this
+			*/
+		  public function twig ($fileName, $params = [ ])
+		  {
 
-    /**
-     * Dinamik olarak method çağrımı
-     * @param $name
-     * @param $params
-     * @return mixed
-     */
-    public function __call($name, $params){
+				return Twig::make ($fileName, $params);
 
-        if(is_callable([$this->headersBag, $name])){
+		  }
 
-            return call_user_func_array([$this->headersBag, $name], $params);
+		  /**
+			* Yeni bir response objesi oluşturur
+			* @param string $content
+			* @param int $statusCode
+			* @return static
+			*/
+		  public function make ($content = '', $statusCode = 200)
+		  {
 
-        }
+				return new static($content, $statusCode);
 
-    }
-}
+		  }
+
+		  /**
+			* Dinamik olarak method çağrımı
+			* @param $name
+			* @param $params
+			* @return mixed
+			*/
+		  public function __call ($name, $params)
+		  {
+
+				if ( is_callable ([ $this->headersBag, $name ]) ) {
+
+					 return call_user_func_array ([ $this->headersBag, $name ], $params);
+
+				}
+
+		  }
+	 }

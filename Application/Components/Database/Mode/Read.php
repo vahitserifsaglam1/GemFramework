@@ -1,211 +1,214 @@
 <?php
 
-/**
- *
- *  GemFramework Database Read Mode -> veritabanından veri okumakda kullanılır
- *
- * @package Gem\Components\Database\Mode
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- *
- */
+	 /**
+	  *
+	  *  GemFramework Database Read Mode -> veritabanından veri okumakda kullanılır
+	  *
+	  * @package Gem\Components\Database\Mode
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  *
+	  */
 
-namespace Gem\Components\Database\Mode;
+	 namespace Gem\Components\Database\Mode;
 
-use Gem\Components\Database\Base;
-use Gem\Components\Database\Mode\ModeManager;
-use Gem\Components\Database\Builders\Where;
-use Gem\Components\Database\Builders\Select;
-use Gem\Components\Database\Builders\Order;
-use Gem\Components\Database\Traits\Builder;
-use Gem\Components\Database\Builders\Limit;
-use Gem\Components\Database\Builders\Group;
-use Gem\Components\Helpers\Config;
+	 use Gem\Components\Database\Base;
+	 use Gem\Components\Database\Builders\Group;
+	 use Gem\Components\Database\Builders\Limit;
+	 use Gem\Components\Database\Builders\Order;
+	 use Gem\Components\Database\Builders\Select;
+	 use Gem\Components\Database\Builders\Where;
+	 use Gem\Components\Database\Traits\Builder;
+	 use Gem\Components\Helpers\Config;
 
-class Read extends ModeManager
-{
+	 class Read extends ModeManager
+	 {
 
-    use Builder, Config;
+		  use Builder, Config;
 
-    private $as;
+		  private $as;
 
-    public function __construct(Base $base)
-    {
+		  public function __construct (Base $base)
+		  {
 
-        $this->setBase($base);
-        $this->useBuilders([
+				$this->setBase ($base);
+				$this->useBuilders ([
 
-            'where' => new Where(),
-            'select' => new Select(),
-            'order' => new Order(),
-            'limit' => new Limit(),
-            'group' => new Group()
-        ]);
+					 'where'  => new Where(),
+					 'select' => new Select(),
+					 'order'  => new Order(),
+					 'limit'  => new Limit(),
+					 'group'  => new Group()
+				]);
 
-        $this->string = [
+				$this->string = [
 
-            'select' => '*',
-            'from' => $this->getBase()->getTable(),
-            'group' => null,
-            'where' => null,
-            'order' => null,
-            'limit' => null,
-            'parameters' => [],
-        ];
+					 'select'     => '*',
+					 'from'       => $this->getBase ()->getTable (),
+					 'group'      => null,
+					 'where'      => null,
+					 'order'      => null,
+					 'limit'      => null,
+					 'parameters' => [ ],
+				];
 
-        $this->setChield($this);
+				$this->setChield ($this);
 
-        $this->setChieldPattern('read');
-    }
+				$this->setChieldPattern ('read');
+		  }
 
-    /**
-     * Select sorgusu olu�turur
-     * @param string $select
-     * @return $this
-     */
-    public function select($select = null)
-    {
+		  /**
+			* Select sorgusu olu�turur
+			* @param string $select
+			* @return $this
+			*/
+		  public function select ($select = null)
+		  {
 
-        $this->string['select'] = $this->useBuilder('select')
-            ->select($select, $this->cleanThis());
-
-
-        return $this;
-    }
-
-    private function cleanThis()
-    {
-
-        return new static($this->getBase());
-    }
-
-    /**
-     * Order Sorgusu olu�turur
-     * @param string $order
-     * @param string $type
-     * @return \Gem\Components\Database\Mode\Read
-     */
-    public function order($order, $type = 'DESC')
-    {
-
-        $this->string['order'] .= $this->useBuilder('order')
-            ->order($order, $type);
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param int $page
-     * @return \Gem\Components\Database\Mode\Read
-     */
-    public function page($page)
-    {
-
-        $limit = $this->getConfig('pagination');
-        $limit = $limit['limit'];
-        $baslangic = ($page - 1) * ($limit);
-        $bitis = $page * $limit;
-        $this->limit([$baslangic, $bitis]);
-    }
+				$this->string['select'] = $this->useBuilder ('select')
+					 ->select ($select, $this->cleanThis ());
 
 
-    /**
-     * Group By sorgusu ekler
-     * @param string $group
-     * @return \Gem\Components\Database\Mode\Read
-     */
-    public function group($group)
-    {
+				return $this;
+		  }
 
-        $this->string['group'] = $this->useBuilder('group')
-            ->group($group);
+		  private function cleanThis ()
+		  {
 
-        return $this;
-    }
+				return new static($this->getBase ());
+		  }
 
-    /**
-     *
-     * İç içe bir sorgu oluşturur
-     * @param string $as
-     * @param mixed $select
-     * @return  \Gem\Components\Database\Mode\Read
-     */
-    public function create($as, $select)
-    {
+		  /**
+			* Order Sorgusu olu�turur
+			* @param string $order
+			* @param string $type
+			* @return \Gem\Components\Database\Mode\Read
+			*/
+		  public function order ($order, $type = 'DESC')
+		  {
 
-        $this->setAs($as);
+				$this->string['order'] .= $this->useBuilder ('order')
+					 ->order ($order, $type);
 
-        return $this->select($select);
-    }
+				return $this;
+		  }
 
-    /**
-     * Limit sorgusu olu�turur
-     * @param string $limit
-     * @return \Gem\Components\Database\Mode\Read
-     */
-    public function limit($limit)
-    {
+		  /**
+			*
+			* @param int $page
+			* @return \Gem\Components\Database\Mode\Read
+			*/
+		  public function page ($page)
+		  {
 
-        $this->string['limit'] .= $this->useBuilder('limit')
-            ->limit($limit);
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param string $as
-     * @return \Gem\Components\Database\Mode\Read
-     */
-    public function setAs($as)
-    {
-
-        $this->as = $as;
-        return $this;
-    }
-
-    /**
-     * Select de kullanılacak as değerini döndürür
-     * @return string
-     */
-    public function getAs()
-    {
-
-        return $this->as;
-    }
-
-    /**
-     * Etkilenen elaman sayısını döndürür
-     * @return int
-     */
-
-    public function rowCount(){
-
-       return $this->build()->rowCount();
-
-    }
+				$limit = $this->getConfig ('pagination');
+				$limit = $limit['limit'];
+				$baslangic = ( $page - 1 ) * ( $limit );
+				$bitis = $page * $limit;
+				$this->limit ([ $baslangic, $bitis ]);
+		  }
 
 
-    /**
-     * İçeriği tekil veya çokul olarak döndürür
-     * @param bool $fetchAll
-     * @return array|mixed|object|\stdClass
-     * @throws \Exception
-     */
-    public function fetch($fetchAll = false){
+		  /**
+			* Group By sorgusu ekler
+			* @param string $group
+			* @return \Gem\Components\Database\Mode\Read
+			*/
+		  public function group ($group)
+		  {
 
-        return $this->build()->fetch($fetchAll);
+				$this->string['group'] = $this->useBuilder ('group')
+					 ->group ($group);
 
-    }
+				return $this;
+		  }
 
-    /**
-     * Tüm İçeriği Döndürür
-     * @return array|mixed|object|\stdClass
-     */
-    public function fetchAll(){
+		  /**
+			*
+			* İç içe bir sorgu oluşturur
+			* @param string $as
+			* @param mixed $select
+			* @return  \Gem\Components\Database\Mode\Read
+			*/
+		  public function create ($as, $select)
+		  {
 
-        return $this->fetch(true);
+				$this->setAs ($as);
 
-    }
+				return $this->select ($select);
+		  }
 
-}
+		  /**
+			* Limit sorgusu olu�turur
+			* @param string $limit
+			* @return \Gem\Components\Database\Mode\Read
+			*/
+		  public function limit ($limit)
+		  {
+
+				$this->string['limit'] .= $this->useBuilder ('limit')
+					 ->limit ($limit);
+
+				return $this;
+		  }
+
+		  /**
+			*
+			* @param string $as
+			* @return \Gem\Components\Database\Mode\Read
+			*/
+		  public function setAs ($as)
+		  {
+
+				$this->as = $as;
+
+				return $this;
+		  }
+
+		  /**
+			* Select de kullanılacak as değerini döndürür
+			* @return string
+			*/
+		  public function getAs ()
+		  {
+
+				return $this->as;
+		  }
+
+		  /**
+			* Etkilenen elaman sayısını döndürür
+			* @return int
+			*/
+
+		  public function rowCount ()
+		  {
+
+				return $this->build ()->rowCount ();
+
+		  }
+
+
+		  /**
+			* İçeriği tekil veya çokul olarak döndürür
+			* @param bool $fetchAll
+			* @return array|mixed|object|\stdClass
+			* @throws \Exception
+			*/
+		  public function fetch ($fetchAll = false)
+		  {
+
+				return $this->build ()->fetch ($fetchAll);
+
+		  }
+
+		  /**
+			* Tüm İçeriği Döndürür
+			* @return array|mixed|object|\stdClass
+			*/
+		  public function fetchAll ()
+		  {
+
+				return $this->fetch (true);
+
+		  }
+
+	 }

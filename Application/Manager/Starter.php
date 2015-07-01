@@ -1,52 +1,57 @@
 <?php
-/**
- *
- *  Bu Sınıf GemFramework'un başlangıç manager'ı dır, facede alias ları vs tutulur.
- *
- */
+	 /**
+	  *
+	  *  Bu Sınıf GemFramework'un başlangıç manager'ı dır, facede alias ları vs tutulur.
+	  *
+	  */
 
-namespace Gem\Manager;
+	 namespace Gem\Manager;
 
-class Starter {
+	 class Starter
+	 {
 
-    public $alias = [];
-    private $providers = [];
+		  public $alias = [ ];
+		  private $providers = [ ];
 
-    /**
-     * Alias'ları atar
-     * @param array $alias
-     */
-    public function setAlias($alias = []){
+		  /**
+			* Alias'ları atar
+			* @param array $alias
+			*/
+		  public function setAlias ($alias = [ ])
+		  {
 
-        $this->alias = array_merge($this->alias, $alias);
+				$this->alias = array_merge ($this->alias, $alias);
 
-    }
+		  }
 
-    /**
-     * Alias'ları döndürür
-     * @return array
-     */
-    public function getAlias(){
+		  /**
+			* Alias'ları döndürür
+			* @return array
+			*/
+		  public function getAlias ()
+		  {
 
-        return $this->alias;
+				return $this->alias;
 
-    }
+		  }
 
-    /**
-     * Providersleri atar
-     * @param $providers
-     */
-    public function  setProviders($providers){
+		  /**
+			* Providersleri atar
+			* @param $providers
+			*/
+		  public function  setProviders ($providers)
+		  {
 
-        $this->providers = array_merge($this->providers, $providers);
+				$this->providers = array_merge ($this->providers, $providers);
 
-    }
+		  }
 
-    /**
-     * Provider'sleri döndürür
-     * @return array
-     */
-    public function getProviders(){
-        return $this->providers;
-    }
-}
+		  /**
+			* Provider'sleri döndürür
+			* @return array
+			*/
+		  public function getProviders ()
+		  {
+				return $this->providers;
+		  }
+	 }

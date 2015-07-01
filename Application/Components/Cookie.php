@@ -1,98 +1,99 @@
 <?php
 
-/**
- *
- * GemFramework Cookie işlemlerinin yapıldığı sınıf
- * @package Gem\Components
- * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
- *
- */
+	 /**
+	  *
+	  * GemFramework Cookie işlemlerinin yapıldığı sınıf
+	  * @package Gem\Components
+	  * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
+	  *
+	  */
 
-namespace Gem\Components;
+	 namespace Gem\Components;
 
-use Gem\Components\Http\CookieJar;
-use Gem\Components\Patterns\Singleton;
-class Cookie
-{
+	 use Gem\Components\Http\CookieJar;
+	 use Gem\Components\Patterns\Singleton;
 
-    public $cookies;
-    private $headerBag;
-    public function __construct(){
+	 class Cookie
+	 {
 
-        $this->cookies = Singleton::make('Gem\Components\Http\CookieBag')->getCookies();
-        $this->headerBag = Singleton::make('Gem\Components\Http\Response\HeadersBag');
+		  public $cookies;
+		  private $headerBag;
 
-    }
+		  public function __construct ()
+		  {
 
-    /**
-     * Cookie 'i döndürür
-     * @param string $name
-     * @return mixed
-     */
-   public function get($name = '')
-   {
+				$this->cookies = Singleton::make ('Gem\Components\Http\CookieBag')->getCookies ();
+				$this->headerBag = Singleton::make ('Gem\Components\Http\Response\HeadersBag');
 
-       return $this->cookies[$name];
+		  }
 
-   }
+		  /**
+			* Cookie 'i döndürür
+			* @param string $name
+			* @return mixed
+			*/
+		  public function get ($name = '')
+		  {
+				return $this->cookies[ $name ];
 
-    public function has($name = ''){
+		  }
 
-        return isset($this->cookies[$name]);
+		  public function has ($name = '')
+		  {
+				return isset( $this->cookies[ $name ] );
+		  }
 
-    }
+		  /**
+			*
+			* Cookie Atamasını yapar
+			* $name -> cookie adı
+			* $value -> cookie değeri
+			* $expires -> geçerlilik süresi
+			* $path->cookie nin geçerli olacağı alan
+			* $domain->cookie'in geçerli olduğu domain
+			* $sucere->cookie'nin secure değeri
+			* $httpOnly -> cookie'in httpony değeri
+			*
+			* @param string $name
+			* @param string $value
+			* @param int $expires
+			* @param string $path
+			* @param null $domain
+			* @param bool $secure
+			* @param bool $httpOnly
+			* @return $this
+			*/
+		  public function set ($name = '', $value = '', $expires = 3600, $path = '/', $domain = null, $secure = false, $httpOnly = false)
+		  {
+				$this->headerBag->setCookie (new CookieJar($name, $value, $expires, $path, $domain, $secure, $httpOnly));
+				return $this;
 
-    /**
-     *
-     * Cookie Atamasını yapar
-     * $name -> cookie adı
-     * $value -> cookie değeri
-     * $expires -> geçerlilik süresi
-     * $path->cookie nin geçerli olacağı alan
-     * $domain->cookie'in geçerli olduğu domain
-     * $sucere->cookie'nin secure değeri
-     * $httpOnly -> cookie'in httpony değeri
-     *
-     * @param string $name
-     * @param string $value
-     * @param int $expires
-     * @param string $path
-     * @param null $domain
-     * @param bool $secure
-     * @param bool $httpOnly
-     * @return $this
-     */
-    public function set($name = '', $value = '', $expires = 0, $path = '/', $domain = null, $secure = false, $httpOnly = false)
-    {
+		  }
 
-        $this->headerBag->setCookie(new CookieJar($name, $value, $expires, $path, $domain, $secure, $httpOnly));
-        return $this;
+		  /**
+			* Silme işlemini yapar
+			* @param string $name
+			* @return $this
+			*/
+		  public function delete ($name = '')
+		  {
 
-    }
+				$this->set ($name, '');
+				return $this;
+		  }
 
-    /**
-     * Silme işlemini yapar
-     * @param string $name
-     * @return $this
-     */
-    public function delete($name = ''){
+		  /**
+			* Tüm cookileri temizler
+			*/
+		  public function flush ()
+		  {
 
-        $this->set($name, '');
-        return $this;
-    }
+				foreach ( $this->cookies as $cookie => $value ) {
 
-    /**
-     * Tüm cookileri temizler
-     */
-    public function flush(){
+					 $this->delete ($cookie);
 
-        foreach($this->cookies as $cookie => $value)
-        {
+				}
 
-            $this->delete($cookie);
+		  }
 
-        }
-
-    }
-
-}
+	 }

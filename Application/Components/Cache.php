@@ -1,235 +1,240 @@
 <?php
 
-/**
- * Bu sınıf GemFrameworkde cache verileri depolamak için kullanılmaktadır.
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- * @copyright 2015, Vahit Şerif Sağlam
- */
+	 /**
+	  * Bu sınıf GemFrameworkde cache verileri depolamak için kullanılmaktadır.
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  * @copyright 2015, Vahit Şerif Sağlam
+	  */
 
-namespace Gem\Components;
+	 namespace Gem\Components;
 
-use Gem\Components\Filesystem;
-use Exception;
+	 use Exception;
 
-class Cache extends Filesystem
-{
+	 class Cache extends Filesystem
+	 {
 
-    private $time = 3600;
+		  private $time = 3600;
 
-    private $cacheFolder = APP . 'stroge/cache';
-    private $cacheExt = '.cache';
+		  private $cacheFolder = APP . 'stroge/cache';
+		  private $cacheExt = '.cache';
 
-    public function __construct()
-    {
+		  public function __construct ()
+		  {
 
 
-        if (!$this->exists($this->cacheFolder)) {
-            $this->mkdir($this->cacheFolder);
-        }
+				if ( !$this->exists ($this->cacheFolder) ) {
+					 $this->mkdir ($this->cacheFolder);
+				}
 
 
-        if ($this->cacheFolder) {
-            $this->chmod($this->cacheFolder, 0744);
-        }
+				if ( $this->cacheFolder ) {
+					 $this->chmod ($this->cacheFolder, 0744);
+				}
 
-        parent::__construct();
+				parent::__construct ();
 
-    }
+		  }
 
-    /**
-     * Sınıfta kullanılmak üzere cache dosyalarını hazırlar
-     * @param $path
-     * @return string
-     */
-    private function inPath($path)
-    {
+		  /**
+			* Sınıfta kullanılmak üzere cache dosyalarını hazırlar
+			* @param $path
+			* @return string
+			*/
+		  private function inPath ($path)
+		  {
 
-        return $this->cacheFolder . '/' . $path;
+				return $this->cacheFolder . '/' . $path;
 
-    }
+		  }
 
-    /**
-     * Yeni bir instance döndürür
-     * @return static
-     */
-    public static function getInstance()
-    {
+		  /**
+			* Yeni bir instance döndürür
+			* @return static
+			*/
+		  public static function getInstance ()
+		  {
 
-        return new static();
+				return new static();
 
-    }
+		  }
 
-    /**
-     * Zaman aşımına düşecek zamanı ayarlar
-     * @param int $time
-     * @return $this
-     */
-    public function setTime($time = 3600)
-    {
+		  /**
+			* Zaman aşımına düşecek zamanı ayarlar
+			* @param int $time
+			* @return $this
+			*/
+		  public function setTime ($time = 3600)
+		  {
 
-        $this->time = $time;
-        return $this;
+				$this->time = $time;
 
-    }
+				return $this;
 
-    /**
-     * Cache dosyalarının tutulacağı klasörü ayarlar
-     * @param $folder
-     * @return $this
-     */
-    public function setCacheFolder($folder)
-    {
+		  }
 
-        $this->cacheFolder = $folder;
-        return $this;
+		  /**
+			* Cache dosyalarının tutulacağı klasörü ayarlar
+			* @param $folder
+			* @return $this
+			*/
+		  public function setCacheFolder ($folder)
+		  {
 
-    }
+				$this->cacheFolder = $folder;
 
-    /**
-     * Cache dosyalarının hangi dosya uzantısına sahip olacağını ayarlar
-     * Not:default olarak .cache atanmıştır
-     * @param $ext
-     * @return $this
-     */
-    public function setCacheExt($ext)
-    {
+				return $this;
 
-        $this->cacheExt = $ext;
-        return $this;
+		  }
 
-    }
+		  /**
+			* Cache dosyalarının hangi dosya uzantısına sahip olacağını ayarlar
+			* Not:default olarak .cache atanmıştır
+			* @param $ext
+			* @return $this
+			*/
+		  public function setCacheExt ($ext)
+		  {
 
-    /**
-     * Girilen veriyi Çeker, eğer $json true verilirse veriyi json_decode den geçirir.
-     * @param $name
-     * @param bool $json
-     * @return bool|mixed|string
-     * @throws Exception
-     */
+				$this->cacheExt = $ext;
 
-    public function get($name, $json = false)
-    {
+				return $this;
 
-        $file = $this->cacheFileNameGenaretor($name);
-        $file = $this->inPath($file);
-        if ($this->exists($file)) {
+		  }
 
-            if ($this->checkTime($file)) {
+		  /**
+			* Girilen veriyi Çeker, eğer $json true verilirse veriyi json_decode den geçirir.
+			* @param $name
+			* @param bool $json
+			* @return bool|mixed|string
+			* @throws Exception
+			*/
 
-                $content = $this->read($file);
-                if ($json)
-                    $content = json_decode($content);
+		  public function get ($name, $json = false)
+		  {
 
-                return $content;
+				$file = $this->cacheFileNameGenaretor ($name);
+				$file = $this->inPath ($file);
+				if ( $this->exists ($file) ) {
 
-            } else {
+					 if ( $this->checkTime ($file) ) {
 
-                return false;
+						  $content = $this->read ($file);
+						  if ( $json )
+								$content = json_decode ($content);
 
-            }
+						  return $content;
 
-        } else {
+					 } else {
 
-            return false;
+						  return false;
 
-        }
+					 }
 
-    }
+				} else {
 
-    /**
-     * Yeni bir cache ataması yapar, eğer $json true girilirse veri json_encodeden geçirilir
-     * @param string $name
-     * @param mixed $content
-     * @param bool $json
-     * @return bool
-     */
-    public function set($name = '', $content = '', $json = false)
-    {
+					 return false;
 
-        $file = $this->cacheFileNameGenaretor($name);
-        $file = $this->inPath($file);
-        if (!$this->exists($file))
-            $this->create($file);
+				}
 
-        if ($json)
-            $content = json_encode($content);
+		  }
 
-        $this->write($file, $content);
-        return true;
+		  /**
+			* Yeni bir cache ataması yapar, eğer $json true girilirse veri json_encodeden geçirilir
+			* @param string $name
+			* @param mixed $content
+			* @param bool $json
+			* @return bool
+			*/
+		  public function set ($name = '', $content = '', $json = false)
+		  {
 
-    }
+				$file = $this->cacheFileNameGenaretor ($name);
+				$file = $this->inPath ($file);
+				if ( !$this->exists ($file) )
+					 $this->create ($file);
 
+				if ( $json )
+					 $content = json_encode ($content);
 
-    /**
-     * Girilen isimdeki veriyi siler
-     * @param string $name
-     * @return bool
-     */
-    public function delete($name = '')
-    {
+				$this->write ($file, $content);
 
-        $file = $this->cacheFileNameGenaretor($name);
-        $file = $this->inPath($file);
-        if ($this->exists($file)) {
-            $this->delete($file);
-            return true;
-        } else {
-            return false;
-        }
+				return true;
 
-    }
+		  }
 
-    /**
-     * Tüm önbellek dosyalarını siler
-     */
-    public function flush()
-    {
 
-        $this->delete($this->cacheFolder);
+		  /**
+			* Girilen isimdeki veriyi siler
+			* @param string $name
+			* @return bool
+			*/
+		  public function delete ($name = '')
+		  {
 
-    }
+				$file = $this->cacheFileNameGenaretor ($name);
+				$file = $this->inPath ($file);
+				if ( $this->exists ($file) ) {
+					 $this->delete ($file);
 
-    /**
-     * Girilen parametreye göre dosyanın yolunu hazırlar
-     * @param $file
-     * @return string
-     */
+					 return true;
+				} else {
+					 return false;
+				}
 
-    private function cacheFileNameGenaretor($file)
-    {
+		  }
 
-        return $file . $this->cacheExt;
+		  /**
+			* Tüm önbellek dosyalarını siler
+			*/
+		  public function flush ()
+		  {
 
-    }
+				$this->delete ($this->cacheFolder);
 
-    /**
-     * Dosyanın yaratılma zamanını ve şuanki zamana göre durup durmaması gerektiğini  kontrol eder
-     * @param string $fileName
-     * @throws Exception
-     * @return bool
-     */
-    private function checkTime($fileName = '')
-    {
+		  }
 
-        $fileName = $this->inPath($fileName);
-        if (!$this->exists($fileName)) {
+		  /**
+			* Girilen parametreye göre dosyanın yolunu hazırlar
+			* @param $file
+			* @return string
+			*/
 
-            return false;
+		  private function cacheFileNameGenaretor ($file)
+		  {
 
-        }
+				return $file . $this->cacheExt;
 
-        $createdTime = $this->ftime($fileName);
-        $endTime = $createdTime + $this->time;
-        $now = time();
+		  }
 
-        if ($endTime > $now) {
-            $this->delete($fileName);
-            return true;
+		  /**
+			* Dosyanın yaratılma zamanını ve şuanki zamana göre durup durmaması gerektiğini  kontrol eder
+			* @param string $fileName
+			* @throws Exception
+			* @return bool
+			*/
+		  private function checkTime ($fileName = '')
+		  {
 
-        } else {
+				$fileName = $this->inPath ($fileName);
+				if ( !$this->exists ($fileName) ) {
 
-            return false;
+					 return false;
 
-        }
-    }
-}
+				}
+
+				$createdTime = $this->ftime ($fileName);
+				$endTime = $createdTime + $this->time;
+				$now = time ();
+
+				if ( $endTime > $now ) {
+					 $this->delete ($fileName);
+
+					 return true;
+
+				} else {
+
+					 return false;
+
+				}
+		  }
+	 }

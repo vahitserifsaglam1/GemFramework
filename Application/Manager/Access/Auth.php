@@ -1,31 +1,33 @@
 <?php
 
-namespace Gem\Manager\Access;
-use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
-use Gem\Components\Redirect;
-use Gem\Components\Http\Request;
-/**
- * 
- * GemFramework accessManager test dosyası
- * 
- */
-class Auth implements HandleInterface{
+	 namespace Gem\Manager\Access;
 
-    /**
-     * @param Request $request Ön tanımlı olarak gelen Http\Request 'e ait bir örnek.
-     * @param callable $next Rötalandırma sınıfında ->setNext() ile atanan değer
-     * @param null $role  Rötalandırma sınıfında ->setRole() ile atanan değer
-     */
+	 use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
+	 use Gem\Components\Http\Request;
 
-    public function handle(Request $request,callable $next = null, $role = null) {
+	 /**
+	  *
+	  * GemFramework accessManager test dosyası
+	  *
+	  */
+	 class Auth implements HandleInterface
+	 {
 
-        $user = $request->user();
-        if(!$user->hasRole('read')){
+		  /**
+			* @param Request $request Ön tanımlı olarak gelen Http\Request 'e ait bir örnek.
+			* @param callable $next Rötalandırma sınıfında ->setNext() ile atanan değer
+			* @param null $role Rötalandırma sınıfında ->setRole() ile atanan değer
+			*/
 
-            Redirect::to('/index');
+		  public function handle (Request $request, callable $next = null, $role = null)
+		  {
 
-        }
-        
-    }
+				$user = $request->user ();
+				if ( !$user->hasRole ('read') ) {
 
-}
+
+				}
+
+		  }
+
+	 }

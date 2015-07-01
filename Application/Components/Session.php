@@ -1,91 +1,66 @@
 <?php
 
-/**
- *
- *  Gem Framework Session Sınıfı, session'a atama yapmakda kullanılır.
- * @package Gem\Components
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- *
- */
+	 /**
+	  *
+	  *  Gem Framework Session Sınıfı, session'a atama yapmakda kullanılır.
+	  * @package Gem\Components
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  *
+	  */
 
-namespace Gem\Components;
+	 namespace Gem\Components;
+	 use Gem\Components\Session\SecureSessionHandler;
 
-use InvalidArgumentException;
-use Exception;
+	 class Session extends SecureSessionHandler
+	 {
 
-class Session
-{
+		  public function __construct ()
+		  {
+				parent::__construct ('AAA');
+		  }
 
-    /**
-     * Session un olup olmadigini kontrol eder
-     * @param string $name
-     * @return boolean
-     */
-    static function has($name = null)
-    {
+		  /**
+			* Veriyi döndürür
+			* @param string $name
+			* @return mixed
+			*/
+		  public function get ($name)
+		  {
+				return $this->getValue ($name);
+		  }
 
-        if ($name !== null && is_string($name)) {
+		  /**
+			* @param $name
+			* @param $value
+			* @return $this
+			*/
+		  public function set ($name, $value)
+		  {
+				$this->setValue ($name, $value);
+				return $this;
+		  }
 
-            if (isset($_SESSION[$name]))
-                return true;
-            else
-                return false;
+		  /**
+			* Veriyi siler
+			* @param $name
+			* @return $this
+			*/
+		  public function delete ($name)
+		  {
+				if ( isset( $_SESSION[ $name ] ) ) {
+					 unset( $_SESSION[ $name ] );
+				}
 
-        } elseif ($name === null) {
+				return $this;
+		  }
 
-            return (count($_SESSION) > 0) ? true : false;
-
-        } else {
-
-            throw new InvalidArgumentException(sprintf('%s Sınıfı %s fonksiyonuna parametre olarak sadece string girilebilir', 'Session', 'has'));
-        }
-
-    }
-
-    /**
-     * Atama yapar
-     * @param string $name
-     * @param mixed $value
-     */
-    static function set($name, $value)
-    {
-
-        $_SESSION[$name] = $value;
-    }
-
-    /**
-     * Tum sessionlari temizler
-     */
-    static function flush()
-    {
-
-        foreach ($_SESSION as $key => $value) {
-
-            unset($_SESSION[$key]);
-        }
-    }
-
-    /**
-     * Session u dondurur
-     * @param string $name
-     * @return mixed|boolean
-     */
-    public function get($name)
-    {
-
-        return $_SESSION[$name];
-    }
-
-    /**
-     * Session i siler
-     * @param string $name
-     */
-    public function delete($name)
-    {
-        if (self::has($name))
-            unset($_SESSION[$name]);
-        else
-            throw new Exception(sprintf("%s adinda bir session yok", $name));
-    }
-
-}
+		  /**
+			* Tüm oturum verilerini temilzer
+			*/
+		  public function flush ()
+		  {
+				foreach ( $_SESSION as $name => $value ) {
+					 unset( $_SESSION[ $name ] );
+				}
+		  }
+	 }

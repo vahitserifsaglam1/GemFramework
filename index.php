@@ -1,14 +1,13 @@
 <?php
-session_start();
-ob_start();
-error_reporting(E_ALL);
+include 'vendor/autoload.php';
+use Gem\System\Run;
+
 /**
  * 
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- * @copyright MyfcMedya
+ *  @author vahitserifsaglam <vahit.serif119@gmail.com>
+ *  @copyright 2015, GemFramework
  *  Tamamen Türk Yapımlı profosyonel php framework'u.
- *  Amacımız  Diğer Frameworklerin iyi yanlarını toplayıp kötü yanlarını atmak.
+ *  Diğer herhangi Frameworkden daha iyi olmaya değil en iyisi olmaya çalışıyoruz.
  * 
  */
-  include_once('vendor/autoload.php');
-  include_once('system/bootstrap.php');
+ new Run();

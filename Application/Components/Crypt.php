@@ -1,224 +1,226 @@
 <?php
 
-/**
- *
- *  GemFramework Crypte sınıfı, şifrelenmiş metinler üretmek için kullanılır
- * @package Gem\Components
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- *
- */
+	 /**
+	  *
+	  *  GemFramework Crypte sınıfı, şifrelenmiş metinler üretmek için kullanılır
+	  * @package Gem\Components
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  *
+	  */
 
-namespace Gem\Components;
+	 namespace Gem\Components;
 
-use Exception;
-use Gem\Components\Helpers\Server;
+	 use Exception;
+	 use Gem\Components\Helpers\Server;
 
-class Crypt
-{
+	 class Crypt
+	 {
 
-    use Server;
-    private $securityKey;
-    private $mode = MCRYPT_MODE_ECB;
-    private $rand = MCRYPT_RAND;
-    private $alogirtym = MCRYPT_RIJNDAEL_256;
+		  use Server;
+		  private $securityKey;
+		  private $mode = MCRYPT_MODE_ECB;
+		  private $rand = MCRYPT_RAND;
+		  private $alogirtym = MCRYPT_RIJNDAEL_256;
 
-    public function __construct()
-    {
+		  public function __construct ()
+		  {
 
-        if (!function_exists('mcrypt_create_iv')) {
+				if ( !function_exists ('mcrypt_create_iv') ) {
 
-            throw new Exception('sunucunuzda mcrypt desteÄŸi bulunamadÄ±');
-        }
+					 throw new Exception('sunucunuzda mcrypt desteÄŸi bulunamadÄ±');
+				}
 
-        $this->securityKeyCreator();
-    }
+				$this->securityKeyCreator ();
+		  }
 
-    /**
-     * GÃ¼venlik anahtarÄ± oluÅŸtrucu
-     */
-    private function securityKeyCreator()
-    {
+		  /**
+			* GÃ¼venlik anahtarÄ± oluÅŸtrucu
+			*/
+		  private function securityKeyCreator ()
+		  {
 
-        $url = $this->findBasePath();
-        $ip = $this->serverip;
-        $len = strlen($ip);
-        $letters = [];
-        for ($i = 'a', $j = 1; $j <= 26; $i++, $j++) {
+				$url = $this->findBasePath ();
+				$ip = $this->serverip;
+				$len = strlen ($ip);
+				$letters = [ ];
+				for ( $i = 'a', $j = 1; $j <= 26; $i++, $j++ ) {
 
-            $letters[$j] = $i;
-        }
-        $bas = substr($ip, 0, 2);
-        $con = $letters[$len];
-        $son = substr($ip, $len - 1, 1);
-        $con2 = $letters[$len + $ip];
-        $key = $url . $son . FRAMEWORK_VERSION . $con . $con2 . $ip . $bas . FRAMEWORK_NAME;
-        $this->securityKey = md5($key);
-    }
+					 $letters[ $j ] = $i;
+				}
+				$bas = substr ($ip, 0, 2);
+				$con = $letters[ $len ];
+				$son = substr ($ip, $len - 1, 1);
+				$con2 = $letters[ $len + $ip ];
+				$key = $url . $son . FRAMEWORK_VERSION . $con . $con2 . $ip . $bas . FRAMEWORK_NAME;
+				$this->securityKey = md5 ($key);
+		  }
 
-    /**
-     * Şifrelenmiş metni oluşturur
-     * @param string $value
-     * @return string
-     * @return mixed
-     */
-    public function encode($value = '')
-    {
+		  /**
+			* Şifrelenmiş metni oluşturur
+			* @param string $value
+			* @return string
+			* @return mixed
+			*/
+		  public function encode ($value = '')
+		  {
 
-        if (is_string($value)) {
+				if ( is_string ($value) ) {
 
-            $iv = mcrypt_create_iv($this->getIvSize(), $this->getRandomizer());
+					 $iv = mcrypt_create_iv ($this->getIvSize (), $this->getRandomizer ());
 
-            $base = base64_encode(json_encode($this->payloadCreator($this->encrypt($value, $iv), $iv)));
-
-
-            return $base;
-        }
-    }
-
-    /**
-     * @param string $value
-     * @param $iv
-     * @return string
-     *
-     * Şifrelenmiş metni hazırlar
-     */
-    private function encrypt($value = '', $iv)
-    {
-
-        $value = $this->returnCleanAndHexedValue($value);
-
-        try{
-            $crypted =  mcrypt_encrypt($this->alogirtym, $this->securityKey, $value, $this->mode, $iv);
-            return $crypted;
-        }catch (Exception $e){
-            //
-        }
-
-    }
-
-    /**
-     * Value ve iv değerlerini kullanılmak için hazırlar
-     * @param $creypted
-     * @param $iv
-     * @return array
-     */
-
-    private function payloadCreator($creypted, $iv)
-    {
+					 $base = base64_encode (json_encode ($this->payloadCreator ($this->encrypt ($value, $iv), $iv)));
 
 
-        return array(
-            'value' => base64_encode($creypted),
-            'iv' => base64_encode($iv),
-        );
-    }
+					 return $base;
+				}
+		  }
 
-    /**
-     * Temizlenmiş value değeri oluşturur
-     * @param string $value
-     * @return string
-     */
-    private function returnCleanAndHexedValue($value = '')
-    {
+		  /**
+			* @param string $value
+			* @param $iv
+			* @return string
+			*
+			* Şifrelenmiş metni hazırlar
+			*/
+		  private function encrypt ($value = '', $iv)
+		  {
 
-        $value = trim($value);
-        return $value;
-    }
+				$value = $this->returnCleanAndHexedValue ($value);
 
+				try {
+					 $crypted = mcrypt_encrypt ($this->alogirtym, $this->securityKey, $value, $this->mode, $iv);
 
-    /**
-     * Randomizer i dÃ¶ndÃ¼rÃ¼r
-     * @return int
-     */
-    private function getRandomizer()
-    {
+					 return $crypted;
+				} catch ( Exception $e ) {
+					 //
+				}
 
-        if ($this->rand) {
+		  }
 
-            return $this->rand;
-        }
-    }
+		  /**
+			* Value ve iv değerlerini kullanılmak için hazırlar
+			* @param $creypted
+			* @param $iv
+			* @return array
+			*/
 
-    /**
-     * Iv uzunluÄŸunu DÃ¶ndÃ¼rÃ¼r
-     * @return int
-     */
-    private function getIvSize()
-    {
-
-        return mcrypt_get_iv_size($this->alogirtym, $this->mode);
-    }
-
-    public function decode($value = '')
-    {
+		  private function payloadCreator ($creypted, $iv)
+		  {
 
 
-        if (is_string($value)) {
+				return [
+					 'value' => base64_encode ($creypted),
+					 'iv'    => base64_encode ($iv),
+				];
+		  }
 
-            $payload = $this->parsePayload($value);
+		  /**
+			* Temizlenmiş value değeri oluşturur
+			* @param string $value
+			* @return string
+			*/
+		  private function returnCleanAndHexedValue ($value = '')
+		  {
 
-            return $this->decrypt($payload);
-        }
-    }
+				$value = trim ($value);
 
-    /**
-     * @param $value
-     * @return array
-     *
-     * payload verisi parçalanır
-     */
-    private function parsePayload($value)
-    {
-
-        $based = (array)json_decode(base64_decode($value));
-
-
-        if (isset($based['value']) && isset($based['iv'])) {
+				return $value;
+		  }
 
 
-            return array(
-                'value' => base64_decode($based['value']),
-                'iv' => base64_decode($based['iv'])
-            );
-        }
-    }
+		  /**
+			* Randomizer i dÃ¶ndÃ¼rÃ¼r
+			* @return int
+			*/
+		  private function getRandomizer ()
+		  {
 
-    /**
-     * Metnin şifresini çözer
-     * @param array $payload
-     * @return string
-     */
-    private function decrypt(array $payload)
-    {
+				if ( $this->rand ) {
 
+					 return $this->rand;
+				}
+		  }
 
-        $iv = $payload['iv'];
+		  /**
+			* Iv uzunluÄŸunu DÃ¶ndÃ¼rÃ¼r
+			* @return int
+			*/
+		  private function getIvSize ()
+		  {
 
-        $value = $payload['value'];
+				return mcrypt_get_iv_size ($this->alogirtym, $this->mode);
+		  }
 
-        $value = $this->returnCleanAndDeHexedValue($value);
-
-        return mcrypt_decrypt($this->alogirtym, $this->securityKey, $value, $this->mode, $iv);
-    }
-
-    /**
-     * @param $value
-     * @return string
-     * Parametreyi temizler ve hexden çıkarır
-     */
-    private function returnCleanAndDeHexedValue($value)
-    {
-
-        $value = trim($value);
+		  public function decode ($value = '')
+		  {
 
 
-        return $value;
-    }
+				if ( is_string ($value) ) {
 
-    /**
-     * @param $value
-     * @return string
-     * Parametreyi hex halinden kurtarÄ±r
-     */
+					 $payload = $this->parsePayload ($value);
 
-}
+					 return $this->decrypt ($payload);
+				}
+		  }
+
+		  /**
+			* @param $value
+			* @return array
+			*
+			* payload verisi parçalanır
+			*/
+		  private function parsePayload ($value)
+		  {
+
+				$based = (array)json_decode (base64_decode ($value));
+
+
+				if ( isset( $based['value'] ) && isset( $based['iv'] ) ) {
+
+
+					 return [
+						  'value' => base64_decode ($based['value']),
+						  'iv'    => base64_decode ($based['iv'])
+					 ];
+				}
+		  }
+
+		  /**
+			* Metnin şifresini çözer
+			* @param array $payload
+			* @return string
+			*/
+		  private function decrypt (array $payload)
+		  {
+
+
+				$iv = $payload['iv'];
+
+				$value = $payload['value'];
+
+				$value = $this->returnCleanAndDeHexedValue ($value);
+
+				return mcrypt_decrypt ($this->alogirtym, $this->securityKey, $value, $this->mode, $iv);
+		  }
+
+		  /**
+			* @param $value
+			* @return string
+			* Parametreyi temizler ve hexden çıkarır
+			*/
+		  private function returnCleanAndDeHexedValue ($value)
+		  {
+
+				$value = trim ($value);
+
+
+				return $value;
+		  }
+
+		  /**
+			* @param $value
+			* @return string
+			* Parametreyi hex halinden kurtarÄ±r
+			*/
+
+	 }

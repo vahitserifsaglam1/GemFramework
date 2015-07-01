@@ -1,35 +1,35 @@
 <?php
-/**
- *
- * Bu sınıf örnek bir Route Sınıfıdır.
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- *
- */
-namespace Gem\Routes;
-use Gem\Components\Route\RouteHandleInterface;
-use Gem\Components\Route\Http\ControllerDispatcher;
-use Gem\Manager\Access\Auth;
+	 /**
+	  *
+	  * Bu sınıf örnek bir Route Sınıfıdır.
+	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  *
+	  */
+	 namespace Gem\Routes;
 
-/**
- * Class HomeRoute
- * @package Gem\Routes
- */
+	 use Gem\Components\Route\Http\ControllerDispatcher;
+	 use Gem\Components\Route\RouteHandleInterface;
 
-class HomeRoute extends ControllerDispatcher implements RouteHandleInterface {
+	 /**
+	  * Class HomeRoute
+	  * @package Gem\Routes
+	  */
+	 class HomeRoute extends ControllerDispatcher implements RouteHandleInterface
+	 {
 
-    public function __construct()
-    {
+		  public function __construct ()
+		  {
+				//
+		  }
 
+		  /**
+			*  Route olayını hatılar
+			* @return void
+			*/
+		  public function handle ()
+		  {
 
-    }
+				$this->setController ('IndexController::boot');
+		  }
 
-    public function handle()
-    {
-
-        $this->setController('IndexController::boot');
-        $this->setAccess(new Auth());
-        $this->dispatch();
-
-    }
-
-}
+	 }
