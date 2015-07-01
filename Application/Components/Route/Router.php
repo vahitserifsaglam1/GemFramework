@@ -7,11 +7,10 @@
 	  */
 	 namespace Gem\Components\Route;
 
-	 use Exception;
 	 use Gem\Components\Helpers\Server;
-	 use Gem\Components\Helpers\String\Builder;
-	 use Gem\Components\Helpers\String\Parser;
 	 use Gem\Components\Patterns\Singleton;
+	 use Exception;
+	 use Particle\Validator\Exception\InvalidValueException;
 
 	 /**
 	  * Class Router
@@ -20,7 +19,7 @@
 	 class Router
 	 {
 
-		  use Server, Parser, Builder;
+		  use Server;
 		  /**
 			* Rötalama koleksiyonları'nın tutalacağı yer
 			* @var RouteListener $listener
@@ -51,6 +50,7 @@
 
 		  }
 
+
 		  public function getFilter ($name = '')
 		  {
 				return $this->filter[ $name ];
@@ -77,62 +77,100 @@
 				return isset( $this->collector->filter[ $matches[1] ] ) ? "({$this->getFilter($matches[1])})" : "([\w-%]+)";
 		  }
 
+		  /**
+			* Rötaları Yürütür
+			* @return bool
+			*/
 		  public function run ()
 		  {
+
 				$collections = $this->getCollections ();
-				$url = $this->getUrl ();
-				if ( isset( $collections[ $this->getMethod () ] ) ) {
+				$method = $this->getMethod ();
+				if ( isset( $collections[ $method ] ) ) {
+					 $collections = $collections[ $method ];
+				} else {
+					 return false;
+				}
 
-					 if ( count ($collections) > 0 ) {
+				$this->runCollections ($collections);
+		  }
 
-						  foreach ( $collections as $collection ) {
+		  /**
+			* Koleksiyonları Parçalar
+			* @param array $collections
+			* @return void
+			*/
+		  private function runCollections (array $collections = [ ])
+		  {
+				foreach ( $collections as $col ) {
+					 $action = str_replace ("/", " ", $col['action']);
+					 $url = str_replace ("/", " ", $this->getUrl ());
+					 $regex = $this->regexChecker ($action, $url);
+					 if(false === $regex)
+					 {
+						  continue;
+					 }
+					 $this->runRouter($col['callback'], $regex);
+				}
+		  }
 
-								$regex = $this->getRegex ($collection['action']);
-								if ( $regex !== '' ) {
-									 if ( !preg_match ("@^" . $regex . "*$@i", $url, $matches) ) {
-										  continue;
-									 }
-								}
-								$get = $this->routeGenerateParams ($url, $collection['action']);
-								$argument_keys = $get['args'];
-								$params = $get['params'];
+		  /**
+			* @param string $action
+			* @param string $url
+			* @return mixed
+			*/
+		  private function regexChecker ($action = '', $url = '')
+		  {
 
-								if ( $url == '/' ) {
-									 $url = '';
-								}
-								$url = $this->basePath . $url;
+				if($action === $url)
+				{
+					 return [];
+				}
 
+				$regex = $this->getRegex ($action);
 
-								if ( $this->routeGenareteNewUrl ($argument_keys,
-									 $params,
-									 $url,
-									 $this->basePath . $collection['action'])
-								) {
+				if($regex !== ' ')
+				{
+					 if (preg_match( "@".ltrim($regex)."@si" , $url, $matches))
+					 {
 
+						  unset($matches[0]);
+						  return $matches;
+					 }else{
+						  return false;
+					 }
+				}else{
+					 return false;
+				}
+		  }
 
-									 if ( isset( $this->routes[ $collection['callback'] ] ) ) {
-										  $router = $this->routes[ $collection['callback'] ];
-										  $router = new $router();
-										  $router->setParams ($params);
-										  $router->handle ();
-										  $router->dispatch ();
+		  /**
+			*
+			* Rötalandırmanın Sınıfı çağırma ve yürütme kısımlarını yürütür.
+			* @param $callback
+			* @param array $params
+			* @throws Exception
+			*/
 
-									 } else {
-										  throw new Exception(sprintf ('%s adında bir router kayıtlı değil', $collection['callback']));
-									 }
+		  private function runRouter($callback, array $params = [])
+		  {
+				if(isset($this->routes[$callback]))
+				{
 
-								}
+					 $router = new $this->routes[$callback]();
+					 if($router instanceof RouteHandlerInterface)
+					 {
+						  $router->setParams($params);
+						  $router->handle();
+						  $router->dispatch();
 
-						  }
-
+					 }else{
+						  throw new Exception(sprintf('%s rötalandırma sınıfınız RouteHandlerInterface e sahip değil', get_class($router)));
 					 }
 
-				} else {
-
-					 //
-
+				}else{
+					 throw new Exception(sprintf('%s adında bir röta bulunamadı.', $callback));
 				}
 
 		  }
-
 	 }

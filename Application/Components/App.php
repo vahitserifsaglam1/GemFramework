@@ -15,9 +15,12 @@
 
 	 namespace Gem\Components;
 
+	 use Gem\Components\Helpers\Config;
+
 	 class App
 	 {
 
+		  use Config;
 		  const CONTROLLER = 'Controller';
 		  const MODEL = 'Model';
 

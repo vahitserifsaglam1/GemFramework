@@ -17,6 +17,7 @@
 			*/
 		  private $connection;
 		  private $query;
+		  private $page;
 		  private $params = [ ];
 
 		  /**
@@ -27,6 +28,18 @@
 		  {
 
 				$this->connection = $base;
+		  }
+
+		  /**
+			* Sayfalama olayı için şuan bulunulan sayfayı atar
+			* @param $page
+			* @return $this
+			*/
+		  public function setPage ($page)
+		  {
+				$this->page = $page;
+
+				return $this;
 		  }
 
 		  /**
@@ -118,6 +131,11 @@
 		  public function pagination ($action = [ ], $return = true)
 		  {
 
+				if ( !is_array ($action) ) {
+					 $action = [
+						  'url' => $action,
+						  'now' => $this->page ];
+				}
 				$pagination = new Pagination();
 				$pagination->setCount ($this->run ()->rowCount ());
 				$paginate = $pagination->paginate ($action);

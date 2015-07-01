@@ -17,7 +17,7 @@
 				 */
 
 				'host'     => 'localhost',
-				'db'       => 'instakipci',
+				'db'       => 'dt',
 				'username' => 'root',
 				'password' => '',
 				'charset'  => 'utf-8',

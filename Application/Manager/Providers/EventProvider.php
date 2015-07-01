@@ -27,9 +27,16 @@
 			*/
 		  protected $events = [
 
-				'Gem\Events\TestEvent' => [
-					 'Gem\Listeners\TestEventListener'
-				] ];
+				'Gem\Events\Header' => [
+					 'Gem\Listeners\HeaderListener'
+				],
+				'Gem\Events\Kategori' => [
+					 'Gem\Listeners\KategoriListener'
+				],
+				'Gem\Events\Ders' => [
+					 'Gem\Listeners\DersListener'
+				]
+		  ];
 
 		  /**
 			* Events sınıfını oluşturur ve listener ları atar

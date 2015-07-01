@@ -2,7 +2,6 @@
 
 	 use Gem\Components\Facade\Event as EventDispatcher;
 	 use Gem\Components\Patterns\Singleton;
-	 use Gem\Components\Cookie;
 
 	 /**
 	  * Girilen Event's değerine göre event'i parçalar
@@ -72,4 +71,13 @@
 				return $cookie;
 		  }
 
+	 }
+
+	 /**
+	  * Base Href adresini döndürür
+	  * @return string
+	  */
+	 function base()
+	 {
+		  return \Gem\Components\App::base();
 	 }

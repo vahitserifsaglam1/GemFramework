@@ -5,14 +5,14 @@
 	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
 	  */
 	 namespace Gem\Controllers;
-	 use Gem\Components\Facade\Cookie;
+	 use Gem\Components\Orm\Orm;
 	 use Gem\Components\Route\Controller;
 
 	 /**
 	  * Class IndexController
 	  * @package Gem\Controllers
 	  */
-	 class IndexController extends Controller
+	 class Index extends Controller
 	 {
 
 		  /**
@@ -26,12 +26,16 @@
 		  }
 
 		  /**
-			* Route tarafından IndexController::boot atandığı için bu tetiklenir.
+			* Route tarafından Index::boot atandığı için bu tetiklenir.
+			* @return Response
 			*/
 
-		  public function boot ()
+		  public function open ()
 		  {
-				
+				$orm = new Orm();
+				$return = $orm->read();
+				print_r($return);
+				return response('Hello World');
 		  }
 
 	 }

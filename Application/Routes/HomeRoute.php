@@ -8,13 +8,13 @@
 	 namespace Gem\Routes;
 
 	 use Gem\Components\Route\Http\ControllerDispatcher;
-	 use Gem\Components\Route\RouteHandleInterface;
+	 use Gem\Components\Route\RouteHandlerInterface;
 
 	 /**
 	  * Class HomeRoute
 	  * @package Gem\Routes
 	  */
-	 class HomeRoute extends ControllerDispatcher implements RouteHandleInterface
+	 class HomeRoute extends ControllerDispatcher implements RouteHandlerInterface
 	 {
 
 		  public function __construct ()
@@ -29,7 +29,7 @@
 		  public function handle ()
 		  {
 
-				$this->setController ('IndexController::boot');
+				$this->setController ('Index::open');
 		  }
 
 	 }

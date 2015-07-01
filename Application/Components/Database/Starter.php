@@ -49,7 +49,6 @@
 						  try {
 
 								$db = new PDO("$type:host=$host;dbname=$database", $username, $password);
-								$db->query ("SET CHARSET {$charset}");
 								$this->db = $db;
 						  } catch ( \PDOException $e ) {
 

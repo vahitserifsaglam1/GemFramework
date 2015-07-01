@@ -19,7 +19,8 @@
 		  public function __construct ()
 		  {
 
-				Route::get ('/', 'pages.home');
+				Route::get('/', 'pages.home');
+				Route::get('/index/:page', 'pages.home');
 
 		  }
 

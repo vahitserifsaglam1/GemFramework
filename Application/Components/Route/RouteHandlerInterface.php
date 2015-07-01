@@ -8,7 +8,7 @@
 	  * @package Gem\Components\Route
 	  */
 
-	 interface RouteHandleInterface
+	 interface RouteHandlerInterface
 	 {
 
 		  public function handle ();

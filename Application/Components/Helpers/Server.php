@@ -65,7 +65,6 @@
 				if ( !isset( $_GET['url'] ) || !$_GET['url'] || $_GET['url'] == '' )
 					 $_GET['url'] = '/';
 				$this->url = $_GET['url'];
-
 				return Security::xssProtection ($this->url);
 		  }
 

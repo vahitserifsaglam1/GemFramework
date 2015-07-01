@@ -32,6 +32,7 @@
 		  private $builders;
 		  private $chieldPattern;
 		  private $chield;
+		  protected $page;
 		  private $patterns = [
 
 				'read'   => [
@@ -84,8 +85,8 @@
 		  }
 
 		  /**
-			* veleti g�nderir
-			* @param  $chield
+			* veleti gönderir
+			* @return mixed
 			*/
 		  protected function getChield ()
 		  {
@@ -122,6 +123,7 @@
 
 				$query = $this->getQuery ();
 				$manager = new BuildManager($this->getBase ()->getConnection ());
+				$manager->setPage($this->page);
 				$manager->setQuery ($query);
 				$manager->setParams ($this->string['parameters']);
 
@@ -244,6 +246,8 @@
 		  /**
 			* Where  sorgusu
 			* @param mixed $where
+			* @param null controll
+			* @return $this
 			*/
 		  public function where ($where, $controll = null)
 		  {

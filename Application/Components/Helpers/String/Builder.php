@@ -60,7 +60,7 @@
 		  public function joinWithDot (array $dor = [ ])
 		  {
 
-				return $this->joinWithImploder ($dot, '.');
+				return $this->joinWithImploder ($dor, '.');
 		  }
 
 		  /**
@@ -77,55 +77,11 @@
 				return str_replace ($search, $replace, $string);
 		  }
 
-		  /**
-			*
-			* @param string $url
-			* @param string $action
-			* @return array
-			*/
-		  public function routeGenerateParams ($url = '', $action)
-		  {
-
-				## parametreler
-				$params = [ ];
-
-				$argument_keys = $this->createArgumentKeys ($action);
-
-				if ( count ($argument_keys) > 0 ) {
-
-					 foreach ( $argument_keys as $key => $value ) {
-
-						  $matches = explode ("/", $url);
-
-						  if ( isset( $matches[ $key ] ) ) {
-
-								$params[ $value ] = $matches[ $key ];
-						  }
-					 }
-				}
-
-				return [ 'args'   => $argument_keys,
-							'params' => $params ];
-		  }
 
 		  /**
-			*
-			* @param array $replaces
-			* @param array $params
-			* @param string $url
+			* @param $url
 			* @return string
 			*/
-		  public function routeGenareteNewUrl ($replaces, $params, $url, $action)
-		  {
-
-
-				$replaced = $this->replaceString ($replaces, $params, $action);
-
-				if ( $replaced == $url ) {
-
-					 return true;
-				}
-		  }
 
 		  public function clearLastSlash ($url)
 		  {
@@ -137,26 +93,6 @@
 				}
 
 				return $url;
-		  }
-
-		  /**
-			* Argsları hazırlar
-			* @param string $action
-			* @return multitype:|unknown
-			*/
-		  private function createArgumentKeys ($action)
-		  {
-
-				return array_filter (
-					 $this->urlParser ($action), function ($a) {
-
-					 if ( preg_match ("/:([\w-%]+)/", $a, $find) ) {
-
-
-						  return $find[1];
-					 }
-				}
-				);
 		  }
 
 	 }

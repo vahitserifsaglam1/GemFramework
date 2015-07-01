@@ -18,8 +18,7 @@
 		  {
 
 				$action = $action['action'];
-				$url = ltrim ($url, '/');
-				$this->collection[ $type ] = [
+				$this->collection[ $type ][] = [
 					 'action'   => $url,
 					 'callback' => $action
 				];

@@ -49,8 +49,6 @@
 
 		  public function paginate ($action)
 		  {
-
-
 				$url = $this->clearLastSlash ($action['url']);
 
 				$count = $this->count;
@@ -77,8 +75,6 @@
 
 					 $limit = ceil ($count / $this->options['limit']);
 				}
-
-				echo $now;
 				for ( $i = $now; $i <= $limit; $i++ ) {
 
 					 $s .= $this->chieldString ($i, $url, $search);

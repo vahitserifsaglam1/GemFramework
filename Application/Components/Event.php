@@ -54,12 +54,12 @@
 				if ( is_string ($eventName) || $eventName instanceof EventDispatch ) {
 
 					 if ( $eventName instanceof EventDispatch ) {
+						  $eventInstance = $eventName;
 						  $eventName = get_class ($eventName);
 					 } elseif ( is_string ($eventName) ) {
 						  $eventName = new $eventName();
 					 }
 					 if ( $this->hasListiner ($eventName) ) {
-						  $eventInstance = $eventName;
 						  $listeners = $this->getListeners ($eventName);
 						  $response = $this->runListenersHandle ($listeners, $eventInstance);
 						  if ( count ($response) === 1 ) {

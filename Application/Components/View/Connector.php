@@ -123,7 +123,6 @@
 		  public function setParams ($params = [ ])
 		  {
 				$this->params = $params;
-
 				return $this;
 		  }
 

@@ -99,12 +99,12 @@
 			*/
 		  public function page ($page)
 		  {
-
+				$this->page = $page;
 				$limit = $this->getConfig ('pagination');
 				$limit = $limit['limit'];
 				$baslangic = ( $page - 1 ) * ( $limit );
 				$bitis = $page * $limit;
-				$this->limit ([ $baslangic, $bitis ]);
+				return $this->limit ([ $baslangic, $bitis ]);
 		  }
 
 

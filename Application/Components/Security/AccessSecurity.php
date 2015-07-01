@@ -7,11 +7,13 @@
 	 class AccessSecurity extends ServerBag
 	 {
 		  /**
+			* Ayarları tutar
 			* @var array
 			*/
 		  private $configs;
 
 		  /**
+			* Başlıkları Tutar
 			* @var array
 			*/
 		  private $httpConfigs;
@@ -21,6 +23,12 @@
 			*/
 
 		  private $message = 'Bu Sayfaya Giriş Yetkiniz Bulunmamaktadır.';
+
+		  /**
+			* Kullanılacak paremetreleri ve onların başlıklardaki karşılıklarını depolar.
+			* @var array
+			*/
+
 		  private $params = [
 
 				'allowedUserAgent'  => 'User-Agent',
@@ -32,12 +40,22 @@
 				'allowedMethod'     => 'Method'
 		  ];
 
+		  /**
+			* Ayarları alır ve başlıkları tutar
+			* @param array $config
+			*/
 		  public function __construct (array $config = [ ])
 		  {
 				parent::__construct ();
-				$this->configs = $config;
+				$this->setConfig($config);
 				$this->httpConfigs = $this->getHeaders ();
 		  }
+
+		  /**
+			* Ayarları ayarlar
+			* @param array $config
+			* @return $this
+			*/
 
 		  public function setConfig (array $config = [ ])
 		  {
@@ -91,8 +109,7 @@
 		  private function stopPageProcess ()
 		  {
 
-				$response = new Response();
-				$response->make ($this->getMessage (), 401)->execute ();
+				response($this->getMessage (), 401)->execute ();
 				die();
 
 		  }

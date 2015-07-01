@@ -1,18 +1,30 @@
 <?php
 	 /**
-	  * Created by PhpStorm.
-	  * User: vserifsaglam
-	  * Date: 24.6.2015
-	  * Time: 15:20
+	  *  Bu Sınıf GemFramework'de Asset Sınıfında Versiona dayalı işlemler yapmak için tasarlanmıştır
+	  *  @author vahitserifsaglam <vahit.serif119@gmail.com>
 	  */
-
 	 namespace Gem\Components\Assets;
+
+	 /**
+	  * Class VersionPackpage
+	  * @package Gem\Components\Assets
+	  *
+	  */
 
 	 class VersionPackpage implements AssetInterface
 	 {
 
 
+		  /**
+			* Girilecek version değerini tutar
+			* @var string
+			*/
 		  private $version = '';
+
+		  /**
+			* Değiştirelecek deseni tutar
+			* @var string
+			*/
 		  private $pattern = '';
 
 		  public function __construct ($version = '', $pattern = '%f?%v')
