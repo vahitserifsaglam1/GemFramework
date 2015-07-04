@@ -4,7 +4,8 @@
 	 class Orm
 	 {
 
-		  public function __construct ()
+         const TABLE = 'table';
+         public function __construct ()
 		  {
 				$this->orm = new \Gem\Components\Orm\Orm();
 				$this->orm->setTable($this->findCalledClassTableVariable());

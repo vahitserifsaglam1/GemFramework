@@ -5,10 +5,8 @@
 	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
 	  */
 	 namespace Gem\Controllers;
-	 use Gem\Components\Orm\Orm;
-	 use Gem\Components\Route\Controller;
-
-	 /**
+     use Gem\Components\Route\Controller;
+     /**
 	  * Class IndexController
 	  * @package Gem\Controllers
 	  */
@@ -32,10 +30,7 @@
 
 		  public function open ()
 		  {
-				$orm = new Orm();
-				$return = $orm->read();
-				print_r($return);
-				return response('Hello World');
+
 		  }
 
 	 }

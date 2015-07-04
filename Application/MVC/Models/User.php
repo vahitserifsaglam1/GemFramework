@@ -1,8 +1,10 @@
 <?php
 
 namespace Gem\Models;
+use Gem\Components\Facade\Orm;
 
+class User extends Orm{
 
-class User {
-
+    public $table = 'user';
+    
 }

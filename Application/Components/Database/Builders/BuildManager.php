@@ -77,9 +77,7 @@
 					 $prepare = $this->connection->prepare ($this->query);
 				}
 				if ( $prepare instanceof PDOStatement ) {
-
 					 $prepare->execute ($this->params);
-
 				} elseif ( $prepare instanceof mysqli_stmt ) {
 
 					 $s = "";
