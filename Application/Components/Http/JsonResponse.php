@@ -1,13 +1,5 @@
 <?php
-	 /**
-	  * Created by PhpStorm.
-	  * User: vserifsaglam
-	  * Date: 24.6.2015
-	  * Time: 20:44
-	  */
-
 	 namespace Gem\Components\Http;
-
 	 use Gem\Components\Http\Response;
 
 	 /**

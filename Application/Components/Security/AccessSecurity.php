@@ -1,9 +1,7 @@
 <?php
 	 namespace Gem\Components\Security;
-
 	 use Gem\Components\Http\Response;
 	 use Gem\Components\Http\ServerBag;
-
 	 class AccessSecurity extends ServerBag
 	 {
 		  /**
@@ -125,8 +123,8 @@
 
 				if ( isset( $this->httpConfigs[ $paramName ] ) ) {
 					 foreach ( $value as $val ) {
-						  if ( false === $this->stringValueChecker ($paramName, $val) ) {
-								return false;
+						  if ( true === $this->stringValueChecker ($paramName, $val) ) {
+								return true;
 						  }
 					 }
 

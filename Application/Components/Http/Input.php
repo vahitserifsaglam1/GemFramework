@@ -65,7 +65,7 @@
 		  /**
 			* @return mixed Post verilerini döndürür
 			*/
-		  public function getAll ()
+		  public static function getAll ()
 		  {
 				return $_POST;
 		  }
