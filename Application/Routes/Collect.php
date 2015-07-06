@@ -20,8 +20,6 @@
 		  {
 
 				Route::get('/', 'pages.home');
-				Route::get('/index/:page', 'pages.home');
-
 		  }
 
 	 }

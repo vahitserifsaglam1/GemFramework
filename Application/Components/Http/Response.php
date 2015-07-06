@@ -273,7 +273,6 @@
 
 				$cookies = $this->headersBag->getCookies ();
 				foreach ( $cookies as $cookie ) {
-
 					 $cookie = sprintf('Set-Cookie: %s', $cookie);
 					 header ($cookie);
 

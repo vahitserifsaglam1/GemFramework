@@ -10,7 +10,7 @@
 
 	 use Exception;
 
-	 class CallableDispatcher extends Dispatch
+	 class CallableManager extends Dispatch
 	 {
 
 		  /**

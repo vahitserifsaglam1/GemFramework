@@ -3,7 +3,7 @@
 	 namespace Gem\Components\Route;
 
 	 use Gem\Components\App;
-	 use Gem\Components\Job\JobManager;
+     use Gem\Components\Job\JobDispatcherInterface;
 	 use Gem\Components\Support\MethodDispatcher;
 
 	 /**
@@ -53,22 +53,47 @@
 
 		  /**
 			* Sınıfın yapacağı işleri ayar
-			* @param JobManager $job Yapılacak işlerin toplandığı sınıf 'a ait instance
+			* @param JobDispatcherInterface $job Yapılacak işlerin toplandığı sınıf 'a ait instance
 			* @return $this
 			*/
-		  public function job (JobManager $job)
+		  public function job (JobDispatcherInterface $job)
 		  {
 				$this->job = $job;
-
+                $this->getJob();
 				return $this;
 		  }
 
 		  /**
 			* JobManager objesini döndürür
-			* @return mixed
+			* @return JobDispatcherInterface
 			*/
 		  protected function getJob ()
 		  {
 				return $this->job;
 		  }
+
+         /**
+          * @param null $name
+          * @param null $value
+          * @return $this
+          */
+         public function __set($name = null, $value = null)
+         {
+             $this->job->$name = $value;
+             return $this;
+         }
+
+         /**
+          * JobManager'i yürütür
+          * @return mixed
+          */
+         protected function run()
+         {
+             return $this->getJob()->dispatch();
+         }
+
+         public function __call($name, $params)
+         {
+             return call_user_func_array([$this->getJob(), $name], $params);
+         }
 	 }

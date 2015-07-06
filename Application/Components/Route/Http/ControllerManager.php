@@ -7,7 +7,7 @@
 
 	 use Exception;
 
-	 class ControllerDispatcher extends Dispatch
+	 class ControllerManager extends Dispatch
 	 {
 
 		  /**

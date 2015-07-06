@@ -42,7 +42,18 @@
 			* @return Redis
 			*/
 		  public function getRedisObj()
-		  {
-				return $this->redisObj;
-		  }
+          {
+              return $this->redisObj;
+          }
+
+         /**
+          * Dinamik olarak method çağırım işlevi
+          * @param $method
+          * @param $params
+          * @return mixed
+          */
+         public function __call($method, $params)
+         {
+             return call_user_func([$this->redisObj, $method], $params);
+         }
 	 }

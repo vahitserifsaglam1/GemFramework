@@ -42,7 +42,7 @@
 					 foreach ( $explode as $ex ) {
 
 						  $ex = explode ('=', $ex);
-						  $cookies[ $ex[0] ] = $ex[1];
+						  $cookies[ trim($ex[0]) ] = ($ex[1]);
 
 					 }
 

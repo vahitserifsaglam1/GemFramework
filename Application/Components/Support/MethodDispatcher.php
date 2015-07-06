@@ -25,12 +25,10 @@
 			* @param callable $callback
 			* @return $this
 			*/
-		  public function make ($functionName = '', callable $callback = null)
+		  public static function make ($functionName = '', callable $callback = null)
 		  {
-
 				Closure::bind ($callback, null, get_class ());
-
-				return $this;
+				return new static();
 		  }
 
 		  /**

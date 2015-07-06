@@ -63,4 +63,19 @@
 					 unset( $_SESSION[ $name ] );
 				}
 		  }
+
+         /**
+          * İtem varmı yokmu diye kontrol eder
+          * @param null $name
+          * @return bool
+          */
+         public function has($name = null)
+         {
+             if($name === null)
+             {
+                 return isset($_SESSION);
+             }else{
+                 return isset($_SESSION[$name]);
+             }
+         }
 	 }
