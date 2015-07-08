@@ -1,14 +1,11 @@
 <?php
-	 /**
-	  * Created by PhpStorm.
-	  * User: vserifsaglam
-	  * Date: 21.6.2015
-	  * Time: 00:45
-	  */
-
-	 namespace Gem\components\Facade;
-
+	 namespace Gem\Components\Facade;
 	 use Gem\Components\Patterns\Facade;
+
+     /**
+      * Class Route
+      * @package Gem\Components\Facade
+      */
 
 	 class Route extends Facade
 	 {

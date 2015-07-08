@@ -11,10 +11,10 @@
 
 	 use Exception;
 	 use Gem\Components\Patterns\Singleton;
-	 use Gem\Components\View\Connector;
-	 use Gem\Components\View\ShouldBeViewInterface;
+	 use Gem\Components\View\ShouldBeView;
+     use Gem\Components\View\ViewManager;
 
-	 class View extends Connector implements ShouldBeViewInterface
+     class View extends ViewManager implements ShouldBeView
 	 {
 
 		  private $file;

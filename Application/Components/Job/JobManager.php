@@ -2,7 +2,7 @@
 	 namespace Gem\Components\Job;
 	 use Gem\Components\Orm\Orm;
      use Gem\Components\Support\SetCollector;
-     class JobManager extends Orm implements JobDispatcherInterface
+     class JobManager extends Orm implements ShouldBeJob
 	 {
          use SetCollector;
          private $callback;

@@ -16,7 +16,7 @@
 	 use Gem\Components\Patterns\Facade;
 	 use Gem\Components\Patterns\Singleton;
 	 use Gem\Components\Security\TypeHint;
-	 use Gem\Routes\Collect;
+     use Exception;
 
 	 /**
 	  *
@@ -30,6 +30,7 @@
 		  private $frameworkName;
 		  private $starter;
 		  private $frameworkVersion;
+          const ROUTE_FILE = ROUTE.'routes.php';
 
 		  /**
 			* Framework 'un adı ve versionu girilir,
@@ -86,9 +87,14 @@
 		  {
 
 				$this->runOthers ();
-				new Collect();
-				$make = $this->singleton ('Gem\Components\Route\Router');
-				$make->run ();
+                if(file_exists(self::ROUTE_FILE))
+                {
+                    include(self::ROUTE_FILE);
+                    $make = $this->singleton ('Gem\Components\Route\Router');
+                    $make->run ();
+                }else{
+                    throw new Exception(sprintf('%s yolunda olması gerek röta dosyanız bulunamadı, lütfen oluşturun',self::ROUTE_FILE));
+                }
 
 		  }
 

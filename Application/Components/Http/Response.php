@@ -9,13 +9,13 @@
 	 namespace Gem\components\Http;
 
 	 use Gem\Components\Cookie;
-	 use Gem\Components\Http\Response\ShouldBeResponseInterface;
+	 use Gem\Components\Http\Response\ShouldBeResponse;
 	 use Gem\Components\Patterns\Singleton;
 	 use Gem\Components\Twig;
 	 use Gem\Components\View;
-	 use Gem\Components\View\ShouldBeViewInterface;
+	 use Gem\Components\View\ShouldBeView;
 	 use HttpResponseException;
-	 class Response implements ShouldBeResponseInterface
+	 class Response implements ShouldBeResponse
 	 {
 
 		  private $contentType = 'text/html';
@@ -204,7 +204,7 @@
 		  {
 
 
-				if ( $content instanceof ShouldBeViewInterface ) {
+				if ( $content instanceof ShouldBeView ) {
 					 $content = $content->execute ();
 				}
 

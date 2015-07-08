@@ -24,10 +24,11 @@
 
 		  /**
 			* Callable atamasını engeller
-			* @param null $callable
+			* @param callable $callable
 			* @throws Exception
 			*/
-		  public function setCallable ($callable = null)
+
+		  public function setCallable (callable $callable = null)
 		  {
 
 				throw new Exception('%s sınıfından callable ataması yapamassınız', __CLASS__);

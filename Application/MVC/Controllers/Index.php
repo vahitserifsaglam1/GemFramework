@@ -31,6 +31,6 @@
 		  public function open ()
 		  {
 
-              return response('hello world');
+              return response('Hello World');
           }
 	 }

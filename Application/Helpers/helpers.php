@@ -25,6 +25,17 @@ function view($file = '', array $parametres = [])
 }
 
 /**
+ * yeni bir twig objesi oluşturur
+ * @param $file
+ * @param array $parametres
+ * @return $this
+ */
+
+function twig($file, array $parametres = [])
+{
+    return (new \Gem\Components\Twig())->setFileName($file)->setParams($parametres);
+}
+/**
  * Yeni bir response objesi döndürür
  * @param string $content Gösterilecek içerik
  * @param integer $statusCode İstekçiye gönderilecek durum kodu

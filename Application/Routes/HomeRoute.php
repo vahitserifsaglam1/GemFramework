@@ -8,13 +8,13 @@
 namespace Gem\Routes;
 
 use Gem\Components\Route\Http\ControllerManager;
-use Gem\Components\Route\RouteHandlerInterface;
+use Gem\Components\Route\ShouldBeRoute;
 
 /**
  * Class HomeRoute
  * @package Gem\Routes
  */
-class HomeRoute extends ControllerManager implements RouteHandlerInterface
+class HomeRoute extends ControllerManager implements ShouldBeRoute
 {
 
     public function __construct()

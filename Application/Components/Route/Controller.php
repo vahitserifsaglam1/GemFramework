@@ -39,7 +39,6 @@
 		  public function response (ShouldBeResponseInterface $response)
 		  {
 				$this->response = $response;
-
 				return $this;
 		  }
 
