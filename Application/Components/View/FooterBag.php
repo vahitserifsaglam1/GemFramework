@@ -1,47 +1,44 @@
 <?php
-	 /**
-	  * Created by PhpStorm.
-	  * User: vserifsaglam
-	  * Date: 24.6.2015
-	  * Time: 20:54
-	  */
+    /**
+     * Created by PhpStorm.
+     * User: vserifsaglam
+     * Date: 24.6.2015
+     * Time: 20:54
+     */
 
-	 namespace Gem\Components\View;
+    namespace Gem\Components\View;
 
+    class FooterBag
+    {
+        private $viewFooters = [
 
-	 class FooterBag
-	 {
-		  private $viewFooters = [
+           'inc/footer'
 
-				'inc/footer'
+        ];
 
-		  ];
+        /**
+         * @param array $Footers
+         * @return $this
+         */
+        public function setViewFooters(array $footers = [])
+        {
+            if (!is_array($footers)) {
 
-		  /**
-			*
-			* @param array $Footers
-			* @return $this
-			*/
-		  public function setViewFooters (array $footers = [ ])
-		  {
-				if ( !is_array ($footers) ) {
+                $footers = (array)$footers;
+            }
+            $this->viewFooters = $footers;
 
-					 $footers = (array)$footers;
+            return $this;
+        }
 
-				}
-				$this->viewFooters = $footers;
+        /**
+         * İndex.php den sonra yüklenecek dosyalar çekilir
+         *
+         * @return array
+         */
+        public function getViewFooters()
+        {
 
-				return $this;
-		  }
-
-		  /**
-			* İndex.php den sonra yüklenecek dosyalar çekilir
-			* @return array
-			*/
-		  public function getViewFooters ()
-		  {
-
-				return $this->viewFooters;
-
-		  }
-	 }
+            return $this->viewFooters;
+        }
+    }

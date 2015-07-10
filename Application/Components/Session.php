@@ -1,81 +1,84 @@
 <?php
 
-	 /**
-	  *
-	  *  Gem Framework Session Sınıfı, session'a atama yapmakda kullanılır.
-	  * @package Gem\Components
-	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
-	  *
-	  */
+    /**
+     *  Gem Framework Session Sınıfı, session'a atama yapmakda kullanılır.
+     *
+     * @package Gem\Components
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     */
 
-	 namespace Gem\Components;
-	 use Gem\Components\Session\SecureSessionHandler;
+    namespace Gem\Components;
 
-	 class Session extends SecureSessionHandler
-	 {
+    use Gem\Components\Session\SecureSessionHandler;
 
-		  public function __construct ()
-		  {
-				parent::__construct ('AAA');
-		  }
+    class Session extends SecureSessionHandler
+    {
 
-		  /**
-			* Veriyi döndürür
-			* @param string $name
-			* @return mixed
-			*/
-		  public function get ($name)
-		  {
-				return $this->getValue ($name);
-		  }
+        public function __construct()
+        {
+            parent::__construct('AAA');
+        }
 
-		  /**
-			* @param $name
-			* @param $value
-			* @return $this
-			*/
-		  public function set ($name, $value)
-		  {
-				$this->setValue ($name, $value);
-				return $this;
-		  }
+        /**
+         * Veriyi döndürür
+         *
+         * @param string $name
+         * @return mixed
+         */
+        public function get($name)
+        {
+            return $this->getValue($name);
+        }
 
-		  /**
-			* Veriyi siler
-			* @param $name
-			* @return $this
-			*/
-		  public function delete ($name)
-		  {
-				if ( isset( $_SESSION[ $name ] ) ) {
-					 unset( $_SESSION[ $name ] );
-				}
+        /**
+         * @param $name
+         * @param $value
+         * @return $this
+         */
+        public function set($name, $value)
+        {
+            $this->setValue($name, $value);
 
-				return $this;
-		  }
+            return $this;
+        }
 
-		  /**
-			* Tüm oturum verilerini temilzer
-			*/
-		  public function flush ()
-		  {
-				foreach ( $_SESSION as $name => $value ) {
-					 unset( $_SESSION[ $name ] );
-				}
-		  }
+        /**
+         * Veriyi siler
+         *
+         * @param $name
+         * @return $this
+         */
+        public function delete($name)
+        {
+            if (isset($_SESSION[$name])) {
+                unset($_SESSION[$name]);
+            }
 
-         /**
-          * İtem varmı yokmu diye kontrol eder
-          * @param null $name
-          * @return bool
-          */
-         public function has($name = null)
-         {
-             if($name === null)
-             {
-                 return isset($_SESSION);
-             }else{
-                 return isset($_SESSION[$name]);
-             }
-         }
-	 }
+            return $this;
+        }
+
+        /**
+         * Tüm oturum verilerini temilzer
+         */
+        public function flush()
+        {
+            foreach ($_SESSION as $name => $value) {
+                unset($_SESSION[$name]);
+            }
+        }
+
+        /**
+         * İtem varmı yokmu diye kontrol eder
+         *
+         * @param null $name
+         * @return bool
+         */
+        public function has($name = null)
+        {
+            if ($name === null) {
+                return isset($_SESSION);
+            } else {
+                return isset($_SESSION[$name]);
+            }
+        }
+    }

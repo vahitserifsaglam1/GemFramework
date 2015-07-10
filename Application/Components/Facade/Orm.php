@@ -1,41 +1,44 @@
 <?php
 
-	 namespace Gem\Components\Facade;
-	 class Orm
-	 {
+    namespace Gem\Components\Facade;
 
-         const TABLE = 'table';
-         public function __construct ()
-		  {
-				$this->orm = new \Gem\Components\Orm\Orm();
-				$this->orm->setTable($this->findCalledClassTableVariable());
-		  }
+    class Orm
+    {
 
-		  /**
-			* Hangi sınıftan çağrıldığını arar
-			* @return mixed
-			*/
-		  private function findCalledClassTableVariable ()
-		  {
-				$class = get_called_class ();
-				$vars = get_class_vars ($class);
-				if ( isset( $vars[ self::TABLE ] ) ) {
-					 return $vars[ self::TABLE ];
-				}
-		  }
+        const TABLE = 'table';
 
-		  /**
-			* Static kullanım desteği
-			* @param $method
-			* @param array $params
-			* @return mixed
-			*/
-		  public static function __callStatic ($method, $params = [ ])
-		  {
+        public function __construct()
+        {
+            $this->orm = new \Gem\Components\Orm\Orm();
+            $this->orm->setTable($this->findCalledClassTableVariable());
+        }
 
-				$instance = new static();
-				return call_user_func_array([$instance->orm, $method],$params);
+        /**
+         * Hangi sınıftan çağrıldığını arar
+         *
+         * @return mixed
+         */
+        private function findCalledClassTableVariable()
+        {
+            $class = get_called_class();
+            $vars = get_class_vars($class);
+            if (isset($vars[self::TABLE])) {
+                return $vars[self::TABLE];
+            }
+        }
 
-		  }
+        /**
+         * Static kullanım desteği
+         *
+         * @param       $method
+         * @param array $params
+         * @return mixed
+         */
+        public static function __callStatic($method, $params = [])
+        {
 
-	 }
+            $instance = new static();
+
+            return call_user_func_array([$instance->orm, $method], $params);
+        }
+    }

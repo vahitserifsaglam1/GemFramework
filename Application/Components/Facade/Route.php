@@ -1,17 +1,18 @@
 <?php
-	 namespace Gem\Components\Facade;
-	 use Gem\Components\Patterns\Facade;
+    namespace Gem\Components\Facade;
 
-     /**
-      * Class Route
-      * @package Gem\Components\Facade
-      */
+    use Gem\Components\Patterns\Facade;
 
-	 class Route extends Facade
-	 {
+    /**
+     * Class Route
+     *
+     * @package Gem\Components\Facade
+     */
+    class Route extends Facade
+    {
 
-		  protected static function getFacadeClass ()
-		  {
-				return 'Route';
-		  }
-	 }
+        protected static function getFacadeClass()
+        {
+            return 'Route';
+        }
+    }

@@ -1,149 +1,138 @@
 <?php
-	 /**
-	  * Created by PhpStorm.
-	  * User: vserifsaglam
-	  * Date: 19.6.2015
-	  * Time: 04:29
-	  */
+    /**
+     * Created by PhpStorm.
+     * User: vserifsaglam
+     * Date: 19.6.2015
+     * Time: 04:29
+     */
 
-	 namespace Gem\Components;
+    namespace Gem\Components;
 
-	 use Exception;
-	 use Gem\Components\Event\EventCollector;
-	 use Gem\Events\Event as EventDispatch;
-	 use Gem\Listeners\EventListener;
-	 use InvalidArgumentException;
+    use Exception;
+    use Gem\Components\Event\EventCollector;
+    use Gem\Events\Event as EventDispatch;
+    use Gem\Listeners\EventListener;
+    use InvalidArgumentException;
 
-	 class Event
-	 {
-
-
-		  /**
-			*
-			* @var array
-			*/
-
-		  private $firing;
+    class Event
+    {
 
 
-		  /**
-			*
-			* @var EventCollector
-			*/
-		  private $collector;
+        /**
+         * @var array
+         */
+
+        private $firing;
 
 
-		  public function __construct (EventCollector $collector = null)
-		  {
+        /**
+         * @var EventCollector
+         */
+        private $collector;
 
 
-				$this->collector = $collector;
-				$this->listeners = $this->collector->getListeners ();
-		  }
+        public function __construct(EventCollector $collector = null)
+        {
 
-		  /**
-			* Event'i yürütür
-			* $eventName 'sınıfın ismi veya direk sınıfın instance i olabilir
-			* @param string $eventName
-			* @return array
-			* @throws Exception
-			*/
-		  public function fire ($eventName = '')
-		  {
+            $this->collector = $collector;
+            $this->listeners = $this->collector->getListeners();
+        }
 
-				if ( is_string ($eventName) || $eventName instanceof EventDispatch ) {
+        /**
+         * Event'i yürütür
+         * $eventName 'sınıfın ismi veya direk sınıfın instance i olabilir
+         *
+         * @param string $eventName
+         * @return array
+         * @throws Exception
+         */
+        public function fire($eventName = '')
+        {
 
-					 if ( $eventName instanceof EventDispatch ) {
-						  $eventInstance = $eventName;
-						  $eventName = get_class ($eventName);
-					 } elseif ( is_string ($eventName) ) {
-						  $eventName = new $eventName();
-					 }
-					 if ( $this->hasListiner ($eventName) ) {
-						  $listeners = $this->getListeners ($eventName);
-						  $response = $this->runListenersHandle ($listeners, $eventInstance);
-						  if ( count ($response) === 1 ) {
-								$response = $response[0];
-						  }
-						  $this->firing[] = $response;
+            if (is_string($eventName) || $eventName instanceof EventDispatch) {
 
-						  return $response;
+                if ($eventName instanceof EventDispatch) {
+                    $eventInstance = $eventName;
+                    $eventName = get_class($eventName);
+                } elseif (is_string($eventName)) {
+                    $eventName = new $eventName();
+                }
+                if ($this->hasListiner($eventName)) {
+                    $listeners = $this->getListeners($eventName);
+                    $response = $this->runListenersHandle($listeners, $eventInstance);
+                    if (count($response) === 1) {
+                        $response = $response[0];
+                    }
+                    $this->firing[] = $response;
 
-					 } else {
+                    return $response;
+                } else {
 
-						  throw new Exception(sprintf ('%s adındaki Event\' in herhangi bir dinleyicisi yok', $eventName));
+                    throw new Exception(sprintf('%s adındaki Event\' in herhangi bir dinleyicisi yok', $eventName));
+                }
+            } else {
+                throw new InvalidArgumentException('Girdiğiniz Event, geçerli bir event değil');
+            }
+        }
 
-					 }
-				} else {
-					 throw new InvalidArgumentException('Girdiğiniz Event, geçerli bir event değil');
-				}
+        /**
+         * Listener'ları yürütür
+         *
+         * @param array $listeners
+         * @param null  $eventName
+         * @throws Exception
+         * @return array
+         */
+        private function runListenersHandle(array $listeners = [], $eventName = null)
+        {
 
+            $response = [];
+            foreach ($listeners as $listener) {
 
-		  }
+                $listener = new $listener();
+                if ($listener instanceof EventListener) {
 
-		  /**
-			* Listener'ları yürütür
-			* @param array $listeners
-			* @param null $eventName
-			* @throws Exception
-			* @return array
-			*/
-		  private function runListenersHandle (array $listeners = [ ], $eventName = null)
-		  {
+                    $response[] = call_user_func_array([$listener, 'handle'], [$eventName]);
+                } else {
 
-				$response = [ ];
-				foreach ( $listeners as $listener ) {
+                    throw new Exception(sprintf('%s listener sınıfı EventListenerInterface\' e sahip olmalıdır',
+                       get_class($listener)));
+                }
+            }
 
-					 $listener = new $listener();
-					 if ( $listener instanceof EventListener ) {
+            return $response;
+        }
 
-						  $response[] = call_user_func_array ([ $listener, 'handle' ], [ $eventName ]);
+        public function getListeners($eventName = '')
+        {
 
+            if (!is_string($eventName)) {
+                throw new InvalidArgumentException('event adı geçerli bir string değeri olmalıdır');
+            }
 
-					 } else {
+            return $this->listeners[$eventName];
+        }
 
-						  throw new Exception(sprintf ('%s listener sınıfı EventListenerInterface\' e sahip olmalıdır', get_class ($listener)));
+        /**
+         * Girilen event'in bir dinleyicisi varmı diye bakar
+         *
+         * @param string $eventName
+         * @return bool
+         */
+        public function hasListiner($eventName = '')
+        {
 
-					 }
+            return isset($this->listeners[$eventName]);
+        }
 
-				}
+        /**
+         * En son çağrılan event'i döndürür
+         *
+         * @return mixed
+         */
+        public function firing()
+        {
 
-				return $response;
-
-		  }
-
-		  public function getListeners ($eventName = '')
-		  {
-
-				if ( !is_string ($eventName) ) {
-					 throw new InvalidArgumentException('event adı geçerli bir string değeri olmalıdır');
-				}
-
-				return $this->listeners[ $eventName ];
-
-		  }
-
-		  /**
-			* Girilen event'in bir dinleyicisi varmı diye bakar
-			* @param string $eventName
-			* @return bool
-			*/
-		  public function hasListiner ($eventName = '')
-		  {
-
-				return isset( $this->listeners[ $eventName ] );
-
-		  }
-
-		  /**
-			* En son çağrılan event'i döndürür
-			* @return mixed
-			*/
-		  public function firing ()
-		  {
-
-				return end ($this->firing);
-
-		  }
-
-	 }
+            return end($this->firing);
+        }
+    }

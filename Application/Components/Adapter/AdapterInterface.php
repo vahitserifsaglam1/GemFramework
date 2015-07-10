@@ -1,18 +1,17 @@
 <?php
 
-	 namespace Gem\Components\Adapter;
-	 /**
-	  *
-	  *  Bu dosya Adapter sınıfının interface dosyasıdır, Adapter sınıfına eklenecek her dosya bu interface sahip olmak
-	  * zorundadır
-	  *
-	  */
+    namespace Gem\Components\Adapter;
 
-	 interface AdapterInterface
-	 {
+    /**
+     *
+     * Interface AdapterInterface
+     *
+     * @package Gem\Components\Adapter
+     */
 
-		  public function getName ();
+    interface AdapterInterface
+    {
 
-		  public function boot ();
-
-	 }
+        public function getName();
+        public function boot();
+    }

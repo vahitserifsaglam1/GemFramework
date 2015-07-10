@@ -1,10 +1,11 @@
 <?php
-namespace Gem\Components\Security\CsrfTokenCryptMethods;
-class Md5Crypt extends CsrfCryptMethod {
+    namespace Gem\Components\Security\CsrfTokenCryptMethods;
 
-    public function encrypt($string = '')
+    class Md5Crypt extends CsrfCryptMethod
     {
-        return md5($string);
-    }
 
-}
+        public function encrypt($string = '')
+        {
+            return md5($string);
+        }
+    }

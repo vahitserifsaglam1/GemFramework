@@ -1,35 +1,38 @@
 <?php
-	 /**
-	  *  Bu sınıf GemFramework'un örnek bir controller dosyasıdır.
-	  * @packpage Gem\Controllers
-	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
-	  */
-	 namespace Gem\Controllers;
-     use Gem\Components\Route\Controller;
-     /**
-	  * Class IndexController
-	  * @package Gem\Controllers
-	  */
-	 class Index extends Controller
-	 {
+    /**
+     *  Bu sınıf GemFramework'un örnek bir controller dosyasıdır.
+     *
+     * @packpage Gem\Controllers
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     */
 
-		  /**
-			*  Starter Function
-			*/
-		  public function __construct ()
-		  {
+    namespace Gem\Controllers;
+    use Gem\Components\Route\Controller;
 
-				//
+    /**
+     * Class IndexController
+     *
+     * @package Gem\Controllers
+     */
 
-		  }
+    class Index extends Controller
+    {
+        /**
+         *  Starter Function
+         */
+        public function __construct()
+        {
+            //
+        }
 
-		  /**
-			* Route tarafından Index::boot atandığı için bu tetiklenir.
-			* @return Response
-			*/
+        /**
+         * Route tarafından Index::boot atandığı için bu tetiklenir.
+         *
+         * @return Response
+         */
 
-		  public function open ()
-		  {
-              return response(view('index'));
-          }
-	 }
+        public function open()
+        {
+            return response(twig('index'));
+        }
+    }

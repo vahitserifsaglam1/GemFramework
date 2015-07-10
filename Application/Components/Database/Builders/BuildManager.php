@@ -1,210 +1,221 @@
 <?php
 
-	 namespace Gem\Components\Database\Builders;
+    namespace Gem\Components\Database\Builders;
 
-	 use Gem\Components\Database\Helpers\Pagination;
-	 use mysqli_stmt;
-	 use PDO;
-	 use PDOStatement;
+    use Gem\Components\Database\Helpers\Pagination;
+    use Gem\Components\Debug\Debug;
+    use mysqli_stmt;
+    use PDO;
+    use PDOStatement;
 
+    class BuildManager
+    {
+        use Debug;
+        /**
+         * @var \PDO
+         */
+        private $connection;
+        private $query;
+        private $page;
+        private $params = [];
 
-	 class BuildManager
-	 {
+        /**
+         * Base Ataması yapar
+         *
+         * @param Base $base
+         */
+        public function __construct($base)
+        {
 
-		  /**
-			*
-			* @var \PDO
-			*/
-		  private $connection;
-		  private $query;
-		  private $page;
-		  private $params = [ ];
+            $this->connection = $base;
+            $this->debugBoot();
+        }
 
-		  /**
-			* Base Ataması yapar
-			* @param Base $base
-			*/
-		  public function __construct ($base)
-		  {
+        /**
+         * Sayfalama olayı için şuan bulunulan sayfayı atar
+         *
+         * @param $page
+         * @return $this
+         */
+        public function setPage($page)
+        {
+            $this->page = $page;
 
-				$this->connection = $base;
-		  }
+            return $this;
+        }
 
-		  /**
-			* Sayfalama olayı için şuan bulunulan sayfayı atar
-			* @param $page
-			* @return $this
-			*/
-		  public function setPage ($page)
-		  {
-				$this->page = $page;
+        /**
+         * Query Sorgusunu atar
+         *
+         * @param string $query
+         */
+        public function setQuery($query)
+        {
 
-				return $this;
-		  }
+            $this->query = $query;
+        }
 
-		  /**
-			* Query Sorgusunu atar
-			* @param string $query
-			*/
-		  public function setQuery ($query)
-		  {
+        /**
+         * parametreleri atar
+         *
+         * @param array $params
+         */
+        public function setParams($params = [])
+        {
 
-				$this->query = $query;
-		  }
+            $this->params = $params;
+        }
 
-		  /**
-			* parametreleri atar
-			* @param array $params
-			*/
-		  public function setParams ($params = [ ])
-		  {
+        /**
+         * Sorguyu Oluşturur
+         *
+         * @return PDOStatement
+         */
+        public function run($query = false)
+        {
 
-				$this->params = $params;
-		  }
+            $add = [
+               'query'  => $this->query,
+               'params' => $this->params
+            ];
 
-		  /**
-			* Sorguyu Oluşturur
-			* @return PDOStatement
-			*/
-		  public function run ($query = false)
-		  {
+            if (true === $query) {
+                $query = $this->connection->query($this->query);
+                $add['response'] = $query;
+                $this->addToDatabase($add);
+                return $query;
+            } else {
+                $prepare = $this->connection->prepare($this->query);
+                $add['response'] = $prepare;
+            }
+            if ($prepare instanceof PDOStatement) {
+                $prepare->execute($this->params);
+            } elseif ($prepare instanceof mysqli_stmt) {
 
-				if ( true === $query ) {
-					 $query = $this->connection->query ($this->query);
+                $s = "";
+                foreach ($this->params as $param) {
 
-					 return $query;
-				} else {
-					 $prepare = $this->connection->prepare ($this->query);
-				}
-				if ( $prepare instanceof PDOStatement ) {
-					 $prepare->execute ($this->params);
-				} elseif ( $prepare instanceof mysqli_stmt ) {
+                    if (is_string($param)) {
+                        $s .= "s";
+                    } elseif (is_integer($param)) {
+                        $s .= "i";
+                    }
+                }
 
-					 $s = "";
-					 foreach ( $this->params as $param ) {
+                if (count($this->params) < 1) {
+                    $param_arr = [];
+                } else {
+                    $param_arr = array_merge([$s], $this->params);
+                }
 
-						  if ( is_string ($param) ) {
-								$s .= "s";
-						  } elseif ( is_integer ($param) ) {
-								$s .= "i";
-						  }
+                call_user_func_array([$prepare, 'bind_param'], $this->refValues($param_arr));
+                $prepare->execute();
 
-					 }
+            }
 
-					 if ( count ($this->params) < 1 ) {
-						  $param_arr = [ ];
-					 } else {
-						  $param_arr = array_merge ([ $s ], $this->params);
-					 }
+            $add['response'] = $prepare;
+            $this->addToDatabase($add);
+            return $prepare;
+        }
 
+        private function refValues($arr)
+        {
+            if (strnatcmp(phpversion(), '5.3') >= 0) //Reference is required for PHP 5.3+
+            {
+                $refs = [];
+                foreach ($arr as $key => $value) {
+                    $refs[$key] = &$arr[$key];
+                }
 
-					 call_user_func_array ([ $prepare, 'bind_param' ], $this->refValues ($param_arr));
-					 $prepare->execute ();
+                return $refs;
+            }
 
-				}
+            return $arr;
+        }
 
-				return $prepare;
-		  }
+        /**
+         * Sayfalama işlemini yapar
+         *  ['url' => 'asdasd/asdasd/:page', 'now' = 0]
+         *
+         * @param array $action
+         * @return string
+         */
+        public function pagination($action = [], $return = true)
+        {
 
-		  private function refValues ($arr)
-		  {
-				if ( strnatcmp (phpversion (), '5.3') >= 0 ) //Reference is required for PHP 5.3+
-				{
-					 $refs = [ ];
-					 foreach ( $arr as $key => $value )
-						  $refs[ $key ] = &$arr[ $key ];
+            if (!is_array($action)) {
+                $action = [
+                   'url' => $action,
+                   'now' => $this->page
+                ];
+            }
+            $pagination = new Pagination();
+            $pagination->setCount($this->run()->rowCount());
+            $paginate = $pagination->paginate($action);
+            if ($return) {
 
-					 return $refs;
-				}
+                return $paginate;
+            } else {
 
-				return $arr;
-		  }
+                echo $paginate;
+            }
+        }
 
-		  /**
-			* Sayfalama işlemini yapar
-			*  ['url' => 'asdasd/asdasd/:page', 'now' = 0]
-			* @param array $action
-			* @return string
-			*/
-		  public function pagination ($action = [ ], $return = true)
-		  {
+        public function fetch($fetchAll = false)
+        {
 
-				if ( !is_array ($action) ) {
-					 $action = [
-						  'url' => $action,
-						  'now' => $this->page ];
-				}
-				$pagination = new Pagination();
-				$pagination->setCount ($this->run ()->rowCount ());
-				$paginate = $pagination->paginate ($action);
-				if ( $return ) {
+            $query = $this->run();
 
-					 return $paginate;
-				} else {
+            if ($query instanceof PDOStatement) {
 
-					 echo $paginate;
-				}
-		  }
+                if ($fetchAll) {
+                    return $query->fetchAll();
+                } else {
+                    return $query->fetch(PDO::FETCH_OBJ);
+                }
+            } elseif ($query instanceof mysqli_stmt) {
 
-		  public function fetch ($fetchAll = false)
-		  {
+                $query = $query->get_result();
+                if ($fetchAll) {
+                    return $query->fetch_all();
+                } else {
+                    return $query->fetch_object();
+                }
+            } else {
 
-				$query = $this->run ();
+                throw new \Exception(sprintf('Girdiğiniz veri tipi geçerli bir query değil. Tip:%s', gettype($query)));
+            }
+        }
 
-				if ( $query instanceof PDOStatement ) {
+        /**
+         * Tüm işlemleri döndürür
+         *
+         * @return array|mixed|object|\stdClass
+         * @throws \Exception
+         */
 
-					 if ( $fetchAll )
-						  return $query->fetchAll ();
-					 else
-						  return $query->fetch (PDO::FETCH_OBJ);
+        public function fetchAll()
+        {
 
-				} elseif ( $query instanceof mysqli_stmt ) {
+            return $this->fetch(true);
+        }
 
-					 $query = $query->get_result ();
-					 if ( $fetchAll )
-						  return $query->fetch_all ();
-					 else
-						  return $query->fetch_object ();
+        /**
+         * Eşleşen içerik sayısını döndürür
+         *
+         * @return int
+         */
+        public function rowCount()
+        {
 
-				} else {
+            $query = $this->run();
 
-					 throw new \Exception(sprintf ('Girdiğiniz veri tipi geçerli bir query değil. Tip:%s', gettype ($query)));
+            if ($query instanceof PDOStatement) {
+                return $query->rowCount();
+            } elseif ($query instanceof mysqli_stmt) {
+                $query = $query->get_result();
 
-				}
-
-		  }
-
-		  /**
-			* Tüm işlemleri döndürür
-			* @return array|mixed|object|\stdClass
-			* @throws \Exception
-			*/
-
-		  public function fetchAll ()
-		  {
-
-				return $this->fetch (true);
-
-		  }
-
-		  /**
-			* Eşleşen içerik sayısını döndürür
-			* @return int
-			*/
-		  public function rowCount ()
-		  {
-
-				$query = $this->run ();
-
-				if ( $query instanceof PDOStatement ) {
-					 return $query->rowCount ();
-				} elseif ( $query instanceof mysqli_stmt ) {
-					 $query = $query->get_result ();
-
-					 return $query->num_rows;
-				}
-
-		  }
-
-
-	 }
+                return $query->num_rows;
+            }
+        }
+    }

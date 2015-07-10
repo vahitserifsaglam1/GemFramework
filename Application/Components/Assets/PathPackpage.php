@@ -1,114 +1,115 @@
 <?php
 
-	 /**
-	  *
-	  *  Bu sınıf GemFramework ' un bir parçasıdır.
-	  *  İmage vs dosyalarda yol'u oluşturmak için kullanılır.
-	  * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
-	  *
-	  */
+    /**
+     *  Bu sınıf GemFramework ' un bir parçasıdır.
+     *  İmage vs dosyalarda yol'u oluşturmak için kullanılır.
+     *
+     * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
+     */
 
-	 namespace Gem\Components\Assets;
+    namespace Gem\Components\Assets;
 
-	 /**
-	  * Class PathPackpage
-	  * @package Gem\Components\Assets
-	  */
-	 class PathPackpage implements AssetInterface
-	 {
+    /**
+     * Class PathPackpage
+     *
+     * @package Gem\Components\Assets
+     */
+    class PathPackpage implements AssetInterface
+    {
 
-		  private $manager;
-		  private $prefix;
-		  private $pattern;
+        private $manager;
+        private $prefix;
+        private $pattern;
 
-		  public function __construct ($prefix = '', AssetInterface $manager = null)
-		  {
+        public function __construct($prefix = '', AssetInterface $manager = null)
+        {
 
-				$this->setManager ($manager);
-				$this->setPrefix ($prefix);
-				$this->pattern = $this->manager->getPattern ();
-				$this->version = $this->manager->getVersion ();
+            $this->setManager($manager);
+            $this->setPrefix($prefix);
+            $this->pattern = $this->manager->getPattern();
+            $this->version = $this->manager->getVersion();
+        }
 
-		  }
+        /**
+         * Manager'i döndürür
+         *
+         * @return AssetInterface
+         */
+        public function getManager()
+        {
 
-		  /**
-			* Manager'i döndürür
-			* @return AssetInterface
-			*/
-		  public function getManager ()
-		  {
+            return $this->manager;
+        }
 
-				return $this->manager;
+        /**
+         * Url 'i oluşturucak ana yönetici
+         *
+         * @param AssetInterface $manager
+         * @return $this
+         */
+        public function setManager(AssetInterface $manager = null)
+        {
 
-		  }
+            $this->manager = $manager;
 
-		  /**
-			* Url 'i oluşturucak ana yönetici
-			* @param AssetInterface $manager
-			* @return $this
-			*/
-		  public function setManager (AssetInterface $manager = null)
-		  {
+            return $this;
+        }
 
-				$this->manager = $manager;
+        /**
+         * Prefix ataması yapar
+         *
+         * @return string
+         */
+        public function setPrefix($prefix = '')
+        {
 
-				return $this;
+            $this->prefix = $prefix;
 
-		  }
+            return $this;
+        }
 
-		  /**
-			* Prefix ataması yapar
-			* @return string
-			*/
-		  public function setPrefix ($prefix = '')
-		  {
+        /**
+         * Atanan prefix' i döndürür
+         *
+         * @return string
+         */
+        public function getPrefix()
+        {
+            return $this->prefix;
+        }
 
-				$this->prefix = $prefix;
+        /**
+         * Versionu döndürür
+         *
+         * @return mixed
+         */
+        public function getVersion()
+        {
 
-				return $this;
-		  }
+            return $this->version;
+        }
 
-		  /**
-			* Atanan prefix' i döndürür
-			* @return string
-			*/
-		  public function getPrefix ()
-		  {
-				return $this->prefix;
-		  }
+        /**
+         * Pattern'i döndürür
+         *
+         * @return string
+         */
 
-		  /**
-			* Versionu döndürür
-			* @return mixed
-			*/
-		  public function getVersion ()
-		  {
+        public function getPattern()
+        {
 
-				return $this->version;
+            return $this->pattern;
+        }
 
-		  }
+        /**
+         * Url'i oluşturur
+         *
+         * @param string $file
+         * @return mixed
+         */
+        public function getUrl($file = '')
+        {
 
-		  /**
-			* Pattern'i döndürür
-			* @return string
-			*/
-
-		  public function getPattern ()
-		  {
-
-				return $this->pattern;
-
-		  }
-
-		  /**
-			* Url'i oluşturur
-			* @param string $file
-			* @return mixed
-			*/
-		  public function getUrl ($file = '')
-		  {
-
-				return $this->manager->getUrl ($file, $this->getPrefix ());
-
-		  }
-	 }
+            return $this->manager->getUrl($file, $this->getPrefix());
+        }
+    }

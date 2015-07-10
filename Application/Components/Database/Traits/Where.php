@@ -1,69 +1,62 @@
 <?php
 
-	 namespace Gem\Components\Database\Traits;
+    namespace Gem\Components\Database\Traits;
 
-	 trait Where
-	 {
+    trait Where
+    {
 
-		  /**
-			*
-			* @param array $args
-			* @param string $start
-			* @return multitype:string multitype:mixed
-			*/
-		  private function databaseStringBuilderWithStart (array $args, $start)
-		  {
+        /**
+         * @param array  $args
+         * @param string $start
+         * @return multitype:string multitype:mixed
+         */
+        private function databaseStringBuilderWithStart(array $args, $start)
+        {
 
-				$s = '';
-				$arr = [ ];
+            $s = '';
+            $arr = [];
 
+            foreach ($args as $arg) {
 
-				foreach ( $args as $arg ) {
+                $s .= " {$arg[0]} {$arg[1]} ? $start";
+                $arr[] = $arg[2];
+            }
 
+            if (!count($args) === 1) {
 
-					 $s .= " {$arg[0]} {$arg[1]} ? $start";
-					 $arr[] = $arg[2];
-				}
+                $s = $start . $s;
+            }
 
+            $s = rtrim($s, $start);
 
-				if ( !count ($args) === 1 ) {
+            return [
 
-					 $s = $start . $s;
-				}
+               'content' => $s,
+               'array'   => $arr
+            ];
+        }
 
-				$s = rtrim ($s, $start);
+        /**
+         * Set verisi olu�turur
+         *
+         * @param unknown $set
+         * @return multitype:string multitype:array
+         */
+        private function databaseSetBuilder($set)
+        {
 
-				return [
+            $s = '';
+            $arr = [];
 
-					 'content' => $s,
-					 'array'   => $arr
-				];
-		  }
+            foreach ($set as $key => $value) {
+                $s .= "$key = ?,";
+                $arr[] = $value;
+            }
 
-		  /**
-			* Set verisi olu�turur
-			* @param unknown $set
-			* @return multitype:string multitype:array
-			*/
-		  private function databaseSetBuilder ($set)
-		  {
+            return [
 
-
-				$s = '';
-				$arr = [ ];
-
-
-				foreach ( $set as $key => $value ) {
-					 $s .= "$key = ?,";
-					 $arr[] = $value;
-				}
-
-
-				return [
-
-					 'content' => rtrim ($s, ","),
-					 'array'   => $arr
-				];
-		  }
-
-	 }
+               'content' => rtrim($s, ","),
+               'array'   => $arr
+            ];
+        }
+    }

@@ -1,37 +1,38 @@
 <?php
-	 /**
-	  *  Bu Sınıf GemFramework' Route olayında kullanılacak Controllerler için kullanılır.
-	  *
-	  */
-	 namespace Gem\Components\Route\Http;
+    /**
+     *  Bu Sınıf GemFramework' Route olayında kullanılacak Controllerler için kullanılır.
 
-	 use Exception;
+     */
+    namespace Gem\Components\Route\Http;
 
-	 class ControllerManager extends Dispatch
-	 {
+    use Exception;
 
-		  /**
-			* Controller ataması yapar
-			* @param null $controller
-			* @return $this
-			*/
-		  public function setController ($controller = null)
-		  {
-				$this->setRouteControllerForDispatch ($controller);
+    class ControllerManager extends Dispatch
+    {
 
-				return $this;
-		  }
+        /**
+         * Controller ataması yapar
+         *
+         * @param null $controller
+         * @return $this
+         */
+        public function setController($controller = null)
+        {
+            $this->setRouteControllerForDispatch($controller);
 
-		  /**
-			* Callable atamasını engeller
-			* @param callable $callable
-			* @throws Exception
-			*/
+            return $this;
+        }
 
-		  public function setCallable (callable $callable = null)
-		  {
+        /**
+         * Callable atamasını engeller
+         *
+         * @param callable $callable
+         * @throws Exception
+         */
 
-				throw new Exception('%s sınıfından callable ataması yapamassınız', __CLASS__);
+        public function setCallable(callable $callable = null)
+        {
 
-		  }
-	 }
+            throw new Exception('%s sınıfından callable ataması yapamassınız', __CLASS__);
+        }
+    }

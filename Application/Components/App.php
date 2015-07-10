@@ -1,108 +1,98 @@
 <?php
 
-	 /**
-	  *
-	  *   GemFramework dosyalarda Controller ve Model leri �a��rmakta kullan�lacak
-	  *
-	  * @package Gem\Components
-	  *
-	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
-	  *
-	  * @copyright MyfcYazilim
-	  *
-	  *
-	  */
+    /**
+     *   GemFramework dosyalarda Controller ve Model leri �a��rmakta kullan�lacak
+     *
+     * @package Gem\Components
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     * @copyright MyfcYazilim
+     */
 
-	 namespace Gem\Components;
+    namespace Gem\Components;
 
-	 use Gem\Components\Helpers\Config;
+    use Gem\Components\Helpers\Config;
 
-	 class App
-	 {
+    class App
+    {
 
-		  use Config;
-		  const CONTROLLER = 'Controller';
-		  const MODEL = 'Model';
+        use Config;
+        const CONTROLLER = 'Controller';
+        const MODEL = 'Model';
 
 
-		  /**
-			* Controller, method yada bir s�n�f �a��r�r
-			* @param mixed $names
-			* @param string $type
-			* @return mixed
-			* @access public
-			*/
-		  public static function uses ($names, $type)
-		  {
+        /**
+         * Controller, method yada bir s�n�f �a��r�r
+         *
+         * @param mixed  $names
+         * @param string $type
+         * @return mixed
+         * @access public
+         */
+        public static function uses($names, $type)
+        {
 
-				$names = (array)$names;
+            $names = (array)$names;
 
+            foreach ($names as $name) {
 
-				foreach ( $names as $name ) {
+                switch ($type) {
 
+                    case self::CONTROLLER:
 
-					 switch ( $type ) {
+                        $return[$name] = self::includeController($name);
 
-						  case self::CONTROLLER:
+                        break;
 
-								$return[ $name ] = self::includeController ($name);
+                    case self::MODEL:
 
-								break;
+                        $return[$name] = self::includeModel($name);
 
-						  case self::MODEL:
+                        break;
+                }
+            }
 
-								$return[ $name ] = self::includeModel ($name);
+            if (count($return) == 1) {
 
-								break;
+                $return = array_reverse($return);
+                $return = end($return);
+            }
 
-					 }
-				}
+            return $return;
+        }
 
-				if ( count ($return) == 1 ) {
+        /**
+         * Html da kullan�lmak i�in base kodunu olu�turur
+         *
+         * @return string
+         */
+        public static function base()
+        {
+            $config = self::getConfigStatic('configs')['url'];
 
-					 $return = array_reverse ($return);
-					 $return = end ($return);
-				}
+            return '<base href="' . $config . '" target="_blank">';
+        }
 
-				return $return;
-		  }
+        /**
+         * @param string $controller
+         * @return null|object
+         */
+        private static function includeController($controller)
+        {
 
-		  /**
-			* Html da kullan�lmak i�in base kodunu olu�turur
-			* @return string
-			*/
-		  public static function base ()
-		  {
-				$config = self::getConfigStatic ('configs')['url'];
+            $controllername = 'Gem\\Controllers\\' . $controller;
 
-				return '<base href="' . $config . '" target="_blank">';
-		  }
+            return new $controllername;
+        }
 
-		  /**
-			*
-			* @param string $controller
-			* @return null|object
-			*/
-		  private static function includeController ($controller)
-		  {
+        /**
+         * @param string $model
+         * @return null|object
+         */
+        private function includeModel($model)
+        {
 
-				$controllername = 'Gem\\Controllers\\' . $controller;
+            $modelname = 'Gem\\Models\\' . $model;
 
-				return new $controllername;
-
-		  }
-
-		  /**
-			*
-			* @param string $model
-			* @return null|object
-			*/
-		  private function includeModel ($model)
-		  {
-
-				$modelname = 'Gem\\Models\\' . $model;
-
-				return new $modelname;
-		  }
-
-	 }
+            return new $modelname;
+        }
+    }

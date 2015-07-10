@@ -16,7 +16,8 @@ return [
         'Cookie' => 'Gem\Components\Cookie',
         'Event' => 'Gem\Components\Event',
         'Route' => 'Gem\Components\Route\RouteCollector',
-        'Session' => 'Gem\Components\Session'
+        'Session' => 'Gem\Components\Session',
+        'Request' => 'Gem\Components\Http\Request'
     ],
 
     /**
@@ -30,6 +31,12 @@ return [
     'providers' => [
         'Gem\Manager\Providers\RouteProvider',
         'Gem\Manager\Providers\EventProvider',
+        /**
+         *  Buradaki CsrfTokenProvider' ı etkinleştirirseniz her post işleminde csrftoken değerini
+         *  araycaktır
+         *
+         */
+
         # 'Gem\Manager\Providers\CsrfTokenProvider'
     ],
 

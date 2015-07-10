@@ -1,65 +1,63 @@
 <?php
-	 /**
-	  *
-	  * Bu sınıf Eventler'i denl
-	  *
-	  */
-	 namespace Gem\Components\Event;
+    /**
+     * Bu sınıf Eventler'i denl
 
-	 use Gem\Components\Application;
+     */
+    namespace Gem\Components\Event;
 
-	 class EventCollector
-	 {
+    use Gem\Components\Application;
 
-		  protected $application;
-		  private $listeners;
+    class EventCollector
+    {
 
-		  /**
-			* Uygulamayı atar
-			* @param Application $application
-			*/
+        protected $application;
+        private $listeners;
 
-		  public function __construct (Application $application)
-		  {
+        /**
+         * Uygulamayı atar
+         *
+         * @param Application $application
+         */
 
-				$this->application = $application;
+        public function __construct(Application $application)
+        {
 
-		  }
+            $this->application = $application;
+        }
 
-		  /**
-			* Dinleyicileri $this->listeners değerine atar
-			* @param array $listeners
-			* @return $this
-			*/
-		  public function setListeners (array $listeners = [ ])
-		  {
+        /**
+         * Dinleyicileri $this->listeners değerine atar
+         *
+         * @param array $listeners
+         * @return $this
+         */
+        public function setListeners(array $listeners = [])
+        {
 
-				$this->listeners = $listeners;
+            $this->listeners = $listeners;
 
-				return $this;
+            return $this;
+        }
 
-		  }
+        /**
+         * Dinleyicileri Döndürür
+         *
+         * @return mixed
+         */
+        public function getListeners()
+        {
 
-		  /**
-			* Dinleyicileri Döndürür
-			* @return mixed
-			*/
-		  public function getListeners ()
-		  {
+            return $this->listeners;
+        }
 
-				return $this->listeners;
+        /**
+         * Uygulama' yı döndürür
+         *
+         * @return Application
+         */
+        public function getApplication()
+        {
 
-		  }
-
-		  /**
-			* Uygulama' yı döndürür
-			* @return Application
-			*/
-		  public function getApplication ()
-		  {
-
-				return $this->application;
-
-		  }
-
-	 }
+            return $this->application;
+        }
+    }

@@ -1,12 +1,10 @@
 <?php
+    /**
+     *  Bu Dosya içinde Rötalarınızı toplayabilirsiniz
+     *
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     */
 
-/**
- *
- *  Bu Dosya içinde Rötalarınızı toplayabilirsiniz
- *  @author vahitserifsaglam <vahit.serif119@gmail.com>
- *
- */
+    use Gem\Components\Facade\Route;
 
-use Gem\Components\Facade\Route;
-
-Route::get('/', 'pages.home');
+    Route::get('/', 'pages.home');

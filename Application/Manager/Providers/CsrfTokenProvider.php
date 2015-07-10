@@ -1,7 +1,7 @@
 <?php
 namespace Gem\Manager\Providers;
 
-use Gem\Components\Helpers\Server;
+use Gem\Components\Facade\Request;
 use Gem\Components\Security\CsrfToken;
 use Gem\Components\Security\CsrfTokenCryptMethods\Md5Crypt;
 
@@ -11,7 +11,6 @@ use Gem\Components\Security\CsrfTokenCryptMethods\Md5Crypt;
  */
 class CsrfTokenProvider
 {
-    use Server;
     private $fieldName = '_token';
     public function __construct()
     {
@@ -20,7 +19,7 @@ class CsrfTokenProvider
         $class->setCryptMethod(new Md5Crypt());
         session($this->fieldName, $class->getSecretKey());
         session('CsrfTokenSessionName', $this->fieldName);
-        if($this->getMethod() === 'POST')
+        if(Request::isMethod('post'))
         {
             $class->run();
         }

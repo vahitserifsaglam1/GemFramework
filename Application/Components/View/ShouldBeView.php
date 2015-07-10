@@ -1,16 +1,17 @@
 <?php
 
-	 namespace Gem\Components\View;
-	 /**
-	  * Bu interface ile sınıfın view dosyası olması gerektiğini söylüyoruz
-	  * Interface ShouldBeView
-	  * @package Gem\Components\View
-	  */
-	 interface ShouldBeView
-	 {
+    namespace Gem\Components\View;
 
-		  public static function make ($fileName = '', $params = [ ]);
+    /**
+     * Bu interface ile sınıfın view dosyası olması gerektiğini söylüyoruz
+     * Interface ShouldBeView
+     *
+     * @package Gem\Components\View
+     */
+    interface ShouldBeView
+    {
 
-		  public function execute ();
+        public static function make($fileName = '', $params = []);
 
-	 }
+        public function execute();
+    }

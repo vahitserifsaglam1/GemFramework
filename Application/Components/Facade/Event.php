@@ -1,16 +1,15 @@
 <?php
 
-	 namespace Gem\Components\Facade;
+    namespace Gem\Components\Facade;
 
-	 use Gem\Components\Patterns\Facade;
+    use Gem\Components\Patterns\Facade;
 
+    class Event extends Facade
+    {
 
-	 class Event extends Facade
-	 {
+        protected static function getFacadeClass()
+        {
 
-		  protected static function getFacadeClass ()
-		  {
-
-				return 'Event';
-		  }
-	 }
+            return 'Event';
+        }
+    }

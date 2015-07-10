@@ -1,293 +1,287 @@
 <?php
 
-/**
- *
- * @package  Gem\Components\Database\Base;
- * @author vahitserifsaglam <vahit.serif119@gmail.com>
- *
- */
-
-namespace Gem\Components\Database\Mode;
-
-use Gem\Components\Database\Builders\BuildManager;
-use Gem\Components\Database\Traits\Builder;
-
-class ModeManager
-{
-
-    use Builder;
-
-    ## Gem\Components\Database\Base
-
     /**
-     *
-     * @var Gem\Components\Database\Base
+     * @package  Gem\Components\Database\Base;
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
      */
-    private $base;
 
-    /**
-     *
-     * @var array
-     */
-    private $builders;
-    private $chieldPattern;
-    private $chield;
-    protected $page;
-    private $patterns = [
+    namespace Gem\Components\Database\Mode;
 
-        'read' => [
+    use Gem\Components\Database\Builders\BuildManager;
+    use Gem\Components\Database\Traits\Builder;
 
-            'SELECT :select FROM :from :group WHERE:where :order :limit',
-            'SELECT :select FROM :from :group :order :limit'
-        ],
-        'update' => [
-
-            'UPDATE :from SET :update WHERE:where'
-        ],
-        'delete' => [
-
-            'DELETE FROM :from WHERE:where'
-        ],
-        'insert' => [
-
-            'INSERT INTO :from SET :insert'
-        ]
-    ];
-
-    /**
-     *
-     * @return \Gem\Components\Database\Base
-     */
-    public function getBase()
+    class ModeManager
     {
 
-        return $this->base;
-    }
+        use Builder;
 
-    /**
-     * Patterin i atar
-     * @param string $pattern
-     */
-    protected function setChieldPattern($pattern)
-    {
+        ## Gem\Components\Database\Base
 
-        $this->chieldPattern = $pattern;
-    }
+        /**
+         * @var Gem\Components\Database\Base
+         */
+        private $base;
 
-    /**
-     * Uygulanan pattern i g�sterir
-     * @return string
-     */
-    protected function getChieldPattern()
-    {
+        /**
+         * @var array
+         */
+        private $builders;
+        private $chieldPattern;
+        private $chield;
+        protected $page;
+        private $patterns = [
 
-        return $this->chieldPattern;
-    }
+           'read'   => [
 
-    /**
-     * veleti gönderir
-     * @return mixed
-     */
-    protected function getChield()
-    {
+              'SELECT :select FROM :from :group WHERE:where :order :limit',
+              'SELECT :select FROM :from :group :order :limit'
+           ],
+           'update' => [
 
-        return $this->chield;
-    }
+              'UPDATE :from SET :update WHERE:where'
+           ],
+           'delete' => [
 
-    protected function setChield($chield)
-    {
+              'DELETE FROM :from WHERE:where'
+           ],
+           'insert' => [
 
+              'INSERT INTO :from SET :insert'
+           ]
+        ];
 
-        $this->chield = $chield;
-    }
+        /**
+         * @return \Gem\Components\Database\Base
+         */
+        public function getBase()
+        {
 
-    /**
-     * Yeni bir query Sorgusu olu�turur
-     * @return \Gem\Components\Database\Builders\BuildManager
-     */
-    public function getQuery()
-    {
-
-        $strings = $this->string;
-        $query = $this->buildQuery($this->getPattern($this->getChieldPattern()), $strings);
-
-        return $query;
-    }
-
-    /**
-     * Sorguyu buildManager ��ine atar
-     * @return \Gem\Components\Database\Builders\BuildManager
-     */
-    public function build()
-    {
-
-        $query = $this->getQuery();
-        $manager = new BuildManager($this->getBase()->getConnection());
-        $manager->setPage($this->page);
-        $manager->setQuery($query);
-        $manager->setParams($this->string['parameters']);
-
-        return $manager;
-    }
-
-    /**
-     * Query oluşturur
-     * @return \PDOStatement
-     */
-    public function run()
-    {
-
-        return $this->build()->run();
-    }
-
-
-    /**
-     * veleti �a��r�r
-     */
-    protected function getCield()
-    {
-
-        return $this->chield;
-    }
-
-    protected $string;
-
-    /**
-     *
-     * @param $base
-     * @return $this
-     */
-    public function setBase($base)
-    {
-
-        $this->base = $base;
-        return $this;
-    }
-
-    /**
-     *
-     * @param array $builders
-     */
-    protected function useBuilders($builders = [])
-    {
-
-        $this->builders = $builders;
-    }
-
-    /**
-     *
-     * @param string $builderName
-     * @return multitype:mixed
-     */
-    protected function useBuilder($builderName)
-    {
-
-        if (isset($this->builders[$builderName])) {
-
-            return $this->builders[$builderName];
+            return $this->base;
         }
-    }
 
-    /**
-     *
-     * @param string $pattern
-     * @return multitype:multitype:string
-     */
-    protected function getPattern($pattern)
-    {
+        /**
+         * Patterin i atar
+         *
+         * @param string $pattern
+         */
+        protected function setChieldPattern($pattern)
+        {
 
-        if (isset($this->patterns[$pattern])) {
-
-            return $this->patterns[$pattern];
+            $this->chieldPattern = $pattern;
         }
-    }
 
-    /**
-     *
-     * Pattern atamas� yapar
-     * @param string $name
-     * @param array $patterns
-     */
-    protected function setPattern($name, array $patterns)
-    {
+        /**
+         * Uygulanan pattern i g�sterir
+         *
+         * @return string
+         */
+        protected function getChieldPattern()
+        {
 
-        $this->patterns[$name] = $patterns;
-    }
+            return $this->chieldPattern;
+        }
 
-    /**
-     * Where tetiklenir
-     * @param unknown $args
-     * @param unknown $type
-     */
-    private function doWhere($where, $type)
-    {
+        /**
+         * veleti gönderir
+         *
+         * @return mixed
+         */
+        protected function getChield()
+        {
 
+            return $this->chield;
+        }
 
-        switch ($type) {
+        protected function setChield($chield)
+        {
 
-            case 'and':
+            $this->chield = $chield;
+        }
 
-                $where = $this->useBuilder('where')
-                    ->where($where, $this->getCield());
+        /**
+         * Yeni bir query Sorgusu olu�turur
+         *
+         * @return \Gem\Components\Database\Builders\BuildManager
+         */
+        public function getQuery()
+        {
 
-                break;
+            $strings = $this->string;
+            $query = $this->buildQuery($this->getPattern($this->getChieldPattern()), $strings);
 
-            case 'or':
+            return $query;
+        }
 
-                $where = $this->useBuilder('where')
-                    ->orWhere($where, $this->getCield());
+        /**
+         * Sorguyu buildManager ��ine atar
+         *
+         * @return \Gem\Components\Database\Builders\BuildManager
+         */
+        public function build()
+        {
 
-                break;
+            $query = $this->getQuery();
+            $manager = new BuildManager($this->getBase()->getConnection());
+            $manager->setPage($this->page);
+            $manager->setQuery($query);
+            $manager->setParams($this->string['parameters']);
+
+            return $manager;
+        }
+
+        /**
+         * Query oluşturur
+         *
+         * @return \PDOStatement
+         */
+        public function run()
+        {
+
+            return $this->build()->run();
         }
 
 
-        $this->string['where'] = $where['content'];
-        $this->string['parameters'] = array_merge($this->string['parameters'], $where['array']);
-    }
+        /**
+         * veleti �a��r�r
+         */
+        protected function getCield()
+        {
 
-    /**
-     * Where  sorgusu
-     * @param mixed $where
-     * @param null controll
-     * @return $this
-     */
-    public function where($where, $controll = null)
-    {
+            return $this->chield;
+        }
 
-        if (!is_array($where) && !is_null($controll)) {
+        protected $string;
 
-            $where = [
-                [$where, '=', $controll]
-            ];
+        /**
+         * @param $base
+         * @return $this
+         */
+        public function setBase($base)
+        {
 
-        } elseif (is_array($where) && isset($where[0]) && isset($where[1])) {
+            $this->base = $base;
 
-            if (is_string($where[1])) {
+            return $this;
+        }
 
-                $where = [
-                    [$where[0], $where[1], $where[2]]
-                ];
+        /**
+         * @param array $builders
+         */
+        protected function useBuilders($builders = [])
+        {
 
+            $this->builders = $builders;
+        }
+
+        /**
+         * @param string $builderName
+         * @return multitype:mixed
+         */
+        protected function useBuilder($builderName)
+        {
+
+            if (isset($this->builders[$builderName])) {
+
+                return $this->builders[$builderName];
+            }
+        }
+
+        /**
+         * @param string $pattern
+         * @return multitype:multitype:string
+         */
+        protected function getPattern($pattern)
+        {
+
+            if (isset($this->patterns[$pattern])) {
+
+                return $this->patterns[$pattern];
+            }
+        }
+
+        /**
+         * Pattern atamas� yapar
+         *
+         * @param string $name
+         * @param array  $patterns
+         */
+        protected function setPattern($name, array $patterns)
+        {
+
+            $this->patterns[$name] = $patterns;
+        }
+
+        /**
+         * Where tetiklenir
+         *
+         * @param unknown $args
+         * @param unknown $type
+         */
+        private function doWhere($where, $type)
+        {
+
+            switch ($type) {
+
+                case 'and':
+
+                    $where = $this->useBuilder('where')
+                       ->where($where, $this->getCield());
+
+                    break;
+
+                case 'or':
+
+                    $where = $this->useBuilder('where')
+                       ->orWhere($where, $this->getCield());
+
+                    break;
             }
 
+            $this->string['where'] = $where['content'];
+            $this->string['parameters'] = array_merge($this->string['parameters'], $where['array']);
         }
 
-        $this->doWhere($where, 'and');
+        /**
+         * Where  sorgusu
+         *
+         * @param mixed $where
+         * @param       null controll
+         * @return $this
+         */
+        public function where($where, $controll = null)
+        {
 
-        return $this;
+            if (!is_array($where) && !is_null($controll)) {
+
+                $where = [
+                   [$where, '=', $controll]
+                ];
+            } elseif (is_array($where) && isset($where[0]) && isset($where[1])) {
+
+                if (is_string($where[1])) {
+
+                    $where = [
+                       [$where[0], $where[1], $where[2]]
+                    ];
+                }
+            }
+
+            $this->doWhere($where, 'and');
+
+            return $this;
+        }
+
+        /**
+         * OrWhere sorgusu
+         *
+         * @param mixed $where
+         */
+        public function orWhere($where)
+        {
+
+            $this->doWhere($where, 'or');
+        }
+        /**
+         * @return string
+         */
     }
-
-    /**
-     * OrWhere sorgusu
-     * @param mixed $where
-     */
-    public function orWhere($where)
-    {
-
-        $this->doWhere($where, 'or');
-    }
-
-    /**
-     * @return string
-     */
-}

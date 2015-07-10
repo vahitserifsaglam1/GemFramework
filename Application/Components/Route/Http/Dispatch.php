@@ -1,229 +1,218 @@
 <?php
-	 /**
-	  * Created by PhpStorm.
-	  * User: vserifsaglam
-	  * Date: 26.6.2015
-	  * Time: 04:43
-	  */
+    /**
+     * Created by PhpStorm.
+     * User: vserifsaglam
+     * Date: 26.6.2015
+     * Time: 04:43
+     */
 
-	 namespace Gem\Components\Route\Http;
+    namespace Gem\Components\Route\Http;
 
-	 use Exception;
-	 use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
-	 use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
-	 use Gem\Components\Http\Request;
-	 use Gem\Components\Http\Response\ShouldBeResponse;
-	 use Gem\Components\Route\Http\Dispatchers\CallableDispatcher;
-	 use Gem\Components\Route\Http\Dispatchers\ControllerDispatcher;
+    use Exception;
+    use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
+    use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
+    use Gem\Components\Http\Request;
+    use Gem\Components\Http\Response\ShouldBeResponse;
+    use Gem\Components\Route\Http\Dispatchers\CallableDispatcher;
+    use Gem\Components\Route\Http\Dispatchers\ControllerDispatcher;
 
-	 class Dispatch
-	 {
+    class Dispatch
+    {
 
-		  private $dispatchController;
-		  private $dispatchCallable;
-		  private $method = null;
+        private $dispatchController;
+        private $dispatchCallable;
+        private $method = null;
 
-		  private $before = null;
-		  private $access = null;
-		  private $params = null;
-		  private $next = null;
-		  private $role = null;
+        private $before = null;
+        private $access = null;
+        private $params = null;
+        private $next = null;
+        private $role = null;
 
-		  const CONTROLLER_METHOD = 1;
-		  const CALLABLE_METHOD = 2;
+        const CONTROLLER_METHOD = 1;
+        const CALLABLE_METHOD = 2;
 
-		  protected function setRouteControllerForDispatch ($controller = null)
-		  {
-				$this->method = self::CONTROLLER_METHOD;
-				$this->dispatchController = $controller;
+        protected function setRouteControllerForDispatch($controller = null)
+        {
+            $this->method = self::CONTROLLER_METHOD;
+            $this->dispatchController = $controller;
+        }
 
-		  }
+        /**
+         * Route olayında bir callable çağırmak istiyorsanız bunu kullanırsınız
+         *
+         * @param null $callable
+         * @return $this
+         */
+        protected function setRouteCallableForDispatch($callable = null)
+        {
 
-		  /**
-			* Route olayında bir callable çağırmak istiyorsanız bunu kullanırsınız
-			* @param null $callable
-			* @return $this
-			*/
-		  protected function setRouteCallableForDispatch ($callable = null)
-		  {
+            $this->method = self::CALLABLE_METHOD;
+            $this->dispatchCallable = $callable;
+        }
 
-				$this->method = self::CALLABLE_METHOD;
-				$this->dispatchCallable = $callable;
+        /**
+         * @param callable $next
+         * @return $this
+         */
+        protected function setNext(callable $next = null)
+        {
 
+            $this->next = $next;
 
-		  }
+            return $this;
+        }
 
-		  /**
-			* @param callable $next
-			* @return $this
-			*/
-		  protected function setNext (callable $next = null)
-		  {
+        /**
+         * Before ataması yapar
+         *
+         * @param callable $before
+         * @return $this
+         */
+        public function setBefore(callable $before = null)
+        {
 
-				$this->next = $next;
+            $this->before = $before;
 
-				return $this;
+            return $this;
+        }
 
-		  }
+        /**
+         * Access Yöneticisini atar.
+         *
+         * @param HandleInterface $handler
+         * @return $this
+         */
+        public function setAccess(HandleInterface $handler = null)
+        {
 
-		  /**
-			* Before ataması yapar
-			* @param callable $before
-			* @return $this
-			*/
-		  public function setBefore (callable $before = null)
-		  {
+            $this->access = $handler;
 
-				$this->before = $before;
+            return $this;
+        }
 
-				return $this;
+        public function setParams(array $params = [])
+        {
 
-		  }
+            $this->params = $params;
 
-		  /**
-			* Access Yöneticisini atar.
-			* @param HandleInterface $handler
-			* @return $this
-			*/
-		  public function setAccess (HandleInterface $handler = null)
-		  {
+            return $this;
+        }
 
-				$this->access = $handler;
+        /**
+         * Çıktıyı oluşturur
+         *
+         * @throws Exception
+         */
+        public function dispatch()
+        {
 
-				return $this;
+            $controller = $this->dispatchController;
+            $callable = $this->dispatchCallable;
+            if (is_null($controller) && is_null($callable)) {
 
-		  }
+                throw new Exception('Herhangi bir Controller veya Callable methodu atamadınız');
+            }
 
-		  public function setParams (array $params = [ ])
-		  {
+            $method = $this->method;
 
-				$this->params = $params;
+            if ($this->beforeChecker() && $this->accessChecker()) {
 
-				return $this;
+                switch ($method) {
 
-		  }
+                    case self::CALLABLE_METHOD:
+                        $this->response($this->callableDispatcher());
+                        break;
+                    case self::CONTROLLER_METHOD:
+                        $this->response($this->controllerDispatcher());
+                        break;
+                    default:
+                        throw new Exception('Geçersiz bir yapı girdiniz');
+                        break;
+                }
+            }
+        }
 
-		  /**
-			* Çıktıyı oluşturur
-			* @throws Exception
-			*/
-		  public function dispatch ()
-		  {
+        public function getParams()
+        {
 
-				$controller = $this->dispatchController;
-				$callable = $this->dispatchCallable;
-				if ( is_null ($controller) && is_null ($callable) ) {
+            return $this->params;
+        }
 
-					 throw new Exception('Herhangi bir Controller veya Callable methodu atamadınız');
+        /**
+         * @param null $role
+         * @return $this
+         */
 
-				}
+        protected function setRole($role = null)
+        {
+            $this->role = $role;
 
-				$method = $this->method;
+            return $this;
+        }
 
-				if ( $this->beforeChecker () && $this->accessChecker () ) {
+        /**
+         * Çağrılabilir fonksiyonu çalıştırır
+         *
+         * @return mixed
+         */
+        private function callableDispatcher()
+        {
 
-					 switch ( $method ) {
+            return (new CallableDispatcher($this->dispatchCallable, $this->getParams()))->getContent();
+        }
 
-						  case self::CALLABLE_METHOD:
-								$this->response ($this->callableDispatcher ());
-								break;
-						  case self::CONTROLLER_METHOD:
-								$this->response ($this->controllerDispatcher ());
-								break;
-						  default:
-								throw new Exception('Geçersiz bir yapı girdiniz');
-								break;
-					 }
+        private function controllerDispatcher()
+        {
 
-				}
+            return (new ControllerDispatcher($this->dispatchController, $this->getParams()))->getContent();
+        }
 
-		  }
+        private function response($response = '')
+        {
 
-		  public function getParams ()
-		  {
+            if ($response instanceof ShouldBeResponse) {
+                $response->execute();
+            }
+        }
 
-				return $this->params;
+        /**
+         * @return bool
+         */
+        private function accessChecker()
+        {
 
-		  }
+            $access = $this->access;
+            if (null === $access) {
+                return true;
+            }
+            $next = $this->next;
+            $request = new Request();
+            $role = $this->role;
+            $handle = call_user_func_array([$access, 'handle'], [$request, $next, $role]);
+            if ($handle) {
+                return true;
+            } else {
 
-		  /**
-			* @param null $role
-			* @return $this
-			*/
+                if ($access instanceof TerminateInterface) {
+                    call_user_func_array([$access, 'terminate'], [$request]);
+                }
+            }
+        }
 
-		  protected function setRole ($role = null)
-		  {
-				$this->role = $role;
+        /**
+         * Before olayını test eder
+         *
+         * @return bool
+         */
+        private function beforeChecker()
+        {
 
-				return $this;
-		  }
-
-		  /**
-			* Çağrılabilir fonksiyonu çalıştırır
-			* @return mixed
-			*/
-		  private function callableDispatcher ()
-		  {
-
-				return (new CallableDispatcher($this->dispatchCallable, $this->getParams ()))->getContent ();
-		  }
-
-		  private function controllerDispatcher ()
-		  {
-
-				return (new ControllerDispatcher($this->dispatchController, $this->getParams ()))->getContent ();
-
-		  }
-
-		  private function response ($response = '')
-		  {
-
-				if ( $response instanceof ShouldBeResponse) {
-					 $response->execute ();
-				}
-
-		  }
-
-		  /**
-			* @return bool
-			*/
-		  private function accessChecker ()
-		  {
-
-				$access = $this->access;
-				if ( null === $access ) {
-					 return true;
-				}
-				$next = $this->next;
-				$request = new Request();
-				$role = $this->role;
-				$handle = call_user_func_array ([ $access, 'handle' ], [ $request, $next, $role ]);
-				if ( $handle ) {
-					 return true;
-				} else {
-
-					 if ( $access instanceof TerminateInterface ) {
-						  call_user_func_array ([ $access, 'terminate' ], [ $request ]);
-					 }
-
-				}
-		  }
-
-		  /**
-			*
-			*
-			* Before olayını test eder
-			* @return bool
-			*/
-		  private function beforeChecker ()
-		  {
-
-				if ( null === $this->before ) {
-					 return true;
-				}
-				if ( call_user_func_array ($this->before, $this->getParams ()) ) {
-					 return true;
-				}
-
-		  }
-	 }
+            if (null === $this->before) {
+                return true;
+            }
+            if (call_user_func_array($this->before, $this->getParams())) {
+                return true;
+            }
+        }
+    }

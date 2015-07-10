@@ -1,10 +1,13 @@
 <?php
 
-namespace Gem\Components\Security;
-use Exception;
-class CsrfTokenMatchException extends Exception{
-    public function __construct($message = '')
+    namespace Gem\Components\Security;
+
+    use Exception;
+
+    class CsrfTokenMatchException extends Exception
     {
-        $this->message = $message;
+        public function __construct($message = '')
+        {
+            $this->message = $message;
+        }
     }
-}

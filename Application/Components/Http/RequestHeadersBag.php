@@ -1,54 +1,51 @@
 <?php
-	 /**
-	  *
-	  *  GemFramework Request Kısmında yapılan headersları toplar.
-	  *  Ayrıca cookie kısmlarınıda parçalar
-	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
-	  *
-	  */
+    /**
+     *  GemFramework Request Kısmında yapılan headersları toplar.
+     *  Ayrıca cookie kısmlarınıda parçalar
+     *
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     */
 
-	 namespace Gem\Components\Http;
+    namespace Gem\Components\Http;
 
-	 /**
-	  * Class RequestHeadersBag
-	  * @package Gem\Components\Http
-	  */
+    /**
+     * Class RequestHeadersBag
+     *
+     * @package Gem\Components\Http
+     */
 
-	 class RequestHeadersBag
-	 {
+    class RequestHeadersBag
+    {
 
-		  protected $headers;
-		  private $server;
+        protected $headers;
+        private $server;
 
-		  public function __construct ()
-		  {
+        public function __construct()
+        {
 
-				$this->headers = getallheaders ();
-				$this->server = $_SERVER;
+            $this->headers = getallheaders();
+            $this->server = $_SERVER;
+        }
 
-		  }
+        /**
+         * Server verilerini döndürür
+         *
+         * @return mixed
+         */
+        public function getServer()
+        {
 
-		  /**
-			* Server verilerini döndürür
-			* @return mixed
-			*
-			*/
-		  public function getServer ()
-		  {
+            return $this->server;
+        }
 
-				return $this->server;
+        /**
+         * Header'ları ekler
+         *
+         * @return mixed
+         */
+        public function getHeaders()
+        {
 
-		  }
-
-		  /**
-			* Header'ları ekler
-			* @return mixed
-			*/
-		  public function getHeaders ()
-		  {
-
-				return $this->headers;
-
-		  }
-
-	 }
+            return $this->headers;
+        }
+    }

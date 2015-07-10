@@ -1,81 +1,73 @@
 <?php
 
-	 /**
-	  *
-	  *  GemFramework Veritaban� pdo instance olu�turma s�n�f�
-	  *
-	  * @package Gem\Components\Database
-	  *
-	  * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
-	  *
-	  * @copyright MyfcYazilim
-	  *
-	  */
+    /**
+     *  GemFramework Veritaban� pdo instance olu�turma s�n�f�
+     *
+     * @package Gem\Components\Database
+     * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
+     * @copyright MyfcYazilim
+     */
 
-	 namespace Gem\Components\Database;
+    namespace Gem\Components\Database;
 
-	 use PDO;
+    use PDO;
 
-	 class Starter
-	 {
+    class Starter
+    {
 
-		  private $db;
+        private $db;
 
-		  public function __construct ($options = [ ])
-		  {
+        public function __construct($options = [])
+        {
 
-				$host = $options['host'] ?: '';
-				$database = $options['db'] ?: '';
-				$username = $options['username'] ?: '';
-				$password = $options['password'] ?: '';
-				$charset = $options['charset'] ?: 'utf-8';
+            $host = $options['host'] ?: '';
+            $database = $options['db'] ?: '';
+            $username = $options['username'] ?: '';
+            $password = $options['password'] ?: '';
+            $charset = $options['charset'] ?: 'utf-8';
 
-				if ( !isset( $options['driver'] ) )
-					 $driver = 'pdo';
-				else
-					 $driver = $options['driver'];
+            if (!isset($options['driver'])) {
+                $driver = 'pdo';
+            } else {
+                $driver = $options['driver'];
+            }
 
+            if (!isset($options['type'])) {
+                $type = 'mysql';
+            } else {
+                $type = $options['type'];
+            }
 
-				if ( !isset( $options['type'] ) )
-					 $type = 'mysql';
-				else
-					 $type = $options['type'];
+            switch ($driver) {
 
+                case 'pdo':
 
-				switch ( $driver ) {
+                    try {
 
-					 case 'pdo':
+                        $db = new PDO("$type:host=$host;dbname=$database", $username, $password);
+                        $this->db = $db;
+                    } catch (\PDOException $e) {
 
-						  try {
+                        throw new \Exception($e->getMessage());
+                    }
 
-								$db = new PDO("$type:host=$host;dbname=$database", $username, $password);
-								$this->db = $db;
-						  } catch ( \PDOException $e ) {
+                    break;
+                case 'mysqli':
 
-								throw new \Exception($e->getMessage ());
-						  }
+                    $db = new \mysqli($host, $username, $password, $database);
 
-						  break;
-					 case 'mysqli':
+                    if ($db->connect_errno > 0) {
+                        throw new \Exception('Bağlantı işlemi başarısız [' . $db->connect_error . ']');
+                    }
 
-						  $db = new \mysqli($host, $username, $password, $database);
+                    $this->db = $db;
+                    break;
+            }
+        }
 
-						  if ( $db->connect_errno > 0 ) {
-								throw new \Exception('Bağlantı işlemi başarısız [' . $db->connect_error . ']');
-						  }
+        public function getDb()
+        {
 
-						  $this->db = $db;
-						  break;
-
-				}
-
-		  }
-
-		  public function getDb ()
-		  {
-
-				return $this->db;
-
-		  }
-
-	 }
+            return $this->db;
+        }
+    }

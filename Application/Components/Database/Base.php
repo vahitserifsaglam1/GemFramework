@@ -1,149 +1,148 @@
 <?php
 
-	 /**
-	  *
-	  *  GemFramework Veritaban� s�n�f� ana s�n�f�
-	  *
-	  *  # builder lerle ve di�er altyap�larla ileti�imi sa�layacak
-	  *
-	  * @package Gem\Components\Database
-	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
-	  *
-	  */
+    /**
+     *  GemFramework Veritaban� s�n�f� ana s�n�f�
+     *  # builder lerle ve di�er altyap�larla ileti�imi sa�layacak
+     *
+     * @package Gem\Components\Database
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     */
 
-	 namespace Gem\Components\Database;
+    namespace Gem\Components\Database;
 
-	 use Gem\Components\Database\Mode\Delete;
-	 use Gem\Components\Database\Mode\Read;
-	 use Gem\Components\Database\Mode\Update;
-	 use Gem\Components\Database\Mode\Insert;
-	 use Gem\Components\Database\Tools\BackUp;
-	 use Gem\Components\Database\Traits\ConnectionManager;
-	 use Gem\Components\Database\Traits\ModeManager;
-	 use Gem\Components\Helpers\Config;
+    use Gem\Components\Database\Mode\Delete;
+    use Gem\Components\Database\Mode\Read;
+    use Gem\Components\Database\Mode\Update;
+    use Gem\Components\Database\Mode\Insert;
+    use Gem\Components\Database\Tools\BackUp;
+    use Gem\Components\Database\Traits\ConnectionManager;
+    use Gem\Components\Database\Traits\ModeManager;
+    use Gem\Components\Helpers\Config;
 
+    class Base extends Starter
+    {
 
-	 class Base extends Starter
-	 {
+        use ConnectionManager,
+           Config,
+           ModeManager;
 
-		  use ConnectionManager,
-				Config,
-				ModeManager;
+        public function __construct()
+        {
 
-		  public function __construct ()
-		  {
+            $configs = $this->getConfig('db');
+            parent::__construct($configs['connection']);
+            $this->connection = $this->getDb();
+        }
 
+        /**
+         * Select i�leminde sorgu olu�turmak da kullan�l�r
+         *
+         * @param string   $table
+         * @param callable $callable
+         * @return mixed
+         * @access public
+         */
+        public function read($table, callable $callable = null)
+        {
 
-				$configs = $this->getConfig ('db');
-				parent::__construct ($configs['connection']);
-				$this->connection = $this->getDb ();
-		  }
+            $this->connect($table);
+            $read = new Read($this);
 
-		  /**
-			* Select i�leminde sorgu olu�turmak da kullan�l�r
-			* @param string $table
-			* @param callable $callable
-			* @return mixed
-			* @access public
-			*/
-		  public function read ($table, callable $callable = null)
-		  {
+            return $callable($read);
+        }
 
-				$this->connect ($table);
-				$read = new Read($this);
+        /**
+         * Update ��lemlerinde kullan�l�r
+         *
+         * @param string   $table
+         * @param callable $callable
+         * @return mixed
+         */
+        public function update($table, callable $callable = null)
+        {
 
-				return $callable($read);
-		  }
+            $this->connect($table);
+            $update = new Update($this);
 
-		  /**
-			* Update ��lemlerinde kullan�l�r
-			* @param string $table
-			* @param callable $callable
-			* @return mixed
-			*/
-		  public function update ($table, callable $callable = null)
-		  {
+            return $callable($update);
+        }
 
-				$this->connect ($table);
-				$update = new Update($this);
+        /**
+         * Insert ��lemlerinde kullan�l�r
+         *
+         * @param string   $table
+         * @param callable $callable
+         * @return mixed
+         */
+        public function insert($table, callable $callable = null)
+        {
 
-				return $callable($update);
-		  }
+            $this->connect($table);
+            $insert = new Insert($this);
 
-		  /**
-			* Insert ��lemlerinde kullan�l�r
-			* @param string $table
-			* @param callable $callable
-			* @return mixed
-			*/
-		  public function insert ($table, callable $callable = null)
-		  {
+            return $callable($insert);
+        }
 
-				$this->connect ($table);
-				$insert = new Insert($this);
+        /**
+         * Delete delete işlemlerinde kullanılır
+         *
+         * @param string   $table
+         * @param callable $callable
+         * @return mixed
+         */
+        public function delete($table, callable $callable = null)
+        {
 
-				return $callable($insert);
-		  }
+            $this->connect($table);
+            $delete = new Delete($this);
 
-		  /**
-			* Delete delete işlemlerinde kullanılır
-			* @param string $table
-			* @param callable $callable
-			* @return mixed
-			*/
-		  public function delete ($table, callable $callable = null)
-		  {
+            return $callable($delete);
+        }
 
-				$this->connect ($table);
-				$delete = new Delete($this);
+        /**
+         * Veritabanını yedekler
+         *
+         * @param string $tables Çekilecek tabloların adı, tüm tabloların çekilmesini istiyorsanız * girebilirisiz
+         * @param string $src Dosyanın kaydedileceği yer
+         * @return bool
+         */
+        public function backup($tables = '*', $src = DATABASE)
+        {
+            $backup = new BackUp($this->getConnection());
 
-				return $callable($delete);
-		  }
+            return $backup->backUp($tables, $src);
+        }
 
-		  /**
-			* Veritabanını yedekler
-			* @param string $tables Çekilecek tabloların adı, tüm tabloların çekilmesini istiyorsanız * girebilirisiz
-			* @param string $src Dosyanın kaydedileceği yer
-			* @return bool
-			*/
-		  public function backup ($tables = '*', $src = DATABASE)
-		  {
-				$backup = new BackUp($this->getConnection ());
+        /**
+         * Yedeklenen veri tabanı dosyalarını yükler
+         *
+         * @return bool
+         */
+        public function load()
+        {
+            $backup = new BackUp($this->getConnection());
 
-				return $backup->backUp ($tables, $src);
+            return $backup->load($this);
+        }
 
-		  }
+        /**
+         * Dinamik method çağrımı
+         *
+         * @param string $method
+         * @param array  $args
+         * @return mixed
+         */
+        public function __call($method, array $args = [])
+        {
 
-		  /**
-			* Yedeklenen veri tabanı dosyalarını yükler
-			* @return bool
-			*/
-		  public function load ()
-		  {
-				$backup = new BackUp($this->getConnection ());
+            if ($this->isMode($method)) {
 
-				return $backup->load ($this);
+                $return = $this->callMode($method, $args);
+            } else {
 
-		  }
+                $return = call_user_func_array([$this->getConnection(), $method], $args);
+            }
 
-		  /**
-			* Dinamik method çağrımı
-			* @param string $method
-			* @param array $args
-			* @return mixed
-			*/
-		  public function __call ($method, array $args = [ ])
-		  {
-
-				if ( $this->isMode ($method) ) {
-
-					 $return = $this->callMode ($method, $args);
-				} else {
-
-					 $return = call_user_func_array ([ $this->getConnection (), $method ], $args);
-				}
-
-				return $return;
-		  }
-
-	 }
+            return $return;
+        }
+    }

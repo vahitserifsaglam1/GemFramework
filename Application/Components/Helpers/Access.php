@@ -1,94 +1,95 @@
 <?php
 
-	 /**
-	  *
-	  * Bu trait GemFramework'un yardımcılarından biridir, bir olaya erişim hakkınızın olup olmadığını kontrol eder.
-	  * @see Laravel\Middleware
-	  * @see GemFramework\AccessManager
-	  * @copyright (c) 2015, MyfcYazilim
-	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
-	  *
-	  */
+    /**
+     * Bu trait GemFramework'un yardımcılarından biridir, bir olaya erişim hakkınızın olup olmadığını kontrol eder.
+     *
+     * @see Laravel\Middleware
+     * @see GemFramework\AccessManager
+     * @copyright (c) 2015, MyfcYazilim
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     */
 
-	 namespace Gem\Components\Helpers;
+    namespace Gem\Components\Helpers;
 
-	 use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
-	 use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
-	 use Gem\Components\Http\Request;
-	 use RuntimeException;
+    use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
+    use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
+    use Gem\Components\Http\Request;
+    use RuntimeException;
 
-	 trait Access
-	 {
+    trait Access
+    {
 
-		  private $access;
+        private $access;
 
-		  /**
-			* Geçerli bir access atanmışmı diye bakar
-			* @param string $name
-			* @return string|boolean
-			*/
-		  public function getAccess ($name)
-		  {
+        /**
+         * Geçerli bir access atanmışmı diye bakar
+         *
+         * @param string $name
+         * @return string|boolean
+         */
+        public function getAccess($name)
+        {
 
-				if ( isset( $this->access[ $name ] ) ) {
+            if (isset($this->access[$name])) {
 
-					 return $this->access[ $name ];
-				} else {
+                return $this->access[$name];
+            } else {
 
-					 return false;
-				}
-		  }
+                return false;
+            }
+        }
 
-		  /**
-			* Fonksiyonları tetikleyerek dönen verileri alır
-			* @param string $name
-			* @param Closure $next
-			* @param string $role
-			* @return boolean
-			*/
-		  public function checkAccess ($name, $next, $role = null)
-		  {
+        /**
+         * Fonksiyonları tetikleyerek dönen verileri alır
+         *
+         * @param string  $name
+         * @param Closure $next
+         * @param string  $role
+         * @return boolean
+         */
+        public function checkAccess($name, $next, $role = null)
+        {
 
-				if ( $access = $this->getAccess ($name) ) {
+            if ($access = $this->getAccess($name)) {
 
-					 $manager = new $access;
+                $manager = new $access;
 
-					 if ( $manager instanceof HandleInterface ) {
-						  $request = new Request();
-						  $response = $manager->handle ($request, $next, $role);
-						  if ( $response ) {
+                if ($manager instanceof HandleInterface) {
+                    $request = new Request();
+                    $response = $manager->handle($request, $next, $role);
+                    if ($response) {
 
-								return true;
-						  } elseif ( $manager instanceof TerminateInterface ) {
+                        return true;
+                    } elseif ($manager instanceof TerminateInterface) {
 
-								$response = $manager->terminate ($request);
-								if ( $response ) {
+                        $response = $manager->terminate($request);
+                        if ($response) {
 
-									 return true;
-								}
-						  }
-					 } else {
+                            return true;
+                        }
+                    }
+                } else {
 
-						  throw new RuntimeException(
-								sprintf ('%s isimli Access sınıfınız %s interface\'ine sahip olmalıdır ',
-									 $name,
-									 'Gem\Components\AccessManager\Interfaces\Handable'
-								));
-					 }
-				} else {
+                    throw new RuntimeException(
+                       sprintf('%s isimli Access sınıfınız %s interface\'ine sahip olmalıdır ',
+                          $name,
+                          'Gem\Components\AccessManager\Interfaces\Handable'
+                       ));
+                }
+            } else {
 
-					 throw new RuntimeException(sprintf ('%s isimli bir Access bulunamadı', $name));
-				}
-		  }
+                throw new RuntimeException(sprintf('%s isimli bir Access bulunamadı', $name));
+            }
+        }
 
-		  /**
-			* AccessAtaması yapar
-			* @param array $access
-			*/
-		  public function setAccess (array $access = [ ])
-		  {
+        /**
+         * AccessAtaması yapar
+         *
+         * @param array $access
+         */
+        public function setAccess(array $access = [])
+        {
 
-				$this->access = $access;
-		  }
-
-	 }
+            $this->access = $access;
+        }
+    }

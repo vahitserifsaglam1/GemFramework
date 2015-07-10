@@ -1,16 +1,17 @@
 <?php
 
-	 namespace Gem\Components\Route\Http\Dispatchers;
-     use Gem\Components\Support\Accessors;
+    namespace Gem\Components\Route\Http\Dispatchers;
 
-     /**
-      * Bu Sınıf
-      * Abstract Class GeneralDispatcher
-      * @package Gem\Components\Route\Http\Dispatchers
-      */
+    use Gem\Components\Support\Accessors;
 
-	 abstract class GeneralDispatcher
-	 {
-		  private $content;
-		  use Accessors;
-	 }
+    /**
+     * Bu Sınıf
+     * Abstract Class GeneralDispatcher
+     *
+     * @package Gem\Components\Route\Http\Dispatchers
+     */
+    abstract class GeneralDispatcher
+    {
+        private $content;
+        use Accessors;
+    }

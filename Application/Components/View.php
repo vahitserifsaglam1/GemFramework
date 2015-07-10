@@ -1,146 +1,135 @@
 <?php
 
-	 /**
-	  *
-	  *  GemFramework View S�n�f� -> G�r�nt� dosyalar� �retmek de kullan�l�r
-	  *
-	  */
+    /**
+     *  GemFramework View S�n�f� -> G�r�nt� dosyalar� �retmek de kullan�l�r
 
-	 namespace Gem\Components;
+     */
 
+    namespace Gem\Components;
 
-	 use Exception;
-	 use Gem\Components\Patterns\Singleton;
-	 use Gem\Components\View\ShouldBeView;
-     use Gem\Components\View\ViewManager;
+    use Exception;
+    use Gem\Components\Patterns\Singleton;
+    use Gem\Components\View\ShouldBeView;
+    use Gem\Components\View\ViewManager;
 
-     class View extends ViewManager implements ShouldBeView
-	 {
+    class View extends ViewManager implements ShouldBeView
+    {
 
-		  private $file;
+        private $file;
 
 
-		  public function __construct ()
-		  {
+        public function __construct()
+        {
+
+            parent::__construct();
+            $this->file = Singleton::make('Gem\Components\Filesystem');
+        }
+
+        private function in($file = '')
+        {
+
+            return VIEW . $file . '.php';
+        }
 
 
-				parent::__construct ();
-				$this->file = Singleton::make ('Gem\Components\Filesystem');
+        /**
+         * Görüntü dosyasını kullanıma hazırlar
+         *
+         * @param string $fileName
+         * @param array  $variables
+         * @throws Exception
+         * @return $this
+         */
+        public static function make($fileName = '', $variables = [])
+        {
+            $app = new static();
+            $app->setFileName($fileName);
+            $app->setParams($variables);
+
+            return $app;
+        }
 
 
-		  }
+        /**
+         * Çıktıyı oluşturur
+         *
+         * @throws Exception
+         */
+        public function execute()
+        {
 
-		  private function in ($file = '')
-		  {
+            $fileName = $this->fileName;
+            $variables = $this->params;
 
-				return VIEW . $file . '.php';
+            if (true === $this->autoload) {
 
-		  }
+                $this->loadHeaderFiles();
+            }
 
+            $this->loadFile($fileName, $variables);
 
-		  /**
-			* Görüntü dosyasını kullanıma hazırlar
-			* @param string $fileName
-			* @param array $variables
-			* @throws Exception
-			* @return $this
-			*/
-		  public static function make ($fileName = '', $variables = [ ])
-		  {
-				$app = new static();
-				$app->setFileName ($fileName);
-				$app->setParams ($variables);
+            if (true === $this->autoload) {
 
-				return $app;
-		  }
+                $this->loadFooterFiles();
+            }
 
-
-		  /**
-			* Çıktıyı oluşturur
-			* @throws Exception
-			*/
-		  public function execute ()
-		  {
-
-				$fileName = $this->fileName;
-				$variables = $this->params;
-
-				if ( true === $this->autoload ) {
-
-					 $this->loadHeaderFiles ();
-
-				}
-
-				$this->loadFile ($fileName, $variables);
-
-				if ( true === $this->autoload ) {
-
-					 $this->loadFooterFiles ();
-
-				}
-
-				return ob_get_clean ();
-
-		  }
+            return ob_get_clean();
+        }
 
 
-		  /**
-			* Girilen dosyayı yüklemeye çalışır
-			* @param string $file
-			* @param array $params
-			* @return bool
-			*/
-		  private function loadFile ($file = '', $params = [ ])
-		  {
+        /**
+         * Girilen dosyayı yüklemeye çalışır
+         *
+         * @param string $file
+         * @param array  $params
+         * @return bool
+         */
+        private function loadFile($file = '', $params = [])
+        {
 
+            $file = $this->in($file);
+            if ($this->file->exists($file)) {
+                $this->file->inc($file, $params);
+            } else {
 
-				$file = $this->in ($file);
-				if ( $this->file->exists ($file) ) {
-					 $this->file->inc ($file, $params);
-				} else {
+                return false;
+            }
+        }
 
-					 return false;
+        /**
+         * Header dosyasını yükler
+         *
+         * @return bool
+         */
+        private function loadHeaderFiles()
+        {
 
-				}
+            $params = $this->params;
+            $files = $this->headerBag->getViewHeaders();
+            foreach ($files as $file) {
 
-		  }
+                $this->loadFile($file, $params);
+            }
 
-		  /**
-			* Header dosyasını yükler
-			* @return bool
-			*/
-		  private function loadHeaderFiles ()
-		  {
+            return true;
+        }
 
-				$params = $this->params;
-				$files = $this->headerBag->getViewHeaders ();
-				foreach ( $files as $file ) {
+        /**
+         * Header dosyasını yükler
+         *
+         * @return bool
+         */
+        private function loadFooterFiles()
+        {
 
-					 $this->loadFile ($file, $params);
+            $params = $this->params;
+            $files = $this->footerBag->getViewFooters();
 
-				}
+            foreach ($files as $file) {
 
-				return true;
+                $this->loadFile($file, $params);
+            }
 
-		  }
-
-		  /**
-			* Header dosyasını yükler
-			* @return bool
-			*/
-		  private function loadFooterFiles ()
-		  {
-
-				$params = $this->params;
-				$files = $this->footerBag->getViewFooters ();
-
-				foreach ( $files as $file ) {
-
-					 $this->loadFile ($file, $params);
-
-				}
-
-				return true;
-
-		  }
-	 }
+            return true;
+        }
+    }
