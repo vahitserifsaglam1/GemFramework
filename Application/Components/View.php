@@ -8,21 +8,22 @@
     namespace Gem\Components;
 
     use Exception;
+    use Gem\Components\Debug\Debug;
     use Gem\Components\Patterns\Singleton;
     use Gem\Components\View\ShouldBeView;
     use Gem\Components\View\ViewManager;
 
     class View extends ViewManager implements ShouldBeView
     {
-
+        use Debug;
         private $file;
-
 
         public function __construct()
         {
 
             parent::__construct();
             $this->file = Singleton::make('Gem\Components\Filesystem');
+            $this->debugBoot();
         }
 
         private function in($file = '')
@@ -60,6 +61,9 @@
 
             $fileName = $this->fileName;
             $variables = $this->params;
+
+            $this->debug['params'] = $this->params;
+            $this->debug['files'][] = $fileName;
 
             if (true === $this->autoload) {
 
@@ -107,7 +111,7 @@
             $params = $this->params;
             $files = $this->headerBag->getViewHeaders();
             foreach ($files as $file) {
-
+                $this->debug['files'][] = $file;
                 $this->loadFile($file, $params);
             }
 
@@ -126,7 +130,7 @@
             $files = $this->footerBag->getViewFooters();
 
             foreach ($files as $file) {
-
+                $this->debug['files'][] = $file;
                 $this->loadFile($file, $params);
             }
 

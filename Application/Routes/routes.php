@@ -6,5 +6,8 @@
      */
 
     use Gem\Components\Facade\Route;
+    use Gem\Components\Route\Http\ControllerManager;
 
-    Route::get('/', 'pages.home');
+    Route::get('/', function(ControllerManager $manager){
+       return $manager->setController('Index::open');
+    });

@@ -15,7 +15,7 @@
 	 {
 
 		  private $routes = [
-              'pages.home' => 'Gem\Routes\HomeRoute',
+
 		  ];
 
 		  /**

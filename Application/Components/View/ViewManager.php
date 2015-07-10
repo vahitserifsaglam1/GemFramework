@@ -22,6 +22,7 @@
         protected $params;
         protected $headerBag;
         protected $footerBag;
+        protected $debug;
 
         public function __construct()
         {

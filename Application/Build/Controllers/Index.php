@@ -33,6 +33,6 @@
 
         public function open()
         {
-            return response(twig('index'));
+            return response('Hello World');
         }
     }
