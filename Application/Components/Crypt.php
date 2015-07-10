@@ -3,8 +3,8 @@
 	 /**
 	  *
 	  *  GemFramework Crypte sınıfı, şifrelenmiş metinler üretmek için kullanılır
-	  * @package Gem\Components
-	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
+	  *  @package Gem\Components
+	  *  @author vahitserifsaglam <vahit.serif119@gmail.com>
 	  *
 	  */
 
@@ -39,7 +39,6 @@
 		  private function securityKeyCreator ()
 		  {
 
-				$url = $this->findBasePath ();
 				$ip = $this->serverip;
 				$len = strlen ($ip);
 				$letters = [ ];
@@ -51,7 +50,7 @@
 				$con = $letters[ $len ];
 				$son = substr ($ip, $len - 1, 1);
 				$con2 = $letters[ $len + $ip ];
-				$key = $url . $son . FRAMEWORK_VERSION . $con . $con2 . $ip . $bas . FRAMEWORK_NAME;
+				$key =  $son . FRAMEWORK_VERSION . $con . $con2 . $ip . $bas . FRAMEWORK_NAME;
 				$this->securityKey = md5 ($key);
 		  }
 

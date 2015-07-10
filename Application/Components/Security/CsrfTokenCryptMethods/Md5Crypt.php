@@ -1,6 +1,6 @@
 <?php
 namespace Gem\Components\Security\CsrfTokenCryptMethods;
-class Md5Crypt implements CsrfCryptMethodInterface {
+class Md5Crypt extends CsrfCryptMethod {
 
     public function encrypt($string = '')
     {

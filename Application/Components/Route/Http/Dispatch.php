@@ -12,7 +12,7 @@
 	 use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
 	 use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
 	 use Gem\Components\Http\Request;
-	 use Gem\Components\Http\Response\ShouldBeResponseInterface;
+	 use Gem\Components\Http\Response\ShouldBeResponse;
 	 use Gem\Components\Route\Http\Dispatchers\CallableDispatcher;
 	 use Gem\Components\Route\Http\Dispatchers\ControllerDispatcher;
 
@@ -178,7 +178,7 @@
 		  private function response ($response = '')
 		  {
 
-				if ( $response instanceof ShouldBeResponseInterface ) {
+				if ( $response instanceof ShouldBeResponse) {
 					 $response->execute ();
 				}
 
@@ -221,10 +221,7 @@
 				if ( null === $this->before ) {
 					 return true;
 				}
-
-
 				if ( call_user_func_array ($this->before, $this->getParams ()) ) {
-
 					 return true;
 				}
 

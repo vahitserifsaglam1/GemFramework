@@ -4,7 +4,7 @@ namespace Gem\Components\Security;
 
 use Gem\Components\Helpers\Server;
 use Gem\Components\Http\Input;
-use Gem\Components\Security\CsrfTokenCryptMethods\CsrfCryptMethodInterface;
+use Gem\Components\Security\CsrfTokenCryptMethods\CsrfCryptMethod;
 
 /**
  * Bu Sınıf GemFramework'de CsrfToken oluşturma ve kontrol etme işlemleri için yapılmıştır
@@ -43,10 +43,10 @@ class CsrfToken
     }
 
     /**
-     * @param CsrfCryptMethodInterface $method
+     * @param CsrfCryptMethod $method Metni şifreleyecek sınıfın objesi
      * @return $this
      */
-    public function setCryptMethod(CsrfCryptMethodInterface $method)
+    public function setCryptMethod(CsrfCryptMethod $method)
     {
         $this->cryptMethod = $method;
         return $this;

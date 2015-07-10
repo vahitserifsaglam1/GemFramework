@@ -2,6 +2,7 @@
 
 use Gem\Components\Facade\Event as EventDispatcher;
 use Gem\Components\Patterns\Singleton;
+use Gem\Components\Http\Input;
 
 /**
  * Girilen Event's değerine göre event'i parçalar
@@ -110,4 +111,22 @@ function csrfActive()
     }
 
     return false;
+}
+
+/**
+ * @param null $name
+ * @param null $controll
+ * @return mixed
+ */
+function input($name = null, $controll = null)
+{
+    if(is_null($controll) && !is_null($name))
+    {
+        return Input::get($name);
+    }elseif(!is_null($name) && !is_null($controll))
+    {
+        return Input::set($name, $controll);
+    }else{
+        return Input::getAll();
+    }
 }

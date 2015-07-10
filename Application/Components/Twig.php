@@ -22,6 +22,7 @@ class Twig extends ViewManager implements ShouldBeView{
         $this->configs = $this->getConfig('twig');
     }
     /**
+     * static fonksiyondan yeni bir dinamik oluşturur
      * @param string $name
      * @param array $parametres
      * @return static

@@ -172,7 +172,6 @@ class Router
             $router = new ControllerManager();
             $router->setParams($params);
             $response = call_user_func($callback,$router);
-
             if($response instanceof Dispatch)
             {
                 $router->dispatch();

@@ -42,13 +42,13 @@ class Run
         ini_set('memory_limit', '1024M');
         define('APP', 'Application/');
         define('ROUTE', APP.'Routes/');
-        define('MVC', APP . 'MVC/');
+        define('MVC', APP . 'Build/');
         define('VIEW', MVC . 'Views/');
         define('MODEL', MVC . 'Models/');
         define('CONTROLLER', MVC . 'Controllers');
         define('CONFIG_PATH', APP . 'Configs/');
         define('SYSTEM', 'System/');
-        define('LANG', 'Language/');
+        define('LANG',APP. 'Language/');
         define('ASSETS', 'public/assets/');
         define('DATABASE', APP . 'Database/');
         error_reporting(E_ALL);

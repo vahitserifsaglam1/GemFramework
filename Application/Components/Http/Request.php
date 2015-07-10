@@ -13,7 +13,7 @@
 	 use Gem\Components\Redirect;
 	 use Gem\Components\Session;
 
-	 class Request
+	 class Request extends ServerBag
 	 {
 
 		  use Server;
@@ -47,16 +47,47 @@
 
 		  }
 
+         /**
+          * Methodun aynı olup olmadığına bakar
+          * @param string $method
+          * @return bool
+          */
+         public function isMethod($method = '')
+         {
+             $method = mb_convert_case($method, MB_CASE_UPPER);
+             if($this->getMethod() === $method)
+             {
+                 return true;
+             }
+         }
 
+         /**
+          * Url tetiklenip tetiklenmediğine bakılır
+          * @param string $url
+          * @return bool
+          */
+         public function is($url = '')
+         {
+             if(strstr($url, '*'))
+             {
+                 $url = str_replace('*','',$url);
+             }
+
+             if(strstr($this->getUrl(), $url))
+             {
+                 return true;
+             }
+         }
 		  /**
 			* input dan veri çekmekte kullanılır
-			* @param string $name
+			* @param null $name
+            * @param null  $control
 			* @return mixed
 			*/
-		  public function input ($name)
+		  public function input ($name = null, $control = null)
 		  {
 
-				return Input::get ($name);
+				return input($name, $control);
 
 		  }
 
