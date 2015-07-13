@@ -7,8 +7,8 @@
     "psr-4": {
       "Gem\\Components\\": "Application/Components/",
       "Gem\\Manager\\": "Application/Manager/",
-      "Gem\\Controllers\\": "Application/MVC/Controllers/",
-      "Gem\\Models\\": "Application/MVC/Models/",
+      "Gem\\Controllers\\": "Application/Build/Controllers/",
+      "Gem\\Models\\": "Application/Build/Models/",
       "Gem\\Events\\":"Application/Event/Events/",
       "Gem\\Listeners\\":"Application/Event/Listeners/",
       "Gem\\Routes\\":"Application/Routes",

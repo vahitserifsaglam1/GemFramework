@@ -28,23 +28,24 @@
         private $frameworkName;
         private $starter;
         private $frameworkVersion;
-        const ROUTE_FILE = ROUTE . 'routes.php';
+        private $routeFile;
 
         /**
          * Framework 'un adı ve versionu girilir,
          * Ve framework başlatılır
          *
          * @param string $frameworkName
-         * @param int    $frameworkVersion
+         * @param int $frameworkVersion
          */
         public function __construct($frameworkName = '', $frameworkVersion = 1)
         {
-
+            $this->routeFile = ROUTE . 'routes.php';
             $this->$frameworkName = $frameworkName;
             $this->frameworkVersion = $frameworkVersion;
             define('FRAMEWORK_NAME', $this->frameworkName);
             define('FRAMEWORK_VERSION', $this->frameworkVersion);
             $this->starter = $this->singleton('Gem\Manager\Starter');
+
             $this->getProvidersAndAlias();
         }
 
@@ -83,19 +84,19 @@
         {
 
             $this->runOthers();
-            if (file_exists(self::ROUTE_FILE)) {
-                include(self::ROUTE_FILE);
+
+            if (file_exists($this->routeFile)) {
+                include $this->routeFile;
                 $make = $this->singleton('Gem\Components\Route\Router');
                 $make->run();
             } else {
                 throw new Exception(sprintf('%s yolunda olması gerek röta dosyanız bulunamadı, lütfen oluşturun',
-                   self::ROUTE_FILE));
+                    $this->routeFile));
             }
         }
 
         /**
          * Facadeleri yürütür
-
          */
         private function runFacades()
         {
@@ -123,7 +124,6 @@
 
         /**
          * Providersları yürütür
-
          */
         private function runProviders()
         {

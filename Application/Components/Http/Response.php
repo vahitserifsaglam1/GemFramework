@@ -94,8 +94,7 @@
 
 
         private $standartHeaders = [
-           'Content-Language' => 'en',
-           'X-Powered-By'     => 'PHP/' . PHP_VERSION,
+            'Content-Language' => 'en'
         ];
 
         private $headersBag;
@@ -109,7 +108,7 @@
          */
         public function __construct($content = '', $statusCode = 200)
         {
-
+            ;
             $this->setContent($content);
             $this->setStatusCode($statusCode);
             $this->setProtocolVersion('1.1');

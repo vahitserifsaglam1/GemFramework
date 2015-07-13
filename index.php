@@ -1,4 +1,5 @@
 <?php
+
     include 'vendor/autoload.php';
     use Gem\System\Run;
 
@@ -9,5 +10,5 @@
      *  Diğer herhangi Frameworkden daha iyi olmaya değil en iyisi olmaya çalışıyoruz.
      *
      */
-    new Run();
 
+    new Run();

@@ -24,7 +24,7 @@
     class Router
     {
 
-        use Server,Config;
+        use Server, Config;
         /**
          * Rötalama koleksiyonları'nın tutalacağı yer
          *
@@ -101,10 +101,10 @@
                 return false;
             }
 
-          $run = $this->runCollections($collections);
+            $run = $this->runCollections($collections);
             if ($run !== true) {
                 $url = $this->configs['NotFoundPage'];
-                $url = str_replace($this->configs['delimiter'],'',$url);
+                $url = str_replace($this->configs['delimiter'], '', $url);
                 Redirect::to($url);
             }
         }
@@ -177,7 +177,7 @@
                     $router = new $this->routes[$callback]();
                     if (!$router instanceof ShouldBeRoute) {
                         throw new Exception(sprintf('%s rötalandırma sınıfınız ShouldBeRoute e sahip değil',
-                           get_class($router)));
+                            get_class($router)));
                     }
 
                     $router->setParams($params);
