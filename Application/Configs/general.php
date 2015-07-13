@@ -66,5 +66,17 @@ return [
          */
 
         'footerFiles' => [
-            'inc/footer']]
+            'inc/footer']],
+    /**
+     *
+     *  Bu Ayarlar Route sınıfında geçerli olur, array içinde
+     *  *****************************************************
+     *  delimeter => sayfanın url yapısının nasıl ayrılacağı dır örneğin / girilirse kategori-adi/yazi-adi veya _ girilirse kategori-adi_yazi-adi
+     *  NotFoundPage => sayfanın url yapısına uyan hiç bir röta bulunmassa yönlenilecek sayfanın url si dir
+     */
+
+    'route' => [
+        'delimiter' => '/',
+        'NotFoundPage' => '/404'
+    ]
 ];

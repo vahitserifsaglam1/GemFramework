@@ -12,6 +12,8 @@
     trait Config
     {
 
+        private static $cache;
+
         /**
          * �stenilen ayar� getirir
          *
@@ -26,7 +28,7 @@
         }
 
         /**
-         * �stenilen ayar� getirir
+         * İstenilen ayarı döndürür
          *
          * @param string $config
          * @return boolean|mixed
@@ -34,14 +36,66 @@
          */
         public static function getConfigStatic($config)
         {
-            $path = CONFIG_PATH . $config . '.php';
 
-            if (file_exists($path)) {
+            $parse = static::parse($config);
 
-                return include $path;
-            } else {
-
-                return false;
+            if (count($parse) == 1) {
+                $task = $parse[0];
+            } elseif (count($parse) == 2) {
+                list($task, $method) = $parse;
             }
+
+            if (isset(static::$cache[$task])) {
+                $return = static::$cache[$task];
+            } else {
+                $return = static::$cache[$task] = include CONFIG_PATH . $config . '.php';
+            }
+
+            if (isset($method)) {
+                $return = $task[$method];
+            }
+
+            return $return;
+        }
+
+        /**
+         * Metni . karekterine göre parçalar ve görev listesini oluşturur
+         *
+         * @param string $config
+         * @return array|string
+         */
+        private static function parse($config = '')
+        {
+            if (strstr($config, ".")) {
+
+                $parse = explode(".", $config);
+
+                return $parse;
+            } else {
+                return [$config];
+            }
+        }
+
+        /**
+         * @param string $name verinin ismi
+         * @param string $value değeri
+         */
+        public static function set($name, $value = '')
+        {
+            static::$cache[$name] = $value;
+        }
+
+        /**
+         * @param string $name eklenecek değerin ismi
+         * @param string $value değeri
+         */
+        public static function add($name = '', $value = '')
+        {
+            // veri yoksa oluşturuyoruz
+            if(!isset(static::$cache[$name]))
+            {
+                static::$cache[$name] = [];
+            }
+            static::$cache[$name] = array_merge(static::$cache[$name], $value);
         }
     }

@@ -11,6 +11,8 @@
     namespace Gem\Components;
 
     use Gem\Components\Helpers\Config;
+    use Gem\Components\Patterns\Singleton;
+    use Gem\Manager\Starter;
 
     class App
     {
@@ -18,7 +20,7 @@
         use Config;
         const CONTROLLER = 'Controller';
         const MODEL = 'Model';
-
+        private static $starter;
 
         /**
          * Controller, method yada bir s�n�f �a��r�r
@@ -32,21 +34,13 @@
         {
 
             $names = (array)$names;
-
             foreach ($names as $name) {
-
                 switch ($type) {
-
                     case self::CONTROLLER:
-
                         $return[$name] = self::includeController($name);
-
                         break;
-
                     case self::MODEL:
-
                         $return[$name] = self::includeModel($name);
-
                         break;
                 }
             }
@@ -88,11 +82,57 @@
          * @param string $model
          * @return null|object
          */
-        private function includeModel($model)
+        private static function includeModel($model)
         {
-
             $modelname = 'Gem\\Models\\' . $model;
 
             return new $modelname;
+        }
+
+        /**
+         * Starter objesini oluşturur
+         */
+        private static function starter()
+        {
+
+            if (static::$starter && static::$starter instanceof Starter) {
+                return;
+            }
+
+            static::$starter = Singleton::make('Gem\Manager\Starter');
+        }
+
+        /**
+         * Sınıfa facede ekler
+         *
+         * @param array $facedes
+         * @return bool
+         */
+        public static function facede($facedes = [])
+        {
+            static::starter();
+            if (!is_array($facedes)) {
+                $facedes = (array)$facedes;
+            }
+
+            static::$starter->setAlias($facedes);
+
+            return true;
+        }
+
+        /**
+         * Sınıfa providers ekler
+         *
+         * @param array $providers
+         * @return bool
+         */
+        public static function serviceProviders($providers = [])
+        {
+            static::starter();
+            if (!is_array($providers)) {
+                $providers = (array)$providers;
+            }
+            static::$starter->setProviders($providers);
+            return true;
         }
     }

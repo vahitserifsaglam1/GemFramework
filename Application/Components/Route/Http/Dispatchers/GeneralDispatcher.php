@@ -12,6 +12,6 @@
      */
     abstract class GeneralDispatcher
     {
-        private $content;
+        protected $content;
         use Accessors;
     }

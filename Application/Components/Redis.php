@@ -16,4 +16,15 @@
         {
             parent::__construct();
         }
+
+        /**
+         * Dinamik olarak method çağrımı
+         * @param string $method
+         * @param array $params
+         * @return mixed
+         */
+        public function __call($method, $params = [])
+        {
+            return call_user_func_array([$this->getRedisObj(), $method], $params);
+        }
     }

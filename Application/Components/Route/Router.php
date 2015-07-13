@@ -7,12 +7,14 @@
      */
     namespace Gem\Components\Route;
 
-    use Gem\Components\Facade\Request;
+    use Gem\Components\Http\Request;
     use Gem\Components\Helpers\Server;
     use Gem\Components\Patterns\Singleton;
     use Exception;
+    use Gem\Components\Redirect;
     use Gem\Components\Route\Http\ControllerManager;
     use Gem\Components\Route\Http\Dispatch;
+    use Gem\Components\Helpers\Config;
 
     /**
      * Class Router
@@ -22,7 +24,7 @@
     class Router
     {
 
-        use Server;
+        use Server,Config;
         /**
          * Rötalama koleksiyonları'nın tutalacağı yer
          *
@@ -33,6 +35,7 @@
         private $routes;
         private $collector;
         private $filter;
+        private $configs;
 
         public function __construct()
         {
@@ -41,6 +44,7 @@
             $this->routes = $this->listener->getRoutes();
             $this->collector = Singleton::make('Gem\Components\Route\RouteCollector');
             $this->filter = $this->collector->getFilter();
+            $this->configs = $this->getConfig('general')['route'];
         }
 
         /**
@@ -97,7 +101,12 @@
                 return false;
             }
 
-            $this->runCollections($collections);
+          $run = $this->runCollections($collections);
+            if ($run !== true) {
+                $url = $this->configs['NotFoundPage'];
+                $url = str_replace($this->configs['delimiter'],'',$url);
+                Redirect::to($url);
+            }
         }
 
         /**
@@ -109,13 +118,15 @@
         private function runCollections(array $collections = [])
         {
             foreach ($collections as $col) {
-                $action = str_replace("/", " ", $col['action']);
-                $url = str_replace("/", " ", $this->getUrl());
+                $delimeter = $this->configs['delimiter'];
+                $action = str_replace($delimeter, " ", $col['action']);
+                $url = str_replace($delimeter, " ", $this->getUrl());
                 $regex = $this->regexChecker($action, $url);
                 if (false === $regex) {
                     continue;
                 }
                 $this->runRouter($col['callback'], $regex);
+                return true;
             }
         }
 

@@ -11,6 +11,7 @@
 
     use Gem\Components\Database\Base;
     use Gem\Components\Database\Builders\Group;
+    use Gem\Components\Database\Builders\Join;
     use Gem\Components\Database\Builders\Limit;
     use Gem\Components\Database\Builders\Order;
     use Gem\Components\Database\Builders\Select;
@@ -35,7 +36,8 @@
                'select' => new Select(),
                'order'  => new Order(),
                'limit'  => new Limit(),
-               'group'  => new Group()
+               'group'  => new Group(),
+               'join'   => new Join(),
             ]);
 
             $this->string = [
@@ -46,6 +48,7 @@
                'where'      => null,
                'order'      => null,
                'limit'      => null,
+               'join'       => null,
                'parameters' => [],
             ];
 
@@ -87,6 +90,19 @@
 
             $this->string['order'] .= $this->useBuilder('order')
                ->order($order, $type);
+
+            return $this;
+        }
+
+        /**
+         * Join komutu ekler
+         *
+         * @param array $join
+         * @return $this
+         */
+        public function join($join = [])
+        {
+            $this->string['join'] = $this->useBuilder('join')->join($join, $this->getBase()->getTable());
 
             return $this;
         }

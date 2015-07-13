@@ -11,11 +11,11 @@
 
     use Exception;
     use Gem\Components\Helpers\Server;
+    use Gem\Components\Support\SecurityKey;
 
     class Crypt
     {
-
-        use Server;
+        use SecurityKey;
         private $securityKey;
         private $mode = MCRYPT_MODE_ECB;
         private $rand = MCRYPT_RAND;
@@ -26,33 +26,11 @@
 
             if (!function_exists('mcrypt_create_iv')) {
 
-                throw new Exception('sunucunuzda mcrypt desteÄŸi bulunamadÄ±');
+                throw new Exception('Sunucunuzda Mcrypt desteği bulunamadı.');
             }
 
-            $this->securityKeyCreator();
+            $this->securityKey = $this->keyGenerate();
         }
-
-        /**
-         * GÃ¼venlik anahtarÄ± oluÅŸtrucu
-         */
-        private function securityKeyCreator()
-        {
-
-            $ip = $this->serverip;
-            $len = strlen($ip);
-            $letters = [];
-            for ($i = 'a', $j = 1; $j <= 26; $i++, $j++) {
-
-                $letters[$j] = $i;
-            }
-            $bas = substr($ip, 0, 2);
-            $con = $letters[$len];
-            $son = substr($ip, $len - 1, 1);
-            $con2 = $letters[$len + $ip];
-            $key = $son . FRAMEWORK_VERSION . $con . $con2 . $ip . $bas . FRAMEWORK_NAME;
-            $this->securityKey = md5($key);
-        }
-
         /**
          * Şifrelenmiş metni oluşturur
          *

@@ -17,7 +17,7 @@
 				 */
 
 				'host'     => 'localhost',
-				'db'       => 'dt',
+				'db'       => 'gemedya',
 				'username' => 'root',
 				'password' => '',
 				'charset'  => 'utf-8',

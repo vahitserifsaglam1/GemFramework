@@ -50,7 +50,6 @@
 
                 $content .= $this->rendeHeaderFiles();
             }
-
             $content .= $this->twig->render($this->fileNameGenaretor($this->fileName), $this->params);
 
             if (true === $this->autoload) {
@@ -71,7 +70,7 @@
             $files = $this->headerBag->getViewHeaders();
             $content = '';
             foreach ($files as $file) {
-                $content .= $this->twig->rende($this->fileNameGenaretor($file), $params);
+                $content .= $this->twig->render($this->fileNameGenaretor($file), $params);
             }
 
             return $content;
@@ -85,10 +84,10 @@
         private function rendeFooterFiles()
         {
             $params = $this->params;
-            $files = $this->headerBag->getViewFooters();
+            $files = $this->footerBag->getViewFooters();
             $content = '';
             foreach ($files as $file) {
-                $content .= $this->twig->rende($this->fileNameGenaretor($file), $params);
+                $content .= $this->twig->render($this->fileNameGenaretor($file), $params);
             }
 
             return $content;

@@ -33,7 +33,7 @@
 
            'read'   => [
 
-              'SELECT :select FROM :from :group WHERE:where :order :limit',
+              'SELECT :select FROM :from :join :group WHERE:where :order :limit',
               'SELECT :select FROM :from :group :order :limit'
            ],
            'update' => [

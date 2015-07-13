@@ -150,44 +150,6 @@
         }
 
         /**
-         * Uygulamaya dinamik olarak facede ekler
-         *
-         * @param array $facedes
-         * @return \Gem\Components\Application
-         */
-        public function facede($facedes = [])
-        {
-
-            if (!is_array($facedes)) {
-                $facedes = (array)$facedes;
-            }
-
-            $this->starter->setAlias($facedes);
-
-            return $this;
-        }
-
-
-        /**
-         * Uygulamaya dinamik olarak provider ekler
-         *
-         * @param array $provider
-         * @return $this
-         */
-        public function provider($provider = [])
-        {
-
-            if (!is_array($provider)) {
-                $provider = (array)$provider;
-            }
-
-            $this->starter->setProviders($provider);
-
-            return $this;
-        }
-
-
-        /**
          * İçeriği belirtilen dosya yolundan çeker
          */
         private function getProvidersAndAlias()

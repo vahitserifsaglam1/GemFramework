@@ -91,6 +91,7 @@
         {
             $url = $this->getUrl();
             $parse = explode('/', $url);
+            $segment = $segment-1;
             if (isset($parse[$segment])) {
                 return $parse[$segment];
             } else {
@@ -107,7 +108,6 @@
          */
         public function input($name = null, $control = null)
         {
-
             return input($name, $control);
         }
 

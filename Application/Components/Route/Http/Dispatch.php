@@ -71,9 +71,7 @@
          */
         public function setBefore(callable $before = null)
         {
-
             $this->before = $before;
-
             return $this;
         }
 

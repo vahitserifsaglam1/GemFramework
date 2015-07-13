@@ -13,7 +13,7 @@
     use Gem\Components\Twig;
     use Gem\Components\View;
     use Gem\Components\View\ShouldBeView;
-    use HttpResponseException;
+    use Gem\Components\Http\Response\HttpResponseException;
 
     class Response implements ShouldBeResponse
     {

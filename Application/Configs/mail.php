@@ -5,6 +5,10 @@
 	 * return [] içindeki kısımı istediğiniz gibi değiştirebilirsiniz.
 	 *
 	 */
-
-	 return [ ];
+	 return [
+        'Host' => '',
+        'Port' => 587,
+        'Username' => 'a',
+        'Password'
+	 ];
 

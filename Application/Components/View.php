@@ -26,11 +26,6 @@
             $this->debugBoot();
         }
 
-        private function in($file = '')
-        {
-
-            return VIEW . $file . '.php';
-        }
 
 
         /**

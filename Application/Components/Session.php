@@ -10,13 +10,15 @@
     namespace Gem\Components;
 
     use Gem\Components\Session\SecureSessionHandler;
+    use Gem\Components\Support\SecurityKey;
 
     class Session extends SecureSessionHandler
     {
 
+        use SecurityKey;
         public function __construct()
         {
-            parent::__construct('AAA');
+            parent::__construct($this->keyGenerate());
         }
 
         /**

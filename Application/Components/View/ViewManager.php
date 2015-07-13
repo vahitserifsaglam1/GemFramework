@@ -47,6 +47,12 @@
             return $this;
         }
 
+        protected function in($file = '')
+        {
+
+            return VIEW . $file . '.php';
+        }
+
         /**
          * Header dosyalarının atamasını yapar
          *
@@ -125,5 +131,21 @@
             $this->params = $params;
 
             return $this;
+        }
+
+        /**
+         * View Dosyasının olup olmadığını kontrol eder
+         * @param string $fileName
+         * @return bool
+         */
+
+        public function exists($fileName = '')
+        {
+            if(file_exists($this->in($fileName)))
+            {
+                return true;
+            }else{
+                return false;
+            }
         }
     }
