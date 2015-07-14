@@ -21,10 +21,5 @@
             'Gem\Console\Commands\TestCommand'
         ];
 
-        /**
-         * Bundle'ların sahip olacağı namespace
-         * @var string
-         */
-        protected $bundlePrefix = 'Gem\Console\Bundles\\';
 
     }

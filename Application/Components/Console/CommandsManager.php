@@ -39,21 +39,21 @@
         }
 
         /**
+         * Yeni Komut ekler
+         * @param string $command
+         */
+        public function add($command = '')
+        {
+            $this->commands[] = $command;
+        }
+
+        /**
          * @return array
          */
         protected function getCommands()
         {
 
             return $this->commands;
-        }
-
-
-        /**
-         * @return string
-         */
-        protected function getBundlePrefix()
-        {
-            return $this->bundlePrefix;
         }
 
     }
