@@ -27,7 +27,6 @@
 
                 $match = $match[0];
                 $values = array_values($args);
-
                 return str_replace($match, $values, $string);
             }
         }

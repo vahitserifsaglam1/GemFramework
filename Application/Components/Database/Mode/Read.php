@@ -32,24 +32,24 @@
             $this->setBase($base);
             $this->useBuilders([
 
-               'where'  => new Where(),
-               'select' => new Select(),
-               'order'  => new Order(),
-               'limit'  => new Limit(),
-               'group'  => new Group(),
-               'join'   => new Join(),
+                'where' => new Where(),
+                'select' => new Select(),
+                'order' => new Order(),
+                'limit' => new Limit(),
+                'group' => new Group(),
+                'join' => new Join(),
             ]);
 
             $this->string = [
 
-               'select'     => '*',
-               'from'       => $this->getBase()->getTable(),
-               'group'      => null,
-               'where'      => null,
-               'order'      => null,
-               'limit'      => null,
-               'join'       => null,
-               'parameters' => [],
+                'select' => '*',
+                'from' => $this->getBase()->getTable(),
+                'join' => null,
+                'group' => null,
+                'where' => null,
+                'order' => null,
+                'limit' => null,
+                'parameters' => [],
             ];
 
             $this->setChield($this);
@@ -67,7 +67,7 @@
         {
 
             $this->string['select'] = $this->useBuilder('select')
-               ->select($select, $this->cleanThis());
+                ->select($select, $this->cleanThis());
 
             return $this;
         }
@@ -89,7 +89,7 @@
         {
 
             $this->string['order'] .= $this->useBuilder('order')
-               ->order($order, $type);
+                ->order($order, $type);
 
             return $this;
         }
@@ -103,7 +103,6 @@
         public function join($join = [])
         {
             $this->string['join'] = $this->useBuilder('join')->join($join, $this->getBase()->getTable());
-
             return $this;
         }
 
@@ -133,7 +132,7 @@
         {
 
             $this->string['group'] = $this->useBuilder('group')
-               ->group($group);
+                ->group($group);
 
             return $this;
         }
@@ -142,7 +141,7 @@
          * İç içe bir sorgu oluşturur
          *
          * @param string $as
-         * @param mixed  $select
+         * @param mixed $select
          * @return  \Gem\Components\Database\Mode\Read
          */
         public function create($as, $select)
@@ -163,7 +162,7 @@
         {
 
             $this->string['limit'] .= $this->useBuilder('limit')
-               ->limit($limit);
+                ->limit($limit);
 
             return $this;
         }

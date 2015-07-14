@@ -7,6 +7,9 @@
      */
 
     namespace Gem\Controllers;
+
+    use Gem\Components\Database\Base;
+    use Gem\Components\Database\Mode\Read;
     use Gem\Components\Route\Controller;
 
     /**
@@ -34,5 +37,6 @@
         public function open()
         {
 
+            return response('hello world');
         }
     }

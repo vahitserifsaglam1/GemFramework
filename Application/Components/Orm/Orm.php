@@ -30,6 +30,7 @@
         private $orderType;
         private $table;
         private $db;
+        private $join;
 
         /**
          * Sınıfı ve Ebeveyn sınıfı başlatır.
@@ -50,6 +51,16 @@
             return $this;
         }
 
+        /**
+         * Sorguya join kodu ekler
+         * @param array $join
+         * @return $this
+         */
+        public function join(array $join = [])
+        {
+            $this->join = $join;
+            return $this;
+        }
         /**
          * Sorguya where komutu ekler
          *
@@ -194,6 +205,9 @@
                 }
                 if (isset($app->select)) {
                     $mode->where($app->where);
+                }
+                if (isset($app->join)) {
+                    $mode->join($app->join);
                 }
                 if (isset($app->group)) {
                     $mode->group($app->group);

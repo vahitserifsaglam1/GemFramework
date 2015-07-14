@@ -19,7 +19,7 @@
             'host' => 'localhost',
             'db' => 'gemedya',
             'username' => 'root',
-            'password' => '',
+            'password' => '123456',
             'charset' => 'utf-8',
             'driver' => 'pdo'
         ],

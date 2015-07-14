@@ -23,6 +23,26 @@
             return $files;
         }
 
+        /**
+         * Klasörün içeriğini döndürür
+         * @param string $path
+         * @param int $type
+         * @return array
+         */
+        public function listDir($path = '', $type = GLOB_NOSORT)
+        {
+            return glob($path, $type);
+        }
+
+        /**
+         * Sadece klasörleri listeler
+         * @param string $path
+         * @return array
+         */
+        public function listDirOnlyDir($path = '')
+        {
+            return $this->listDir($path, GLOB_ONLYDIR);
+        }
 
         /**
          * Dosyaya metni girmeye yarar
@@ -83,6 +103,12 @@
             }
         }
 
+
+        /**
+         * Dosya varmı yokmu diye kontrol eder
+         * @param string $fileName
+         * @return bool
+         */
         public function exists($fileName = '')
         {
 

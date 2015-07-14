@@ -1,9 +1,7 @@
 <?php
+
     /**
-     * Created by PhpStorm.
-     * User: vserifsaglam
-     * Date: 19.6.2015
-     * Time: 04:29
+     * Bu Sınıf GemFramework'de Event İşlemleri yapılması için tasarlanmıştır
      */
 
     namespace Gem\Components;
@@ -13,6 +11,12 @@
     use Gem\Events\Event as EventDispatch;
     use Gem\Listeners\EventListener;
     use InvalidArgumentException;
+
+    /**
+     *
+     * Class Event
+     * @package Gem\Components
+     */
 
     class Event
     {

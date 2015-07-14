@@ -19,13 +19,11 @@
         public function join(array $join = [], $table = '')
         {
             $string = '';
-            foreach($join as $values)
-            {
-                foreach($values as $type => $value)
+
+            foreach ($join as $type => $value)
                 {
                     $string .= sprintf("%s %s ON %s.%s = %s.%s",$type, $value[0], $value[0], $value[1],$table, $value[2]);
                 }
-            }
 
             return $string;
         }
