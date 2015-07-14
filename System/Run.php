@@ -39,8 +39,7 @@
 
         private function runBootstrap()
         {
-            ini_set('display_errors', 'On');
-            error_reporting(E_ALL);
+
 
             ini_set('memory_limit', '1024M');
             define('APP', 'Application/');

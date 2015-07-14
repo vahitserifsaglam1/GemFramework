@@ -103,7 +103,7 @@
 
         /**
          * Sınıfa fonksiyon eklemek
-         *
+         * @throws Exception
          * @param string   $name
          * @param callable $return
          */

@@ -1,14 +1,11 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: mrrobot
-     * Date: 14.07.2015
-     * Time: 11:52
-     */
-
     namespace Gem\Components\Exception;
-
     use Exception;
+
+    /**
+     * Class GemCustomException
+     * @package Gem\Components\Exception
+     */
 
     class GemCustomException extends Exception
     {
