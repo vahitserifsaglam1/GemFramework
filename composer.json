@@ -12,7 +12,8 @@
       "Gem\\Events\\":"Application/Event/Events/",
       "Gem\\Listeners\\":"Application/Event/Listeners/",
       "Gem\\Routes\\":"Application/Routes",
-      "Gem\\System\\":"System/"
+      "Gem\\System\\": "System/",
+      "Gem\\Console\\": "Application/Console/"
     },
     "classmap": [
       "vendor"

@@ -149,3 +149,21 @@
             return Input::getAll();
         }
     }
+
+    /**
+     * Array ın ilk elemanını döndürür
+     * @param array $array
+     * @return bool
+     */
+    function first(array $array = [])
+    {
+        if (count($array) > 0) {
+            if (!isset($array[0])) {
+                $array = array_values($array);
+            }
+
+            return $array[0];
+        } else {
+            return false;
+        }
+    }
