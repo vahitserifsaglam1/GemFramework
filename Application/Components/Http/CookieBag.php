@@ -17,7 +17,6 @@
          */
         public function __construct()
         {
-
             parent::__construct();
             $get = $this->getHeaders();
             if (isset($get['Cookie'])) {
