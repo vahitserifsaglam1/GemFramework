@@ -14,11 +14,15 @@
     use Gem\Components\Helpers\Config;
     use Gem\Components\Helpers\String\Builder;
 
+    /**
+     * Class Pagination
+     * @package Gem\Components\Database\Helpers
+     */
     class Pagination
     {
 
         use Builder,
-           Config;
+            Config;
 
         private $options;
         private $count;
@@ -26,9 +30,14 @@
         public function __construct()
         {
 
-            $this->options = $this->getConfig('pagination');
+            $this->options = $this->getConfig('db.pagination');
         }
 
+        /**
+         * Toplam içerik sayısının atar
+         * @param $count
+         * @return $this
+         */
         public function setCount($count)
         {
 
@@ -37,6 +46,13 @@
             return $this;
         }
 
+        /**
+         * <a nın yapısını oluişturur
+         * @param $i
+         * @param $url
+         * @param $search
+         * @return string
+         */
         private function chieldString($i, $url, $search)
         {
 
@@ -45,6 +61,11 @@
             return "\n <a class='{$this->options['chieldClass']}' href='$url'>$i</a>";
         }
 
+        /**
+         * Sayfalama işlemini tamamlar
+         * @param $action
+         * @return string
+         */
         public function paginate($action)
         {
             $url = $this->clearLastSlash($action['url']);
