@@ -3,7 +3,7 @@
     namespace Gem\Components\Route;
 
     use Gem\Components\App;
-    use Gem\Components\Job\JobDispatcherInterface;
+    use Gem\Components\Http\Response\ShouldBeResponse;
     use Gem\Components\Support\MethodDispatcher;
 
     /**
@@ -35,10 +35,10 @@
         /**
          * Response Objesini atar
          *
-         * @param ShouldBeResponseInterface $response
+         * @param ShouldBeResponse $response
          * @return $this
          */
-        public function response(ShouldBeResponseInterface $response)
+        public function response(ShouldBeResponse $response)
         {
             $this->response = $response;
 
@@ -53,29 +53,6 @@
             return $this->response;
         }
 
-        /**
-         * Sınıfın yapacağı işleri ayar
-         *
-         * @param JobDispatcherInterface $job Yapılacak işlerin toplandığı sınıf 'a ait instance
-         * @return $this
-         */
-        public function job(JobDispatcherInterface $job)
-        {
-            $this->job = $job;
-            $this->getJob();
-
-            return $this;
-        }
-
-        /**
-         * JobManager objesini döndürür
-         *
-         * @return JobDispatcherInterface
-         */
-        protected function getJob()
-        {
-            return $this->job;
-        }
 
         /**
          * @param null $name
@@ -89,18 +66,4 @@
             return $this;
         }
 
-        /**
-         * JobManager'i yürütür
-         *
-         * @return mixed
-         */
-        protected function run()
-        {
-            return $this->getJob()->dispatch();
-        }
-
-        public function __call($name, $params)
-        {
-            return call_user_func_array([$this->getJob(), $name], $params);
-        }
     }
