@@ -21,8 +21,6 @@
         private $argc;
         private $args;
         private $config;
-        private $others;
-
         /**
          * @param array $args Komut elemanları
          * @param int $argc Komut sayısı
@@ -57,13 +55,12 @@
                     unset($args[0]);
                     unset($args[1]);
                 }
+                $bundle = mb_convert_case($bundle, MB_CASE_TITLE, 'utf-8');
+                call_user_func_array([$this, $task], [$bundle, $args]);
 
-                $this->others = $args;
 
             } else {
                 throw new Exception('Parametreniz sayınız 1 den küçük olamaz');
             }
-
         }
-
     }

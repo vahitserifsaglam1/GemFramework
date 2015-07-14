@@ -10,11 +10,16 @@
      * Class System
      * @package Gem\Console
      */
-    class System
+    abstract class System
     {
 
+        /**
+         * Bu Kısıma eklediğiniz sınıflar birer komut olarak algılanacaktır
+         * @var array
+         */
         protected $commands = [
             'Gem\Console\Commands\TestCommand'
         ];
+
 
     }

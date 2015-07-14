@@ -6,12 +6,13 @@
 
     namespace Gem\Components\Console;
 
+    use Gem\Console\System;
+
     /**
      * Class CommandsManager
      * @package Gem\Components\Console
      */
-
-    class CommandsManager
+    class CommandsManager extends System
     {
 
         /**
