@@ -6,7 +6,7 @@
 
     namespace Gem\Components\Console;
 
-
+    use Exception;
     use Gem\Components\Support\Accessors;
 
     /**
@@ -36,11 +36,18 @@
 
         /**
          * Komutları alır, parçalar ve çıktıyı oluşturur
+         * @throws Exception
          * @return bool
          */
         public function run()
         {
+            if (count($this->getArgs()) > 1) {
+                $args = $this->getArgs();
+                $fcommand = $args[0];
 
+            } else {
+                throw new Exception('Parametreniz geçersiz');
+            }
 
         }
 
