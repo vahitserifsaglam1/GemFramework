@@ -9,8 +9,4 @@
 
     abstract class ConsoleBundle
     {
-        public function getCommand()
-        {
-
-        }
     }
