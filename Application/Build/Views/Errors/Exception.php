@@ -2,13 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Exception : {{ code }} </title>
+    <title>İstisna : {{ message }} </title>
 </head>
 <body>
-<b>{{ file }} Dosyasında  Bir Exception Yakalandı:</b>
 
-<br>Mesaj : {{ message }}</br>
-<br>Satır : {{ line }}<br/>
-<br>Hata Kodu : {{ code }}<br/>
+<h1 style="font-family:Open Sans, sans-serif;">GemFramework Uygulama İstinası</h1>
+<hr/>
+<b>{{ file }} Dosyasında Bir İstisna Yakalandı:</b>
+
+Mesaj : {{ message }}
+<hr/>
+Satır : {{ line }}
+<hr/>
+Hata Kodu : {{ code }}
+<hr/>
+
+<p><h4>Trace:</h4></p>
+{{ trace }}
 </body>
 </html>

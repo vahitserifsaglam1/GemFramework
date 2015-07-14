@@ -108,7 +108,6 @@
          */
         public function __construct($content = '', $statusCode = 200)
         {
-            ;
             $this->setContent($content);
             $this->setStatusCode($statusCode);
             $this->setProtocolVersion('1.1');

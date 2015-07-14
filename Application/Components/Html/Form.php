@@ -43,7 +43,6 @@
         {
             if (is_array($params)) {
                 $params = static::render($params);
-
                 return "<input type='submit' $params >" . PHP_EOL;
             } else {
                 return "<input type='submit' value='$params' />" . PHP_EOL;

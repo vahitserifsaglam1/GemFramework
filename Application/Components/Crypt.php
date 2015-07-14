@@ -10,7 +10,6 @@
     namespace Gem\Components;
 
     use Exception;
-    use Gem\Components\Helpers\Server;
     use Gem\Components\Support\SecurityKey;
 
     class Crypt

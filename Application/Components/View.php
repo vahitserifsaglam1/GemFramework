@@ -1,8 +1,8 @@
 <?php
 
     /**
-     *  GemFramework View S�n�f� -> G�r�nt� dosyalar� �retmek de kullan�l�r
-
+     *  GemFramework View sınıfı bu sınıfda görüntü dosyaları oluşturulur
+     * @author vahitserifsaglam1 <vahit.serif119@gmail.com>
      */
 
     namespace Gem\Components;
@@ -12,6 +12,11 @@
     use Gem\Components\Patterns\Singleton;
     use Gem\Components\View\ShouldBeView;
     use Gem\Components\View\ViewManager;
+
+    /**
+     * Class View
+     * @package Gem\Components
+     */
 
     class View extends ViewManager implements ShouldBeView
     {

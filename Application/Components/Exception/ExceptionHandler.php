@@ -13,7 +13,7 @@
      *
      * @package Gem\Components\Exception
      */
-    class Handler
+    class ExceptionHandler
     {
         /**
          * @var Exception
@@ -45,8 +45,10 @@
             $code = $this->exception->getCode();
             $prev = $this->exception->getPrevious();
             $file = $this->exception->getFile();
+            $trace = $this->exception->getTraceAsString();
 
-            response(twig('Errors/Exception', compact('message', 'line', 'code', 'prev', 'file')))->execute();
+            response(twig('Errors/Exception', compact('message', 'line', 'code', 'prev', 'file', 'trace')))->execute();
             die();
         }
+
     }

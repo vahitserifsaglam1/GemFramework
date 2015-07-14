@@ -18,7 +18,7 @@
     trait MethodDispatcher
     {
 
-        private $methods = [];
+        private static $methods = [];
 
         /**
          * Sınıfın içine yeni method eklemek.
@@ -29,7 +29,7 @@
          */
         public static function make($functionName = '', callable $callback = null)
         {
-            Closure::bind($callback, null, get_class());
+            static::$methods[$functionName] = Closure::bind($callback, null, get_class());
 
             return new static();
         }
@@ -44,8 +44,8 @@
 
         public function __call($method, $params = [])
         {
-            if (isset($this->methods[$method])) {
-                return call_user_func_array($this->methods[$method], $params);
+            if (isset(static::$methods[$method])) {
+                return call_user_func_array(static::$methods[$method], $params);
             }
         }
     }

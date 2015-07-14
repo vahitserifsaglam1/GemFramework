@@ -16,6 +16,7 @@
     {
 
         use SecurityKey;
+
         public function __construct()
         {
             parent::__construct($this->keyGenerate());
@@ -29,7 +30,11 @@
          */
         public function get($name)
         {
-            return $this->getValue($name);
+            if ($this->isValid()) {
+                return $this->getValue($name);
+            } else {
+                return false;
+            }
         }
 
         /**
@@ -39,7 +44,10 @@
          */
         public function set($name, $value)
         {
-            $this->setValue($name, $value);
+
+            if ($this->isValid()) {
+                $this->setValue($name, $value);
+            }
 
             return $this;
         }

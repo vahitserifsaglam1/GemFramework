@@ -55,8 +55,7 @@
          */
         public static function delete($name)
         {
-
-            unset($_GET[$name]);
+            unset($_POST[$name]);
         }
 
         /**

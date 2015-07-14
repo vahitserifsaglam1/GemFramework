@@ -77,7 +77,11 @@
         public function __get($name)
         {
             if (isset($this->server_filters[$name])) {
-                return $_SERVER[$this->server_filters[$name]];
+                if (isset($_SERVER[$this->server_filters[$name]])) {
+                    return $_SERVER[$this->server_filters[$name]];
+                } else {
+                    return false;
+                }
             } else {
                 $big = mb_convert_case($name, MB_CASE_UPPER, 'UTF-8');
                 if (isset($_SERVER[$big])) {
@@ -89,17 +93,13 @@
         }
 
         /**
-         * Çalıştığı url i bulur
+         * Sayfanın yürütüldüğü url 'i bulur
+         * @return string
          */
         public function findBasePath()
         {
-
-            $host = $this->host;
-            $uri = $this->uri;
             $type = $this->get('REQUEST_SCHEME');
-            $url = "$type://$host . $uri";
-
-            return $url;
+            return sprintf("%s::%s%s", $type, $this->host, $this->uri);
         }
 
 

@@ -21,7 +21,7 @@
             $bas = substr($ip, 0, 2);
             $con = $letters[$len];
             $son = substr($ip, $len - 1, 1);
-            $con2 = $letters[$len + $ip];
+            $con2 = $letters[$len + $son];
             $key = $son . FRAMEWORK_VERSION . $con . $con2 . $ip . $bas . FRAMEWORK_NAME;
             return md5($key);
         }

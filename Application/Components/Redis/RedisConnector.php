@@ -27,7 +27,7 @@
                 );
             } else {
 
-                $configArray = $this->getConfig('redis');
+                $configArray = $this->getConfig('stroge.redis');
                 $host = $configArray['host'];
                 $port = $configArray['port'];
                 $timeOut = $configArray['timeout'];

@@ -8,6 +8,7 @@
     namespace Gem\Components\Session;
 
     use Exception;
+    use Gem\Components\Helpers\Server;
     use SessionHandler;
 
     /**
@@ -25,7 +26,7 @@
          *
          * @param string $key
          * @param string $name
-         * @param array  $cookie
+         * @param array $cookie
          * @throws Exception
          */
         public function __construct($name = 'GEM_SESSION', array $cookie = [])
@@ -34,15 +35,16 @@
             $this->cookie = $cookie;
 
             $this->cookie += [
-               'lifetime' => 0,
-               'path'     => ini_get('session.cookie_path'),
-               'domain'   => ini_get('session.cookie_domain'),
-               'secure'   => isset($_SERVER['HTTPS']),
-               'httponly' => true
+                'lifetime' => 0,
+                'path' => ini_get('session.cookie_path'),
+                'domain' => ini_get('session.cookie_domain'),
+                'secure' => isset($_SERVER['HTTPS']),
+                'httponly' => true
             ];
 
             $this->setup();
             $this->start();
+            $this->isValid();
         }
 
         /**
@@ -76,9 +78,9 @@
             $_SESSION = [];
 
             setcookie(
-               $this->name, '', time() - 42000,
-               $this->cookie['path'], $this->cookie['domain'],
-               $this->cookie['secure'], $this->cookie['httponly']
+                $this->name, '', time() - 42000,
+                $this->cookie['path'], $this->cookie['domain'],
+                $this->cookie['secure'], $this->cookie['httponly']
             );
 
             return session_destroy();
@@ -107,13 +109,13 @@
             session_name($this->name);
 
             session_set_cookie_params(
-               $this->cookie['lifetime'], $this->cookie['path'],
-               $this->cookie['domain'], $this->cookie['secure'],
-               $this->cookie['httponly']
+                $this->cookie['lifetime'], $this->cookie['path'],
+                $this->cookie['domain'], $this->cookie['secure'],
+                $this->cookie['httponly']
             );
 
             ini_set('session.save_handler', 'files');
-            session_set_save_handler($this, true);
+            session_set_save_handler($this, true);;
         }
 
         /**
@@ -125,8 +127,8 @@
         public function isExpired($ttl = 30)
         {
             $activity = isset($_SESSION['_last_activity'])
-               ? $_SESSION['_last_activity']
-               : false;
+                ? $_SESSION['_last_activity']
+                : false;
 
             if ($activity !== false && time() - $activity > $ttl * 60) {
                 return true;
@@ -144,9 +146,16 @@
          */
         public function isFingerprint()
         {
+            if (isset($_SERVER['HTTP_USER_AGENT'])) {
+                $useragent = $_SERVER['HTTP_USER_AGENT'];
+            } else {
+                $useragent = 'GemFrameworkAgent';
+            }
+
+
             $hash = md5(
-               $this->useragent .
-               (ip2long($_SERVER['REMOTE_ADDR']) & ip2long('255.255.0.0'))
+                $useragent .
+                (ip2long($_SERVER['REMOTE_ADDR']) & ip2long('255.255.0.0'))
             );
 
             if (isset($_SESSION['_fingerprint'])) {
@@ -154,7 +163,6 @@
             }
 
             $_SESSION['_fingerprint'] = $hash;
-
             return true;
         }
 

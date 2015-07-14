@@ -8,6 +8,11 @@
     use Twig_Loader_Filesystem;
     use Twig_Environment;
 
+    /**
+     * Class Twig
+     * @package Gem\Components
+     */
+
     class Twig extends ViewManager implements ShouldBeView
     {
         use Config;

@@ -12,6 +12,11 @@
     class JsonResponse extends Response
     {
 
+        /**
+         * @param string $content
+         * @param int $statusCode
+         */
+
         public function __construct($content = '', $statusCode = 200)
         {
 

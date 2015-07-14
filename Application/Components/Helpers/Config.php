@@ -38,21 +38,22 @@
         {
 
             $parse = static::parse($config);
-
             if (count($parse) == 1) {
                 $task = $parse[0];
             } elseif (count($parse) == 2) {
                 list($task, $method) = $parse;
             }
-
             if (isset(static::$cache[$task])) {
                 $return = static::$cache[$task];
             } else {
-                $return = static::$cache[$task] = include CONFIG_PATH . $config . '.php';
+                $return = static::$cache[$task] = include CONFIG_PATH . $task . '.php';
             }
 
+
             if (isset($method)) {
-                $return = $task[$method];
+                if (isset($return[$method])) {
+                    $return = $return[$method];
+                }
             }
 
             return $return;
@@ -92,8 +93,7 @@
         public static function add($name = '', $value = '')
         {
             // veri yoksa oluşturuyoruz
-            if(!isset(static::$cache[$name]))
-            {
+            if (!isset(static::$cache[$name])) {
                 static::$cache[$name] = [];
             }
             static::$cache[$name] = array_merge(static::$cache[$name], $value);

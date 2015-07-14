@@ -31,6 +31,7 @@ return [
     'providers' => [
         'Gem\Manager\Providers\RouteProvider',
         'Gem\Manager\Providers\EventProvider',
+        'Gem\Manager\Providers\ErrorProvider',
         /**
          *  Buradaki CsrfTokenProvider' ı etkinleştirirseniz her post işleminde csrftoken değerini
          *  araycaktır

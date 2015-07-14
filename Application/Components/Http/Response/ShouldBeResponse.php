@@ -13,6 +13,9 @@
      */
     interface ShouldBeResponse
     {
-
+        /**
+         *
+         * @return mixed
+         */
         public function execute();
     }

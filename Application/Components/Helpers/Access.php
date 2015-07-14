@@ -11,8 +11,8 @@
 
     namespace Gem\Components\Helpers;
 
-    use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
-    use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
+    use Gem\Components\Helpers\Access\Interfaces\Handle;
+    use Gem\Components\Helpers\Access\Interfaces\Terminate;
     use Gem\Components\Http\Request;
     use RuntimeException;
 
@@ -54,13 +54,13 @@
 
                 $manager = new $access;
 
-                if ($manager instanceof HandleInterface) {
+                if ($manager instanceof Handle) {
                     $request = new Request();
                     $response = $manager->handle($request, $next, $role);
                     if ($response) {
 
                         return true;
-                    } elseif ($manager instanceof TerminateInterface) {
+                    } elseif ($manager instanceof Terminate) {
 
                         $response = $manager->terminate($request);
                         if ($response) {

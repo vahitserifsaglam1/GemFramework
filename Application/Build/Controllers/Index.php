@@ -33,6 +33,6 @@
 
         public function open()
         {
-            return response('Hello World');
+
         }
     }
