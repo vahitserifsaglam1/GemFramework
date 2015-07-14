@@ -48,4 +48,12 @@
         }
 
 
+        /**
+         * @return string
+         */
+        protected function getBundlePrefix()
+        {
+            return $this->bundlePrefix;
+        }
+
     }

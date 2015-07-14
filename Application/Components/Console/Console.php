@@ -9,6 +9,7 @@
     use Exception;
     use Gem\Components\Helpers\Config;
     use Gem\Components\Support\Accessors;
+    use Gem\Components\Console\Bundle\ConsoleBundle;
 
     /**
      * Class Console
@@ -56,11 +57,37 @@
                     unset($args[1]);
                 }
                 $bundle = mb_convert_case($bundle, MB_CASE_TITLE, 'utf-8');
-                call_user_func_array([$this, $task], [$bundle, $args]);
+                $bundle = $this->createBundleName($bundle);
+                $bundle = new $bundle();
 
+
+                // bundle yönetimini yapar
+                $this->runBundle($bundle, $task, $args);
 
             } else {
                 throw new Exception('Parametreniz sayınız 1 den küçük olamaz');
             }
+        }
+
+        private function runBundle(ConsoleBundle $bundle, $task = '', $args = [])
+        {
+
+            if (is_callable([$bundle, $task])) {
+
+            } else {
+                throw new Exception(sprintf('%s bundle ında %s adında bir method bulunamadı', get_class($bundle),
+                    $task));
+            }
+
+        }
+
+        /**
+         * Bundle ismini getirir.
+         * @param string $bundle
+         * @return string
+         */
+        private function createBundleName($bundle = '')
+        {
+            return $this->getBundlePrefix() . $bundle;
         }
     }
