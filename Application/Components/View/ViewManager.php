@@ -5,6 +5,7 @@
     use Gem\Components\Helpers\Config;
     use Gem\Components\Helpers\String\Builder;
     use Gem\Components\Helpers\String\Parser;
+    use Exception;
 
     /**
      * Bu sınıf GemFramework'deki view sınıflarını bağlar.
@@ -47,6 +48,10 @@
             return $this;
         }
 
+        /**
+         * @param string $file
+         * @return string
+         */
         protected function in($file = '')
         {
 
@@ -59,15 +64,14 @@
          * @param array $file
          * @return $this
          */
-        public function headerFile($file = [])
+        public function headerFile(array $file = [])
         {
 
             $this->headerBag->setViewHeaders($file);
-
             return $this;
         }
 
-        public function footerFile($file = [])
+        public function footerFile(array $file = [])
         {
 
             $this->footerBag->setViewFooters($file);
@@ -133,6 +137,20 @@
             return $this;
         }
 
+        /**
+         * Yeni bir parametre ekler
+         * @param string $key
+         * @param mixed $value
+         * @throws Exception
+         * @return $this
+         */
+        public function with($key = '', $value)
+        {
+            if (!is_string($key)) {
+                throw new Exception('Girdiğiniz key değeri geçerli bir değer değil');
+            }
+            $this->params[$key] = $value;
+        }
         /**
          * View Dosyasının olup olmadığını kontrol eder
          * @param string $fileName

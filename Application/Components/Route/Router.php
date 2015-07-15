@@ -103,9 +103,15 @@
 
             $run = $this->runCollections($collections);
             if ($run !== true) {
-                $url = $this->configs['NotFoundPage'];
-                $url = str_replace($this->configs['delimiter'], '', $url);
-                Redirect::to($url);
+                $url = $this->configs['miss'];
+
+                if (is_string($url)) {
+                    $url = substr($url, 1, strlen($url));
+                    Redirect::to($url);
+                } elseif (is_callable($url)) {
+                    $url(new Request());
+                }
+
             }
         }
 

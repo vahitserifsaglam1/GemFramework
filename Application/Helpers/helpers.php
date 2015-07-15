@@ -187,3 +187,14 @@
     {
         return array_keys($array);
     }
+
+    /**
+     * Asset dosyasının yolunu
+     * @param string $asset
+     * @return string
+     */
+    function asset($asset = '')
+    {
+        $path = new \Gem\Components\Assets\VersionPackpage('', '%v%f');
+        return $path->getUrl($asset);
+    }

@@ -78,6 +78,6 @@ return [
 
     'route' => [
         'delimiter' => '/',
-        'NotFoundPage' => '/404'
+        'miss' => '/404'
     ]
 ];

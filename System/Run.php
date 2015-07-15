@@ -23,6 +23,7 @@
         {
 
             $this->runBootstrap();
+            include SYSTEM . 'Start.php';
             $application = new Application('GemFramework2Build', 1);
             /**
              *
@@ -44,7 +45,7 @@
             ini_set('memory_limit', '1024M');
             define('APP', 'Application/');
             define('ROUTE', APP . 'Routes/');
-            define('MVC', APP . 'Build/');
+            define('MVC', APP . 'Http/');
             define('VIEW', MVC . 'Views/');
             define('MODEL', MVC . 'Models/');
             define('CONTROLLER', MVC . 'Controllers');

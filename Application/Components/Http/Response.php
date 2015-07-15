@@ -210,7 +210,7 @@
         }
 
 
-        public function jsonResponse($content = '', $statusCode = 200)
+        public function json($content = '', $statusCode = 200)
         {
 
             return new JsonResponse($content, $statusCode);

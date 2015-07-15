@@ -6,6 +6,7 @@
 
     use Gem\Components\Exception\ErrorHandler;
     use Gem\Components\Exception\ExceptionHandler;
+    use Gem\Components\Helpers\Config;
 
     /**
      * Class ErrorProvider
@@ -21,8 +22,8 @@
         {
             ini_set('display_errors', 'On');
             error_reporting(E_ALL);
-            set_exception_handler([new ExceptionHandler(), 'handleException']);
-            set_error_handler([new ErrorHandler(), 'handleError']);
+            set_exception_handler(Config::getConfigStatic('app.exception.handler'));
+            set_error_handler(Config::getConfigStatic('app.error.handler'));
         }
 
     }
