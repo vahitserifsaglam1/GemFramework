@@ -167,3 +167,23 @@
             return false;
         }
     }
+
+    /**
+     * Dizinin sadece değerlerini döndürür
+     * @param array $array
+     * @return array
+     */
+    function values(array $array = [])
+    {
+        return array_values($array);
+    }
+
+    /**
+     * Dizinin sadece anahtarlarını döndürür
+     * @param array $array
+     * @return array
+     */
+    function keys(array $array = [])
+    {
+        return array_keys($array);
+    }

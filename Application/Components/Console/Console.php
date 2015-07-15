@@ -7,16 +7,13 @@
     namespace Gem\Components\Console;
 
     use Exception;
-    use Gem\Components\Helpers\Config;
-    use Gem\Components\Support\Accessors;
     /**
      * Class Console
      * @package Gem\Components\Console
      */
-    class Console extends CommandsManager
+    class Console extends ConsoleArgsParser
     {
 
-        use Accessors;
         private $argc;
         private $args;
         private $config;
@@ -27,8 +24,10 @@
 
         public function __construct(array $args = [], $argc = 0)
         {
-            $this->setArgs($args);
-            $this->setArgc($argc);
+            unset($args[0]);
+            $args[0] = $args[1];
+            $this->args = $args;
+            $this->argc = $argc;
         }
 
 
@@ -40,8 +39,22 @@
         public function run()
         {
 
-            $parser = $this->config['delimeter'];
-            if (count($this->getArgs()) > 1) {
+            if ($this->argc > 1 && is_array($this->args)) {
+                print_r(static::parse($this->args));
+                list($method, $bundle, $args) = values(static::parse($this->args));
+                $args = array_filter($args, function ($value) {
+
+                    if (strstr($value, "--command=")) {
+                        return [
+                            'command' => explode("--command=", $value)[1]
+                        ];
+                    } else {
+                        return $value;
+                    }
+
+                });
+
+                print_r($args);
 
             } else {
                 throw new Exception('Parametreniz sayınız 1 den küçük olamaz');

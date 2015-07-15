@@ -37,16 +37,16 @@
         public static function getConfigStatic($config)
         {
 
-            $parse = static::parse($config);
+            $parse = static::parseConfigString($config);
             if (count($parse) == 1) {
                 $task = $parse[0];
             } elseif (count($parse) == 2) {
                 list($task, $method) = $parse;
             }
-            if (isset(static::$cache[$task])) {
-                $return = static::$cache[$task];
+            if (isset(self::$cache[$task])) {
+                $return = self::$cache[$task];
             } else {
-                $return = static::$cache[$task] = include CONFIG_PATH . $task . '.php';
+                $return = self::$cache[$task] = include CONFIG_PATH . $task . '.php';
             }
 
 
@@ -65,7 +65,7 @@
          * @param string $config
          * @return array|string
          */
-        private static function parse($config = '')
+        private static function parseConfigString($config = '')
         {
             if (strstr($config, ".")) {
 

@@ -9,7 +9,7 @@
     use Gem\Components\Helpers\Config;
     use Exception;
 
-    class Parser
+    class ConsoleArgsParser extends CommandsManager
     {
 
         use Config;
@@ -21,7 +21,7 @@
          */
         protected static function parse(array $args = [])
         {
-            $configs = static::getConfigStatic('console');
+            $configs = self::getConfigStatic('console');
             $delimeter = $configs['delimeter'];
 
             if ('' === $delimeter || null === $delimeter || false === is_string($delimeter)) {
@@ -32,9 +32,21 @@
             unset($args[0]);
             if (strstr($first, $delimeter)) {
                 $first = explode($delimeter, $first);
+            } else {
+                $first = (array)$first;
             }
-            $args = array_merge($first, $args);
 
+            $args = array_merge($first, $args);
+            list($method, $bundler) = $args;
+
+            unset($args[0]);
+            unset($args[1]);
+
+            return [
+                'method' => $method,
+                'bundle' => $bundler,
+                'args' => $args
+            ];
 
         }
 

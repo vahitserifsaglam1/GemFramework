@@ -15,10 +15,6 @@
     class CommandsManager extends System
     {
 
-        /**
-         * @var array
-         */
-        private $commands;
 
         /**
          * @param array $commands
@@ -42,7 +38,7 @@
          * Yeni Komut ekler
          * @param string $command
          */
-        public function add($command = '')
+        public function addCommand($command = '')
         {
             $this->commands[] = $command;
         }
