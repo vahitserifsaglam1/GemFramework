@@ -48,7 +48,6 @@
             $trace = $this->exception->getTraceAsString();
 
             response(twig('Errors/Exception', compact('message', 'line', 'code', 'prev', 'file', 'trace')))->execute();
-            die();
         }
 
     }

@@ -110,7 +110,6 @@
         {
 
             response($this->getMessage(), 401)->execute();
-            die();
         }
 
         /**
