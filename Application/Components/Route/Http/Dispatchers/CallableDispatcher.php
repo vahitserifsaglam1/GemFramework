@@ -4,8 +4,12 @@
      */
     namespace Gem\Components\Route\Http\Dispatchers;
 
-    class CallableDispatcher extends GeneralDispatcher
+    use Gem\Components\Support\Accessors;
+
+    class CallableDispatcher
     {
+        protected $content;
+        use Accessors;
 
         public function __construct(callable $call = null, array $params = [])
         {

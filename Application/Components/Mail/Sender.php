@@ -17,12 +17,10 @@
     use Gem\Components\Mail\Content\ManagerInterface;
     use PHPMailer;
 
-    class Sender extends PHPMailer
+    class Mail extends PHPMailer
     {
 
         use Builder;
-        use Config;
-
         private $configs;
 
         /**
@@ -33,7 +31,7 @@
          */
         public function __construct($options = [], $exceptions = false)
         {
-            $this->getConfig('mail');
+            $options = Config::get('mail');
             parent::__construct($exceptions);
             $this->isSMTP();
             $this->SMTPAuth = true;

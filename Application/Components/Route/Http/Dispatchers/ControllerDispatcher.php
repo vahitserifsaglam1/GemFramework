@@ -1,14 +1,22 @@
 <?php
 
-    /**
-     * Controller'i yürüyür.
-
-     */
     namespace Gem\Components\Route\Http\Dispatchers;
 
-    class ControllerDispatcher extends GeneralDispatcher
-    {
+    use Gem\Components\Support\Accessors;
 
+    /**
+     * Class ControllerDispatcher
+     * @package Gem\Components\Route\Http\Dispatchers
+     */
+    class ControllerDispatcher
+    {
+        protected $content;
+        use Accessors;
+
+        /**
+         * @param null $controller
+         * @param array $params
+         */
         public function __construct($controller = null, array $params = [])
         {
 

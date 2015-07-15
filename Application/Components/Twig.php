@@ -15,7 +15,6 @@
 
     class Twig extends ViewManager implements ShouldBeView
     {
-        use Config;
         private $configs;
         private $twig;
 
@@ -24,7 +23,7 @@
             parent::__construct();
             $this->setParams($parametres);
             $this->setFileName($name);
-            $this->configs = $this->getConfig('twig');
+            $this->configs = Config::get('twig');
         }
 
         /**

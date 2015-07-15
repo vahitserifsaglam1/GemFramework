@@ -23,13 +23,12 @@
     {
 
         use ConnectionManager,
-           Config,
            ModeManager;
 
         public function __construct()
         {
 
-            $configs = $this->getConfig('db');
+            $configs = Config::get('db');
             parent::__construct($configs['connection']);
             $this->connection = $this->getDb();
         }

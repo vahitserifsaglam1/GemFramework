@@ -22,7 +22,6 @@
     class Auth
     {
 
-        use Config;
         private $db;
         private $tables;
         const USER_FILE = 'user.php';
@@ -31,7 +30,7 @@
         {
 
             $this->db = new Base();
-            $this->tables = $this->getConfig('db')['user'];
+            $this->tables = Config::get('db.user');
         }
 
         /**

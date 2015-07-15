@@ -11,24 +11,32 @@
 
     namespace Gem\Components;
 
-    use Gem\Components\Helpers\Config;
     use Gem\Components\Helpers\Server;
-    use Gem\Components\Patterns\Facade;
     use Gem\Components\Patterns\Singleton;
     use Gem\Components\Security\TypeHint;
     use Exception;
+    use Gem\Components\Installation\AllConfigsLoader;
+    use Gem\Components\Installation\AliasAndProviders;
+    use Gem\Components\Installation\ErrorConfigs;
 
     /**
-     *      * @class Application
-     *      */
+     * @class Application
+     *
+     */
     final class Application
     {
 
-        use Server, Config;
+        use Server;
         private $frameworkName;
         private $starter;
         private $frameworkVersion;
         private $routeFile;
+
+        private $bootstraps = [
+            AllConfigsLoader::class,
+            AliasAndProviders::class,
+            ErrorConfigs::class,
+        ];
 
         /**
          *    Framework 'un adı ve versionu girilir,
@@ -40,16 +48,29 @@
          */
         public function __construct($frameworkName = '', $frameworkVersion = 1)
         {
-            $this->routeFile = ROUTE . 'routes.php';
+
             $this->$frameworkName = $frameworkName;
             $this->frameworkVersion = $frameworkVersion;
+
             define('FRAMEWORK_NAME', $this->frameworkName);
             define('FRAMEWORK_VERSION', $this->frameworkVersion);
-            $this->starter = $this->singleton('Gem\Manager\Starter');
 
-            $this->getProvidersAndAlias();
+            $this->starter = $this->singleton('Gem\Manager\Starter');
+            $this->runBootstraps();
         }
 
+
+        /**
+         * Başlatıcı sınıfları yürütür
+         */
+        private function runBootstraps()
+        {
+            $classes = $this->bootstraps;
+
+            foreach ($classes as $class) {
+                new $class($this);
+            }
+        }
 
         /**
          *          $bool girilirse fonksiyonlar tip yakalaması gerçekleşir
@@ -85,9 +106,7 @@
 
         public function run()
         {
-
-            $this->runOthers();
-
+            $this->routeFile = ROUTE . 'routes.php';
             if (file_exists($this->routeFile)) {
                 include $this->routeFile;
                 $make = $this->singleton('Gem\Components\Route\Router');
@@ -95,47 +114,6 @@
             } else {
                 throw new Exception(sprintf('%s yolunda olması gerek röta dosyanız bulunamadı, lütfen oluşturun',
                     $this->routeFile));
-            }
-        }
-
-        /**
-         *          Facadeleri yürütür
-         *
-         */
-        private function runFacades()
-        {
-
-            Facade::$instance = $this->starter->getAlias();
-        }
-
-        /**
-         *          Providers ve Facade'leri yürütür
-         *
-         */
-        private function  runOthers()
-        {
-
-            if (count($this->starter->getProviders()) > 0) {
-
-                $this->runProviders();
-            }
-
-            if (count($this->starter->getAlias()) > 0) {
-
-                $this->runFacades();
-            }
-        }
-
-        /**
-         *      Providersları yürütür
-         *
-         */
-        private function runProviders()
-        {
-
-            foreach ($this->starter->getProviders() as $provider) {
-
-                new $provider($this);
             }
         }
 
@@ -155,14 +133,12 @@
         }
 
         /**
-         *          İçeriği belirtilen dosya yolundan çeker
-         *
-         *
+         * Önbelleğe alınmış ayar dosyasını döndürür
+         * @return string
          */
-        private function getProvidersAndAlias()
+        public function getCachedConfig()
         {
-            $rende = $this->getConfig('general');
-            $this->starter->setAlias($rende['alias']);
-            $this->starter->setProviders($rende['providers']);
+            return 'stroge/cache/system/config.php';
         }
+
     }

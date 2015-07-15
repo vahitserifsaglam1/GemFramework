@@ -61,8 +61,9 @@
             }
 
             if (isset(static::$instance[$name])) {
-
                 return static::$instance[$name];
+            } else {
+                return $name;
             }
         }
 
@@ -76,7 +77,6 @@
         public static function __callStatic($method, $parametres)
         {
             $instanceName = static::getFacedeRoot();
-
             if (!is_object($instanceName)) {
 
                 $instance = Singleton::make($instanceName);
@@ -85,6 +85,7 @@
 
                 $instance = $instanceName;
             }
+
 
             return call_user_func_array([$instance, $method], $parametres);
         }

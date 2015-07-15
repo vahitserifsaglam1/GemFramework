@@ -10,6 +10,8 @@
     use Gem\Components\Database\Mode\Read;
     use Gem\Components\Database\Mode\Update;
     use Gem\Components\Database\Mode\Insert;
+    use Exception;
+    use PDO;
 
     /**
      * Class Orm
@@ -245,7 +247,7 @@
                     $mode->where($app->where);
                 }
 
-                if (isset($this->set)) {
+                if (isset($app->set)) {
                     $mode->set($app->set);
                 }
 
@@ -273,6 +275,40 @@
         }
 
         /**
+         * Tüm sorgular başarılı olmasını zorlayan method
+         * @throws Exception
+         * @return null
+         */
+        public function beginTransaction()
+        {
+
+            $connection = $this->db->getConnection();
+
+            if ($connection instanceof PDO) {
+                $connection->beginTransaction();
+            } else {
+                throw new Exception(sprintf('%s sadece PDO altyapısında çalışabilir', __FUNCTION__));
+            }
+
+        }
+
+        /**
+         * Tüm sorgular başarılı olmazsa değişiklikleri geri alır
+         * @throws Exception
+         */
+        public function commit()
+        {
+            $connection = $this->db->getConnection();
+
+            if ($connection instanceof PDO) {
+                $connection->commit();
+            } else {
+                throw new Exception(sprintf('%s sadece PDO altyapısında çalışabilir', __FUNCTION__));
+
+            }
+        }
+
+        /**
          * Veritabanndan veri silme işlemi yapar
          *
          * @return mixed
@@ -288,5 +324,33 @@
 
                 return $mode->run();
             });
+        }
+
+
+        /**
+         * Dinamik olarak veri toplama
+         * @throws Exception
+         * @param string $name
+         * @param string $value
+         */
+        public function __set($name, $value = '')
+        {
+            if (!is_string($name) || !is_string($value)) {
+                throw new Exception('isim veya değeri mutlaka string olmalıdır');
+            }
+            $this->set[$name] = $value;
+        }
+
+
+        /**
+         * Dinamik method çağrımı
+         * @param $method
+         * @param array $params
+         * @return mixed
+         */
+        public function __call($method, $params = [])
+        {
+
+            return call_user_func_array([$this->db, $method], $params);
         }
     }

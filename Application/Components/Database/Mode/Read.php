@@ -22,7 +22,7 @@
     class Read extends ModeManager
     {
 
-        use Builder, Config;
+        use Builder;
 
         private $as;
 
@@ -113,7 +113,7 @@
         public function page($page)
         {
             $this->page = $page;
-            $limit = $this->getConfig('pagination');
+            $limit = Config::get('db.pagination');
             $limit = $limit['limit'];
             $baslangic = ($page - 1) * ($limit);
             $bitis = $page * $limit;

@@ -7,13 +7,12 @@
 
     class MemCache
     {
-        use Config;
         private $memCache;
 
         public function __construct()
         {
             $this->checkDriver();
-            list($host, $port) = array_values($this->getConfig('stroge.memcache'));
+            list($host, $port) = array_values(Config::get('stroge.memcache'));
             $this->memCache = new MemCacheBag();
             $this->memCache->connect($host, $port);
         }

@@ -1,16 +1,10 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: vserifsaglam
-     * Date: 26.6.2015
-     * Time: 04:43
-     */
 
     namespace Gem\Components\Route\Http;
 
     use Exception;
-    use Gem\Components\Helpers\Access\Interfaces\HandleInterface;
-    use Gem\Components\Helpers\Access\Interfaces\TerminateInterface;
+    use Gem\Components\Helpers\Access\Interfaces\Handle;
+    use Gem\Components\Helpers\Access\Interfaces\Terminate;
     use Gem\Components\Http\Request;
     use Gem\Components\Http\Response\ShouldBeResponse;
     use Gem\Components\Route\Http\Dispatchers\CallableDispatcher;
@@ -81,7 +75,7 @@
          * @param HandleInterface $handler
          * @return $this
          */
-        public function setAccess(HandleInterface $handler = null)
+        public function setAccess(Handle $handler = null)
         {
 
             $this->access = $handler;
@@ -192,7 +186,7 @@
                 return true;
             } else {
 
-                if ($access instanceof TerminateInterface) {
+                if ($access instanceof Terminate) {
                     call_user_func_array([$access, 'terminate'], [$request]);
                 }
             }

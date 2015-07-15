@@ -15,7 +15,6 @@
     class RedisConnector
     {
 
-        use Config;
         private $redisObj;
 
         public function __construct()
@@ -27,7 +26,7 @@
                 );
             } else {
 
-                $configArray = $this->getConfig('stroge.redis');
+                $configArray = Config::get('stroge.redis');
                 $host = $configArray['host'];
                 $port = $configArray['port'];
                 $timeOut = $configArray['timeout'];

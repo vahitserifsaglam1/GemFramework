@@ -16,7 +16,7 @@
     class ViewManager
     {
 
-        use Parser, Builder, Config;
+        use Parser, Builder;
 
         protected $autoload;
         protected $fileName;
@@ -29,7 +29,7 @@
         {
             $this->headerBag = new HeaderBag();
             $this->footerBag = new FooterBag();
-            $view = $this->getConfig('general')['view'];
+            $view = Config::get('general.view');
             $this->headerFile($view['headerFiles']);
             $this->footerFile($view['footerFiles']);
         }

@@ -24,7 +24,7 @@
     class Router
     {
 
-        use Server, Config;
+        use Server;
         /**
          * Rötalama koleksiyonları'nın tutalacağı yer
          *
@@ -44,7 +44,7 @@
             $this->routes = $this->listener->getRoutes();
             $this->collector = Singleton::make('Gem\Components\Route\RouteCollector');
             $this->filter = $this->collector->getFilter();
-            $this->configs = $this->getConfig('general')['route'];
+            $this->configs = Config::get('general.route');
         }
 
         /**

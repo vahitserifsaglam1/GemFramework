@@ -21,8 +21,7 @@
     class Pagination
     {
 
-        use Builder,
-            Config;
+        use Builder;
 
         private $options;
         private $count;
@@ -30,7 +29,7 @@
         public function __construct()
         {
 
-            $this->options = $this->getConfig('db.pagination');
+            $this->options = Config::get('db.pagination');
         }
 
         /**

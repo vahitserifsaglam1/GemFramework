@@ -1,7 +1,7 @@
 <?php
 
     /**
-     *  GemFramework Veritaban� pdo instance olu�turma s�n�f�
+     *  GemFramework Veritabanı pdo instance oluşturma sınıfı
      *
      * @package Gem\Components\Database
      * @author vahitserifsaglam1 <vahit.serif119@gmail.com>

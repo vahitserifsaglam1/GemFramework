@@ -16,7 +16,7 @@
 
         private $time = 3600;
 
-        private $cacheFolder = APP . 'stroge/cache';
+        private $cacheFolder = 'stroge/cache';
         private $cacheExt = '.cache';
 
         public function __construct()

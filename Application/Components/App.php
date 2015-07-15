@@ -19,8 +19,6 @@
 
     class App
     {
-
-        use Config;
         const CONTROLLER = 'Controller';
         const MODEL = 'Model';
         private static $starter;
@@ -162,7 +160,7 @@
          */
         public static function miss($miss = null)
         {
-            static::set('general.route.miss', $miss);
+            Config::set('general.route.miss', $miss);
         }
 
         /**
@@ -175,7 +173,8 @@
                 throw new Exception('Girdiğiniz sınırlayıcı değer geçerli bir string değeri değil');
             }
 
-            static::set('general.route.delimiter', $delimiter);
+            Config::set('general.route.delimiter', $delimiter);
+
         }
 
 
@@ -184,7 +183,7 @@
          */
         public static function exception(callable $callback = null)
         {
-            static::set('app.exception.handler', $callback);
+            Config::set('app.exception.handler', $callback);
         }
 
         /**
@@ -193,6 +192,6 @@
          */
         public static function error(callable $callback = null)
         {
-            static::set('app.error.handler', $callback);
+            Config::set('app.error.handler', $callback);
         }
     }

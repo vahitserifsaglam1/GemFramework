@@ -23,8 +23,9 @@
         {
 
             $this->runBootstrap();
-            include SYSTEM . 'Start.php';
             $application = new Application('GemFramework2Build', 1);
+            include SYSTEM . 'Start.php';
+
             /**
              *
              *  Rotalama olayının Application/routes.php den devam edeceğini bildirir.
@@ -57,6 +58,4 @@
 
             include APP . 'Helpers/helpers.php';
         }
-
     }
-

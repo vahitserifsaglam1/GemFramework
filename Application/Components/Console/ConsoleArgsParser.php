@@ -11,9 +11,6 @@
 
     class ConsoleArgsParser extends CommandsManager
     {
-
-        use Config;
-
         /**
          * @param array $args
          * @throws Exception
@@ -21,7 +18,7 @@
          */
         protected static function parse(array $args = [])
         {
-            $configs = self::getConfigStatic('console');
+            $configs = Config::get('console');
             $delimeter = $configs['delimeter'];
 
             if ('' === $delimeter || null === $delimeter || false === is_string($delimeter)) {
