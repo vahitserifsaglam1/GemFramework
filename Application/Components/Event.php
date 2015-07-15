@@ -8,8 +8,8 @@
 
     use Exception;
     use Gem\Components\Event\EventCollector;
-    use Gem\Events\Event as EventDispatch;
-    use Gem\Listeners\EventListener;
+    use Gem\Components\Event\Event as EventDispatch;
+    use Gem\Components\Event\EventListener;
     use InvalidArgumentException;
 
     /**
