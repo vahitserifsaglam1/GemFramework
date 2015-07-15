@@ -7,6 +7,7 @@
     namespace Gem\Components\Console;
 
     use Exception;
+
     /**
      * Class Console
      * @package Gem\Components\Console
@@ -16,7 +17,12 @@
 
         private $argc;
         private $args;
+        private $types = [
+            'commands',
+            'params'
+        ];
         private $config;
+
         /**
          * @param array $args Komut elemanları
          * @param int $argc Komut sayısı
@@ -40,26 +46,57 @@
         {
 
             if ($this->argc > 1 && is_array($this->args)) {
-                print_r(static::parse($this->args));
                 list($method, $bundle, $args) = values(static::parse($this->args));
-                $args = array_filter($args, function ($value) {
+                $clean = $this->cleanParamsAndCommands($args);
+                $params = $clean['params'];
+                $commands = $clean['commands'];
 
-                    if (strstr($value, "--command=")) {
-                        return [
-                            'command' => explode("--command=", $value)[1]
-                        ];
-                    } else {
-                        return $value;
-                    }
-
-                });
-
-                print_r($args);
-
+                if (isset($params[0])) {
+                    $commandClass = first($params);
+                    unset($params[0]);
+                }
             } else {
                 throw new Exception('Parametreniz sayınız 1 den küçük olamaz');
             }
         }
 
+        /**
+         * Parametreleri temizler
+         * @param array $args
+         * @return array
+         */
+
+        private function cleanParamsAndCommands(array $args = [])
+        {
+            if (count($args) > 0) {
+
+                $return = [];
+                foreach ($args as $value) {
+                    if (strstr($value, "--")) {
+
+                        $argExplode = explode("=", $value);
+
+                        $first = str_replace("--", "", first($argExplode));
+                        $second = $argExplode[1];
+
+                        $types = $this->types;
+                        foreach ($types as $type) {
+
+                            if ($type === $first) {
+                                $return[$type][] = $second;
+                            }
+                        }
+                    } else {
+
+                        $return['params'][] = $value;
+                    }
+                }
+                return $return;
+
+            } else {
+                return $args;
+            }
+
+        }
 
     }

@@ -41,11 +41,20 @@
 
             unset($args[0]);
             unset($args[1]);
+            unset($args[2]);
 
+            $argsnew = $args;
+            if (count($args) > 0) {
+                $argsnew = [];
+
+                foreach ($args as $arg => $value) {
+                    $argsnew[] = $value;
+                }
+            }
             return [
                 'method' => $method,
                 'bundle' => $bundler,
-                'args' => $args
+                'args' => $argsnew
             ];
 
         }

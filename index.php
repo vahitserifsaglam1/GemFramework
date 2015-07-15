@@ -2,7 +2,6 @@
 
     include 'vendor/autoload.php';
     use Gem\System\Run;
-
     /**
      *  @author vahitserifsaglam <vahit.serif119@gmail.com>
      *  @copyright 2015, GemFramework
@@ -11,4 +10,5 @@
      *
      */
 
+    $test = '';
     new Run();
