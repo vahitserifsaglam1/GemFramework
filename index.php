@@ -1,6 +1,5 @@
 <?php
 
-    ini_set('display_errors', 'On');
     include 'vendor/autoload.php';
     use Gem\System\Run;
     /**
@@ -10,6 +9,4 @@
      *  Diğer herhangi Frameworkden daha iyi olmaya değil en iyisi olmaya çalışıyoruz.
      *
      */
-
-    $test = '';
     new Run();

@@ -10,14 +10,14 @@
 	 class Starter
 	 {
 
-		  public $alias = [ ];
+		 private $alias = [];
 		  private $providers = [ ];
 
 		  /**
 			* Alias'ları atar
 			* @param array $alias
 			*/
-		  public function setAlias ($alias = [ ])
+		 public function setAlias(array $alias = [])
 		  {
 
 				$this->alias = array_merge ($this->alias, $alias);
@@ -39,7 +39,7 @@
 			* Providersleri atar
 			* @param $providers
 			*/
-		  public function  setProviders ($providers)
+		 public function  setProviders(array $providers)
 		  {
 
 				$this->providers = array_merge ($this->providers, $providers);

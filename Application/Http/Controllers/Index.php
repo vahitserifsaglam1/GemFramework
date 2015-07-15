@@ -37,7 +37,6 @@
 
         public function open()
         {
-
             return response('hello world');
         }
     }

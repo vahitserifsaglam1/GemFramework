@@ -50,17 +50,29 @@
             if (isset(static::$cache[$task])) {
                 $return = static::$cache[$task];
             } else {
-                $return = static::$cache[$task] = include CONFIG_PATH . $task . '.php';
-            }
-
-            if (isset($method)) {
-                $return = $task[$method];
-                if (isset($fname)) {
-                    $return = $return[$fname];
+                $filePath = CONFIG_PATH . $task . '.php';
+                if (file_exists($filePath)) {
+                    $return = static::$cache[$task] = include $filePath;
+                } else {
+                    $return = static::$cache[$task] = null;
                 }
             }
 
+
+            if (isset($method)) {
+
+                if (isset($return[$method])) {
+                    $return = $return[$method];
+                    if (isset($fname)) {
+                        if (isset($return[$fname])) {
+                            $return = $return[$fname];
+                        }
+                    }
+
+                }
+            }
             return $return;
+
         }
 
         /**
@@ -69,15 +81,15 @@
          * @param string $config
          * @return array|string
          */
-        private static function parse($config = '')
-        {
+        private static function parse(
+            $config = ''
+        ) {
             if (strstr($config, ".")) {
 
-                $parse = explode(".", $config);
-
+                $parse = explode('.', $config);
                 return $parse;
             } else {
-                return [$config];
+                return (array)$config;
             }
         }
 
@@ -87,19 +99,21 @@
          */
         public static function set($name, $value = '')
         {
+
             if (!strstr($name, ".")) {
                 static::$cache[$name] = $value;
             } else {
-                $parse = static::getConfigStatic($name);
 
+                $parse = static::parse($name);
                 if (count($parse) === 2) {
                     list($name, $fname) = $parse;
                     static::$cache[$name][$fname] = $value;
                 } elseif (count($parse) === 3) {
                     list($name, $fname, $sname) = $parse;
-                    static::$cache[$name][$fname] = $value;
+                    static::$cache[$name][$fname][$sname] = $value;
                 }
             }
+
         }
 
         /**

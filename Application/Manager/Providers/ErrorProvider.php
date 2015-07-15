@@ -14,16 +14,15 @@
      */
     class ErrorProvider
     {
-
+        use Config;
         /**
          * Hataları yakalar
          */
         public function __construct()
         {
-            ini_set('display_errors', 'On');
-            error_reporting(E_ALL);
-            set_exception_handler(Config::getConfigStatic('app.exception.handler'));
-            set_error_handler(Config::getConfigStatic('app.error.handler'));
+
+            set_exception_handler(static::getConfigStatic('app.exception.handler'));
+            set_error_handler(static::getConfigStatic('app.error.handler'));
         }
 
     }

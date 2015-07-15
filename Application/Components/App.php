@@ -162,7 +162,7 @@
          */
         public static function miss($miss = null)
         {
-            Config::set('general.route.miss', $miss);
+            static::set('general.route.miss', $miss);
         }
 
         /**
@@ -175,7 +175,7 @@
                 throw new Exception('Girdiğiniz sınırlayıcı değer geçerli bir string değeri değil');
             }
 
-            Config::set('general.route.delimiter', $delimiter);
+            static::set('general.route.delimiter', $delimiter);
         }
 
 
@@ -184,7 +184,7 @@
          */
         public static function exception(callable $callback = null)
         {
-            Config::set('app.exception.handler', $callback);
+            static::set('app.exception.handler', $callback);
         }
 
         /**
@@ -193,6 +193,6 @@
          */
         public static function error(callable $callback = null)
         {
-            Config::set('app.error.handle', $callback);
+            static::set('app.error.handler', $callback);
         }
     }
