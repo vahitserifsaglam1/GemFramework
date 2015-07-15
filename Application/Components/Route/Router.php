@@ -72,7 +72,7 @@
         private function getRegex($url)
         {
 
-            return preg_replace_callback("/:(\w+)/", [$this, 'substituteFilter'], $url);
+            return preg_replace_callback("/:(\w.*)/", [$this, 'substituteFilter'], $url);
         }
 
         /**
@@ -81,7 +81,6 @@
          */
         private function substituteFilter(array $matches = [])
         {
-
             return isset($this->collector->filter[$matches[1]]) ? "({$this->getFilter($matches[1])})" : "([\w-%]+)";
         }
 
@@ -105,12 +104,14 @@
             if ($run !== true) {
                 $url = $this->configs['miss'];
 
+
                 if (is_string($url)) {
                     $url = substr($url, 1, strlen($url));
                     Redirect::to($url);
                 } elseif (is_callable($url)) {
                     $url(new Request());
                 }
+
 
             }
         }
@@ -149,12 +150,9 @@
             }
 
             $regex = $this->getRegex($action);
-
             if ($regex !== ' ') {
                 if (preg_match("@" . ltrim($regex) . "@si", $url, $matches)) {
-
                     unset($matches[0]);
-
                     return $matches;
                 } else {
                     return false;
