@@ -82,10 +82,18 @@
             // eğer dosya yoksa oluşturuyoruz
             if (!$file->exists($path)) {
                 $file->touch($path);
-                $file->write($path, $content);
+                if ($file->isWriteable($path)) {
+                    $file->write($path, $content);
+                    $this->info(sprintf('%s isimli dosya %s yolunda başarıyla oluşturuldu.', $fileName, $src));
+                } else {
+                    $this->error(sprintf('%s isimli dosyaya veri işlenemedi, sebep: dosya yazılabilir değil', $path));
+                }
+
+            } else {
+                $this->error(sprintf('%s isimli dosya %s yolunda oluşturulamadı, sebep: dosya zaten var', $fileName,
+                    $src));
             }
 
-            $this->info(sprintf('%s isimli işlem %s yolunda başarıyla oluşturuldu.', $fileName, $src));
         }
 
         /**

@@ -47,8 +47,8 @@
         /**
          * Dosyaya metni girmeye yarar
          *
-         * @param string         $data
-         * @param mixed          $filename
+         * @param string $data
+         * @param mixed $filename
          * @param boolean|string $append
          * @return boolean
          */
@@ -67,15 +67,38 @@
                 return true;
             }
 
+
             return false;
         }
 
+        /**
+         * Dosyanın okunabilir olup olmadığına bakar
+         *
+         * @param string $fileName
+         * @return bool
+         */
+        public function isReadable($fileName = '')
+        {
+            return is_readable($fileName);
+        }
+
+
+        /**
+         * Dosyanın yazılabilir olduğuna bakar
+         *
+         * @param string $fileName
+         * @return bool
+         */
+        public function isWriteable($fileName = '')
+        {
+            return is_writeable($fileName);
+        }
 
         /**
          * Girilen dosya yolundaki içeriği okur
          *
          * @param string $fileName
-         * @param bool   $fread
+         * @param bool $fread
          * @return string
          * @throws Exception
          */
@@ -84,21 +107,25 @@
 
             if ($this->exists($fileName)) {
 
-                if (false === $fread) {
+                if ($this->isReadable($fileName)) {
+                    if (false === $fread) {
+                        return file_get_contents($fileName);
+                    } elseif (true === $fread) {
 
-                    return file_get_contents($fileName);
-                } elseif (true === $fread) {
+                        $open = fopen($fread, 'r');
+                        $read = fgetss($fread, filesize($fileName));
+                        fclose($open);
 
-                    $open = fopen($fread, 'r');
-                    $read = fgetss($fread, filesize($fileName));
-                    fclose($open);
-
-                    return $read;
+                        return $read;
+                    }
+                } else {
+                    return false;
                 }
+
             } else {
 
                 throw new Exception(
-                   sprintf('Girdiğiniz %s dosyası bulunamadı', $fileName)
+                    sprintf('Girdiğiniz %s dosyası bulunamadı', $fileName)
                 );
             }
         }
@@ -126,7 +153,7 @@
          * $filePath ile girilen yolda bir dosya oluşturur, $over  true girilirse dosya silinip yeni dosya oluştururlu.
          *
          * @param string $filePath
-         * @param bool   $over
+         * @param bool $over
          * @return bool
          */
         public function touch($filePath = '', $over = false)
@@ -186,7 +213,7 @@
          * $filepath ile girilen yola $mode değişkenindeki izinleri atar
          *
          * @param string $filePath
-         * @param int    $mode
+         * @param int $mode
          * @return bool
          */
         public function chmod($filePath = '', $mode = 0777)
@@ -211,7 +238,7 @@
             if (!is_file($src)) {
 
                 throw new Exception(
-                   sprintf('girdiğiniz %s bir dosya değil', $src));
+                    sprintf('girdiğiniz %s bir dosya değil', $src));
             }
 
             $this->mkdir($desc);
@@ -220,7 +247,7 @@
 
                 $error = error_get_last();
                 throw new Exception(
-                   sprintf('Dosya kopyalama sırasında bir hata oluştu: %s', $error['message'])
+                    sprintf('Dosya kopyalama sırasında bir hata oluştu: %s', $error['message'])
                 );
             }
         }
@@ -230,7 +257,7 @@
          * Girilen $dir değişkenine göre yeni bir dosya oluşturur
          *
          * @param string $dir
-         * @param int    $mode
+         * @param int $mode
          * @throws Exception
          * @return bool
          */
@@ -247,7 +274,7 @@
 
                     $error = error_get_last();
                     throw new Exception(sprintf(
-                       'Dosya oluşturma sırasında bir hata oluştu, hata : %s', $error['message']
+                        'Dosya oluşturma sırasında bir hata oluştu, hata : %s', $error['message']
                     ));
                 }
 
@@ -276,7 +303,7 @@
 
                     $error = error_get_last();
                     throw new Exception(
-                       sprintf('İsim değiştirme işlemi sırasında bir hata oluştu: %s', $error['message'])
+                        sprintf('İsim değiştirme işlemi sırasında bir hata oluştu: %s', $error['message'])
                     );
                 }
             }
