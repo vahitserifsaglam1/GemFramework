@@ -9,7 +9,6 @@
     namespace Gem\Components\Exception;
 
     use Gem\Components\Helpers\Config;
-    use Gem\Components\Exception\GemCustomException;
 
     class ErrorHandler
     {

@@ -9,6 +9,8 @@
     namespace Gem\Controllers;
 
     use Gem\Components\Route\Controller;
+    use Symfony\Component\Config\Definition\Exception\Exception;
+
     /**
      * Class IndexController
      *
@@ -33,6 +35,7 @@
 
         public function open()
         {
+            throw new \Exception('aa');
             return view('index');
         }
     }

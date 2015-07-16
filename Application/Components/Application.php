@@ -57,7 +57,7 @@
             define('FRAMEWORK_NAME', $this->frameworkName);
             define('FRAMEWORK_VERSION', $this->frameworkVersion);
 
-            $this->starter = $this->singleton('Gem\Manager\Starter');
+            $this->starter = $this->singleton('Gem\Components\Installation\Starter');
             $this->runBootstraps();
         }
 

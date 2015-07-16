@@ -5,7 +5,7 @@
 	  *
 	  */
 
-	 namespace Gem\Manager;
+	namespace Gem\Components\Installation;
 
 	 class Starter
 	 {

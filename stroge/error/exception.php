@@ -9,8 +9,8 @@
 <h1 style="font-family:Open Sans, sans-serif;">GemFramework Uygulama İstinası</h1>
 <hr/>
 <b>{{ file }} Dosyasında Bir İstisna Yakalandı:</b>
-
-Mesaj : {{ message }}
+<hr/>
+<pre>Mesaj : {{ message }}</pre>
 <hr/>
 Satır : {{ line }}
 <hr/>

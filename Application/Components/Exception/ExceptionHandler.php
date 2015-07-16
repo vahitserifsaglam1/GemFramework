@@ -8,7 +8,7 @@
 
     use Exception;
     use Gem\Components\Helpers\Config;
-
+    use Gem\Components\Support\Migrate;
     /**
      * Class Handler
      *
@@ -55,7 +55,8 @@
             $file = $this->exception->getFile();
             $trace = $this->exception->getTraceAsString();
 
-            response(twig('Errors/Exception', compact('message', 'line', 'code', 'prev', 'file', 'trace')))->execute();
+            response(Migrate::make('stroge/error/exception.php',
+                compact('message', 'line', 'code', 'prev', 'file', 'trace')))->execute();
         }
 
     }

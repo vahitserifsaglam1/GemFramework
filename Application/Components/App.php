@@ -14,7 +14,7 @@
     use Gem\Components\Http\Response\ShouldBeResponse;
     use Gem\Components\Patterns\Singleton;
     use Gem\Components\View\ShouldBeView;
-    use Gem\Manager\Starter;
+    use Gem\Components\Installation\Starter;
     use Exception;
 
     class App
@@ -100,7 +100,7 @@
                 return;
             }
 
-            static::$starter = Singleton::make('Gem\Manager\Starter');
+            static::$starter = Singleton::make('Gem\Components\Installation\Starter');
         }
 
         /**
