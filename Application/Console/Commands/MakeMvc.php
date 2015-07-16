@@ -138,4 +138,18 @@
             $this->view($name);
             $this->controller($name);
         }
+
+        /**
+         * Örnek Röta dosyası oluştur
+         * @param string $name
+         */
+
+        public function route($name = '')
+        {
+            $content = $this->migrate('stroge/create/route.php.dist', [
+                'name' => $name
+            ]);
+
+            $this->create(ROUTE, $name, $content);
+        }
     }

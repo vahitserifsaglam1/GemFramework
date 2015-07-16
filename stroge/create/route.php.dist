@@ -1,0 +1,36 @@
+<?php
+
+    /**
+     *
+     * Bu sınıf örnek bir Route Sınıfıdır.
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     *
+     */
+    
+    namespace Gem\Routes;
+    use Gem\Components\Route\RouteHandlerInterface;
+    use Gem\Components\Route\Http\ControllerManager;
+    use Gem\Components\Http\Response;
+
+    /**
+     * Class {{ name }}
+     * @package Gem\Routes
+     */
+
+    class {{ name }} extends ControllerManager implements RouteHandleInterface {
+
+        public function __construct()
+        {
+            //
+        }
+
+        /**
+         * Bu Method Dispatcher sınıfı tarafından çağrılır, method kullanılmak zorundadır.
+         * @return void
+         */
+        public function handle()
+        {
+            $this->setController('//');
+        }
+
+    }
