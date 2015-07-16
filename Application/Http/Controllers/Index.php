@@ -35,15 +35,6 @@
 
         public function open()
         {
-            $schema = new TablePrint();
-            $schema->create('table')
-                ->int('int', 255)
-                ->varchar('varchar')
-                ->text('text')
-                ->date('date')
-                ->datetime('test')
-                ->fetch();
-
             return view('index');
         }
     }
