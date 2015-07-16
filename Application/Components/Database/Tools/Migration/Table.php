@@ -20,7 +20,8 @@
             'time' => '`%s` TIME %s,',
             'datetime' => '`%s` DATETIME %s,',
             'text' => '`%s` TEXT CHARACTER SET %s %s,',
-            'end' => ') DEFAULT CHARSET=%s;'
+            'end' => ') DEFAULT CHARSET=%s;',
+            'drop' => 'DROP TABLE `%s`;'
         ];
 
         private $null = 'NOT NULL';
@@ -74,6 +75,16 @@
             $this->selected['patterns'][] = 'date';
             $this->selected['values']['date'] = [$tableName, $this->null];
             return $this;
+        }
+
+        /**
+         * içeriği oluşturur ve döndürür
+         * @param string $tableName
+         * @return string
+         */
+        public function drop($tableName = '')
+        {
+            return sprintf($this->patterns['drop'], $tableName);
         }
 
         /**

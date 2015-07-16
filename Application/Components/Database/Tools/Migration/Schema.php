@@ -17,10 +17,16 @@
         private $connection;
 
         /**
+         * @var Table
+         */
+        private $table;
+
+        /**
          * @param null $connection
          */
         public function __construct($connection = null)
         {
+            $this->table = new Table();
             $this->connection = $connection;
         }
 
@@ -33,7 +39,7 @@
          */
         public function create($tableName = '', callable $callback)
         {
-            $table = new Table();
+            $table = $this->table;
             $table->create($tableName);
 
             // çağrı yapılıyor
@@ -46,6 +52,19 @@
             } else {
                 throw new Exception('%s %s den dönen veri bir TableInterface değil', __CLASS__, __FUNCTION__);
             }
+        }
+
+        /**
+         * $tableName'e girilen tabloyu siler
+         *
+         * @param string $tableName
+         * @return bool|\mysqli_result|\PDOStatement
+         */
+        public function drop($tableName = '')
+        {
+            $query = $this->table->drop($tableName);
+            return $this->connection->query($query);
+
         }
 
     }

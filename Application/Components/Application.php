@@ -24,13 +24,30 @@
      * @class Application
      *
      */
-    final class Application
+    class Application
     {
 
         use Server;
-        private $frameworkName;
-        private $frameworkVersion;
-        private $routeFile;
+
+        /**
+         * @var string
+         *
+         * Önbelleğe alınmış ayarın yolunu döndürür
+         */
+        private $cachedConfig = 'stroge/cache/system/config.php';
+
+        /**
+         * Yürütülen Bootstrap dosyalarını tutar
+         *
+         * @var array
+         */
+        private $runnedBootstraps;
+
+        /**
+         * Uygulumanın başlangıcı için gerekli olan dosyalar
+         *
+         * @var array
+         */
 
         private $bootstraps = [
             AllConfigsLoader::class,
@@ -43,18 +60,16 @@
          *    Framework 'un adı ve versionu girilir,
          *    Ve framework başlatılır
          *
-         * @param string $frameworkName
-         * @param int $frameworkVersion
+         * @param string $name
+         * @param int $version
          *
          */
-        public function __construct($frameworkName = '', $frameworkVersion = 1)
+        public function __construct($name = '', $version = 1)
         {
 
-            $this->$frameworkName = $frameworkName;
-            $this->frameworkVersion = $frameworkVersion;
+            define('FRAMEWORK_NAME', $name);
+            define('FRAMEWORK_VERSION', $version);
 
-            define('FRAMEWORK_NAME', $this->frameworkName);
-            define('FRAMEWORK_VERSION', $this->frameworkVersion);
 
             $this->runBootstraps();
         }
@@ -68,12 +83,13 @@
             $classes = $this->bootstraps;
 
             foreach ($classes as $class) {
-                new $class($this);
+                $class = new $class($this);
+                $this->runnedBootstraps[get_class($class)] = $class;
             }
         }
 
         /**
-         *          $bool girilirse fonksiyonlar tip yakalaması gerçekleşir
+         *  $bool girilirse fonksiyonlar tip yakalaması gerçekleşir
          *
          * @param bool $bool
          *
@@ -88,7 +104,7 @@
 
 
         /**
-         *           Yeni bir singleton objesi oluşturur
+         *  Yeni bir singleton objesi oluşturur
          *
          * @param mixed $instance
          * @param mixed ...$parameters
@@ -104,35 +120,25 @@
 
         /**
          * Uygulamayı Yürütür
+         *
+         *
          * @throws Exception
          */
         public function run()
         {
 
-            $this->routeFile = ROUTE . 'routes.php';
-            if (file_exists($this->routeFile)) {
-                include $this->routeFile;
+            $route = ROUTE . 'routes.php';
+
+            if (file_exists($route)) {
+
+                require($route);
                 $make = $this->singleton('Gem\Components\Route\Router');
                 $make->run();
             } else {
+
                 throw new Exception(sprintf('%s yolunda olması gerek röta dosyanız bulunamadı, lütfen oluşturun',
-                    $this->routeFile));
+                    $route));
             }
-        }
-
-        /**
-         * Yeni bir manager objesi döndürür
-         *
-         * @param $class
-         * @return mixed
-         */
-        public function makeManager($class)
-        {
-
-            $class = "Gem\\Application\\Managers\\" . $class;
-            $class = new $class();
-
-            return $class;
         }
 
         /**
@@ -141,13 +147,13 @@
          */
         public function getCachedConfig()
         {
-            return 'stroge/cache/system/config.php';
+            return $this->cachedConfig;
         }
 
         /**
-         * Fonksiyonu yürütür
-         * @param $class
-         * @param array $method
+         * Girilen fonksiyonu çağırır
+         * @param string $class
+         * @param string $method
          * @param array $params
          * @return mixed
          */
