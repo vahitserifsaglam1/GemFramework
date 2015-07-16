@@ -4,7 +4,7 @@
      * @copyright GemMedya, 2015
      */
 
-    namespace Gem\Components\Database\Tools;
+    namespace Gem\Components\Database\Tools\Migration;
 
 
     interface TableInterface
