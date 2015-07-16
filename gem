@@ -1,0 +1,9 @@
+<?php
+
+    include 'vendor/autoload.php';
+    include 'Application/Helpers/helpers.php';
+    include 'System/Bootstrap/bootstrap.php';
+    $console = new \Gem\Components\Console\Console(1);
+    new \Gem\Components\Installation\AllConfigsLoader();
+    // yürütürüz
+    $console->run();

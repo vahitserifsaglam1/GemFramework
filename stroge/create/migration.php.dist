@@ -1,0 +1,34 @@
+<?php
+    /**
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     * @copyright GemMedya, 2015
+     */
+
+    namespace Gem\Database\Migrations;
+
+
+    use Gem\Components\Database\Tools\Migration\Migration;
+    use Gem\Components\Database\Tools\Migration\MigrationInterface;
+
+    class {{ name }} extends Migration implements MigrationInterface
+    {
+
+        /**
+         * Yükleme İşlemleri burada gerçekleşir
+         */
+        public function up()
+        {
+
+            //
+        }
+
+
+        /**
+         * Düşürme işlemleri burada gerçekleşir
+         */
+        public function down()
+        {
+
+            //
+        }
+    }

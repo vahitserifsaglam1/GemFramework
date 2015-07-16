@@ -143,26 +143,9 @@
         protected function execute(InputInterface $input, OutputInterface $output)
         {
             $method = method_exists($this, 'handle') ? 'handle' : 'fire';
-            return $this->getGem()->call($this, $method, [$input, $output]);
+            return call_user_func_array([$this, $method], [$input, $output]);
         }
 
-        /**
-         * @return Application
-         */
-        public function getGem()
-        {
-            return $this->gem;
-        }
-
-        /**
-         * @param Application $app
-         * @return $this
-         */
-        public function setGem(Application $app)
-        {
-            $this->gem = $app;
-            return $this;
-        }
 
         /**
          * Bilgilendirme çıktısı oluşturur

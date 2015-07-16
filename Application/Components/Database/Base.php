@@ -28,8 +28,8 @@
         public function __construct()
         {
 
-            $configs = Config::get('db');
-            parent::__construct($configs['connection']);
+            $configs = Config::get('db.connection');
+            parent::__construct($configs);
             $this->connection = $this->getDb();
         }
 

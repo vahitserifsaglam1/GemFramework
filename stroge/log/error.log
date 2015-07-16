@@ -106,3 +106,13 @@
 [Thu, 16-Jul-2015 18:30:06 EEST], Hata => { Mesaj: 'call_user_func_array() expects parameter 2 to be array, null given', Dosya : '/var/www/html/GemFramework/Application/Components/Database/Tools/TablePrint.php', Satır: 186, Hata Kodu: 2 } 
 [Thu, 16-Jul-2015 18:30:06 EEST], Hata => { Mesaj: 'array_merge(): Argument #1 is not an array', Dosya : '/var/www/html/GemFramework/Application/Components/Database/Tools/TablePrint.php', Satır: 183, Hata Kodu: 2 } 
 [Thu, 16-Jul-2015 18:30:06 EEST], Hata => { Mesaj: 'call_user_func_array() expects parameter 2 to be array, null given', Dosya : '/var/www/html/GemFramework/Application/Components/Database/Tools/TablePrint.php', Satır: 186, Hata Kodu: 2 } 
+[Thu, 16-Jul-2015 20:25:13 EEST], İstisna => { Mesaj: 'An argument with name "command" already exists.', Dosya : '/var/www/html/GemFramework/vendor/symfony/console/Input/InputDefinition.php', Satır: 120, Hata Kodu: 0 } 
+[Thu, 16-Jul-2015 20:25:55 EEST], İstisna => { Mesaj: 'An argument with name "command" already exists.', Dosya : '/var/www/html/GemFramework/vendor/symfony/console/Input/InputDefinition.php', Satır: 120, Hata Kodu: 0 } 
+[Thu, 16-Jul-2015 20:26:30 EEST], İstisna => { Mesaj: 'An argument with name "command" already exists.', Dosya : '/var/www/html/GemFramework/vendor/symfony/console/Input/InputDefinition.php', Satır: 120, Hata Kodu: 0 } 
+[Thu, 16-Jul-2015 20:27:24 EEST], İstisna => { Mesaj: 'An argument with name "command" already exists.', Dosya : '/var/www/html/GemFramework/vendor/symfony/console/Input/InputDefinition.php', Satır: 120, Hata Kodu: 0 } 
+[Thu, 16-Jul-2015 20:30:13 EEST], İstisna => { Mesaj: 'An argument with name "command" already exists.', Dosya : '/var/www/html/GemFramework/vendor/symfony/console/Input/InputDefinition.php', Satır: 120, Hata Kodu: 0 } 
+[Thu, 16-Jul-2015 20:30:29 EEST], İstisna => { Mesaj: 'An argument with name "command" already exists.', Dosya : '/var/www/html/GemFramework/vendor/symfony/console/Input/InputDefinition.php', Satır: 120, Hata Kodu: 0 } 
+[Thu, 16-Jul-2015 20:37:22 EEST], İstisna => { Mesaj: 'Command "migration" is not defined.
+
+Did you mean this?
+    make:migration', Dosya : '/var/www/html/GemFramework/vendor/symfony/console/Application.php', Satır: 549, Hata Kodu: 0 } 

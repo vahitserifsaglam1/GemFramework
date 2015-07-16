@@ -6,24 +6,12 @@
 
     namespace Gem\Components\Database\Tools\Migration;
 
+    use Gem\Components\Helpers\Config;
     /**
      * Class Migration
      * @package Gem\Components\Database\Tools
      */
-    class Migration
+    abstract class Migration
     {
-
-        protected $name;
-
-        /**
-         * Migration'u kaydeder
-         */
-        public function __construct()
-        {
-            if (isset($this->name)) {
-                Config::add('app.migration.list', $this->name);
-            }
-        }
-
 
     }

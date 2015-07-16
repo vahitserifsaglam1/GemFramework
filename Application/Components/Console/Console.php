@@ -25,24 +25,18 @@
          * @var int
          */
         private $version;
-        /**
-         * GemFramework Instance
-         * @var Application
-         */
-        private $application;
 
         /**
          * Sınıfı başlatır ve bazı atamaları gerçekleştirir
          * @param Application $app
          * @param int $version
          */
-        public function __construct(Application $app, $version = 1)
+        public function __construct($version = 1)
         {
 
             $this->version = $version;
             $this->setAutoExit(false);
             $this->setCatchExceptions(false);
-            $this->setApplication($app);
             parent::__construct('GemFrameworkConsole', $version);
             $this->addCommandsToParent(new GetCommands());
         }
@@ -83,29 +77,7 @@
          */
         public function addToParent(Command $command)
         {
-            if ($command instanceof Command) {
-                $command->setGem($this->getApplication());
-            }
-
             $this->add($command);
-        }
-
-        /**
-         * @param Application|null $app
-         * @return $this
-         */
-        public function setApplication(Application $app = null)
-        {
-            $this->application = $app;
-            return $this;
-        }
-
-        /**
-         * @return Application
-         */
-        public function getApplication()
-        {
-            return $this->application;
         }
 
         /**

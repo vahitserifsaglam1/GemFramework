@@ -20,6 +20,6 @@
          */
         protected static function getFacadeClass()
         {
-            return Singleton::make('Gem\Components\Database\Tools');
+            return Singleton::make('Gem\Components\Database\Tools\Migration\Schema');
         }
     }
