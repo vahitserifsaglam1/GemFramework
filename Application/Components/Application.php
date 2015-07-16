@@ -29,7 +29,6 @@
 
         use Server;
         private $frameworkName;
-        private $starter;
         private $frameworkVersion;
         private $routeFile;
 
@@ -57,7 +56,6 @@
             define('FRAMEWORK_NAME', $this->frameworkName);
             define('FRAMEWORK_VERSION', $this->frameworkVersion);
 
-            $this->starter = $this->singleton('Gem\Components\Installation\Starter');
             $this->runBootstraps();
         }
 
@@ -110,6 +108,7 @@
          */
         public function run()
         {
+
             $this->routeFile = ROUTE . 'routes.php';
             if (file_exists($this->routeFile)) {
                 include $this->routeFile;

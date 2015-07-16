@@ -120,15 +120,15 @@
         public function add($name = '', $value = '')
         {
             if (!strstr($name, ".")) {
-                $this->cache[$name][] = $value;
+                $this->cache[$name] = array_merge($this->cache[$name], [$value]);
             } else {
                 $parse = $this->parse($name);
                 if (count($parse) === 2) {
                     list($name, $fname) = $parse;
-                    $this->cache[$name][$fname][] = $value;
+                    $this->cache[$name][$fname] = array_merge($this->cache[$name][$fname][], [$value]);
                 } elseif (count($parse) === 3) {
                     list($name, $fname, $sname) = $parse;
-                    $this->cache[$name][$fname][$sname][] = $value;
+                    $this->cache[$name][$fname][$sname] = array_merge($this->cache[$name][$fname][$sname], [$value]);
                 }
             }
         }
