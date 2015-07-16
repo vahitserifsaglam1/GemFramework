@@ -8,12 +8,7 @@
 
     namespace Gem\Controllers;
 
-    use Gem\Components\App;
-    use Gem\Components\Database\Base;
-    use Gem\Components\Database\Mode\Read;
     use Gem\Components\Route\Controller;
-    use Gem\Components\Thread\AsyncThread;
-
     /**
      * Class IndexController
      *
@@ -38,6 +33,6 @@
 
         public function open()
         {
-            return response(view('index'));
+            return view('index');
         }
     }

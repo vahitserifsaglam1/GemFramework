@@ -164,11 +164,14 @@
         private function response($response = '')
         {
 
+            // eğer düz bir metinse
+            if (is_string($response)) {
+                $response = response($response);
+            }
             // eğer view objesi döndüyse response e döndür
             if ($response instanceof ShouldBeView) {
                 $response = response($response->execute());
             }
-
             // response içeriğini yazdır
             if ($response instanceof ShouldBeResponse) {
                 $response->execute();
