@@ -15,6 +15,8 @@
      */
     class Run
     {
+
+        private $applicaton;
         /**
          * Sistemi yürütür.
          * @throws \Exception
@@ -23,7 +25,8 @@
         {
 
             $this->runBootstrap();
-            $application = new Application('GemFramework2Build', 1);
+            include APP . 'Helpers/helpers.php';
+            $this->application = new Application('GemFramework2Build', 1);
             include SYSTEM . 'Start.php';
 
             /**
@@ -32,30 +35,15 @@
              *  İstenilirse -> run ( den önce istenilen işlemler yapılabilir.
              *
              */
-            $application->run();
+            $this->application->run();
+
         }
 
         /**
-         * System/bootstrap.php 'de yapılacak işlemleri yürütür
+         *  Ayar dosyalarını yükler
          */
-
         private function runBootstrap()
         {
-
-
-            ini_set('memory_limit', '1024M');
-            define('APP', 'Application/');
-            define('ROUTE', APP . 'Routes/');
-            define('MVC', APP . 'Http/');
-            define('VIEW', MVC . 'Views/');
-            define('MODEL', MVC . 'Models/');
-            define('CONTROLLER', MVC . 'Controllers');
-            define('CONFIG_PATH', APP . 'Configs/');
-            define('SYSTEM', 'System/');
-            define('LANG', APP . 'Language/');
-            define('ASSETS', 'public/assets/');
-            define('DATABASE', APP . 'Database/');
-
-            include APP . 'Helpers/helpers.php';
+            include SYSTEM . 'Bootstrap/bootstrap.php';
         }
     }

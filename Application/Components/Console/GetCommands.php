@@ -12,7 +12,7 @@
      * Class CommandsManager
      * @package Gem\Components\Console
      */
-    class CommandsManager extends System
+    class GetCommands extends System
     {
 
 
@@ -21,7 +21,9 @@
          */
         public function __construct(array $commands = [])
         {
-            $this->setCommands($commands);
+            if (count($commands) > 0) {
+                $this->setCommands($commands);
+            }
         }
 
         /**
@@ -46,7 +48,7 @@
         /**
          * @return array
          */
-        protected function getCommands()
+        public function getCommands()
         {
 
             return $this->commands;

@@ -1,7 +1,7 @@
 <?php
 
     /**
-     *  Bu Trait gem framework'de view ve veritabanında debug olaylarının yapılabilmesi için tasarlanmıştır
+     *  Bu Trait gem.php framework'de view ve veritabanında debug olaylarının yapılabilmesi için tasarlanmıştır
      *  @author vahitserifsaglam <vahit.serif119@gmail.com>
      */
 namespace Gem\Components\Debug;

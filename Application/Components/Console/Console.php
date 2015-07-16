@@ -6,97 +6,139 @@
 
     namespace Gem\Components\Console;
 
-    use Exception;
+    use Gem\Components\Application;
+    use Symfony\Component\Console\Application as SymfonyConsole;
+    use Symfony\Component\Console\Output\BufferedOutput;
+    use Symfony\Component\Console\Output\OutputInterface;
+    use Symfony\Component\Console\Input\ArrayInput;
+    use Symfony\Component\Console\Input\InputInterface;
+    use Symfony\Component\Console\Input\InputOption;
 
-    /**
-     * Class Console
-     * @package Gem\Components\Console
-     */
-    class Console extends ConsoleArgsParser
+    class Console extends SymfonyConsole
     {
 
-        private $argc;
-        private $args;
-        private $types = [
-            'commands',
-            'params'
-        ];
-        private $config;
+        /**
+         * @var BufferedOutput
+         */
+        private $lastOutput;
+        /**
+         * @var int
+         */
+        private $version;
+        /**
+         * GemFramework Instance
+         * @var Application
+         */
+        private $application;
 
         /**
-         * @param array $args Komut elemanları
-         * @param int $argc Komut sayısı
+         * Sınıfı başlatır ve bazı atamaları gerçekleştirir
+         * @param Application $app
+         * @param int $version
          */
-
-        public function __construct(array $args = [], $argc = 0)
-        {
-            unset($args[0]);
-            $args[0] = $args[1];
-            $this->args = $args;
-            $this->argc = $argc;
-        }
-
-
-        /**
-         * Komutları alır, parçalar ve çıktıyı oluşturur
-         * @throws Exception
-         * @return bool
-         */
-        public function run()
+        public function __construct(Application $app, $version = 1)
         {
 
-            if ($this->argc > 1 && is_array($this->args)) {
-                list($method, $bundle, $args) = values(static::parse($this->args));
-                $clean = $this->cleanParamsAndCommands($args);
-                $params = $clean['params'];
-                $commands = $clean['commands'];
-
-                if (isset($params[0])) {
-                    $commandClass = first($params);
-                    unset($params[0]);
-                }
-            } else {
-                throw new Exception('Parametreniz sayınız 1 den küçük olamaz');
-            }
+            $this->version = $version;
+            $this->setAutoExit(false);
+            $this->setCatchExceptions(false);
+            $this->setApplication($app);
+            parent::__construct('GemFrameworkConsole', $version);
+            $this->addCommandsToParent(new GetCommands());
         }
 
         /**
-         * Parametreleri temizler
-         * @param array $args
-         * @return array
+         * Tüm Komutları sınıfa ekler
+         * @param GetCommands $commands
          */
-
-        private function cleanParamsAndCommands(array $args = [])
+        public function addCommandsToParent(GetCommands $commands)
         {
-            if (count($args) > 0) {
 
-                $return = [];
-                foreach ($args as $value) {
-                    if (strstr($value, "--")) {
 
-                        $argExplode = explode("=", $value);
-
-                        $first = str_replace("--", "", first($argExplode));
-                        $second = $argExplode[1];
-
-                        $types = $this->types;
-                        foreach ($types as $type) {
-
-                            if ($type === $first) {
-                                $return[$type][] = $second;
-                            }
-                        }
-                    } else {
-
-                        $return['params'][] = $value;
-                    }
-                }
-                return $return;
-
-            } else {
-                return $args;
+            foreach ($commands->getCommands() as $command) {
+                $command = new $command();
+                $this->addToParent($command);
             }
 
         }
 
+
+        /**
+         * Komutu yürütür
+         * @param $command
+         * @param array $params
+         * @return int
+         * @throws \Exception
+         */
+        public function call($command, array $params = [])
+        {
+            $params['commands'] = $params;
+            $this->lastOutput = new BufferedOutput();
+            return $this->find($command)->run(new ArrayInput($params), $this->lastOutput);
+        }
+
+        /**
+         * Girilen Komutu sınıfa ekler
+         * @param Command $command
+         */
+        public function addToParent(Command $command)
+        {
+            if ($command instanceof Command) {
+                $command->setGem($this->getApplication());
+            }
+
+            $this->add($command);
+        }
+
+        /**
+         * @param Application|null $app
+         * @return $this
+         */
+        public function setApplication(Application $app = null)
+        {
+            $this->application = $app;
+            return $this;
+        }
+
+        /**
+         * @return Application
+         */
+        public function getApplication()
+        {
+            return $this->application;
+        }
+
+        /**
+         * Çıktıyı döndürür
+         * @return string
+         */
+        public function output()
+        {
+            return isset($this->lastOutput) ? $this->lastOutput->fetch() : '';
+        }
+
+        /**
+         * Get the default input definitions for the applications.
+         *
+         * This is used to add the --env option to every available command.
+         *
+         * @return \Symfony\Component\Console\Input\InputDefinition
+         */
+        protected function getDefaultInputDefinition()
+        {
+            $definition = parent::getDefaultInputDefinition();
+            $definition->addOption($this->getEnvironmentOption());
+            return $definition;
+        }
+
+        /**
+         * Get the global environment option for the definition.
+         *
+         * @return \Symfony\Component\Console\Input\InputOption
+         */
+        protected function getEnvironmentOption()
+        {
+            $message = 'The environment the command should run under.';
+            return new InputOption('--env', null, InputOption::VALUE_OPTIONAL, $message);
+        }
     }

@@ -102,8 +102,10 @@
         }
 
 
-        ## tetikleyici
-
+        /**
+         * Uygulamayı Yürütür
+         * @throws Exception
+         */
         public function run()
         {
             $this->routeFile = ROUTE . 'routes.php';
@@ -141,4 +143,15 @@
             return 'stroge/cache/system/config.php';
         }
 
+        /**
+         * Fonksiyonu yürütür
+         * @param $class
+         * @param array $method
+         * @param array $params
+         * @return mixed
+         */
+        public function call($class, $method = '', $params = [])
+        {
+            return call_user_func_array([$class, $method], $params);
+        }
     }

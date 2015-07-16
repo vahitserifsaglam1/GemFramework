@@ -2,16 +2,22 @@
   "name": "vahitserifsaglam1/gem_framework",
   "type": "library",
   "description": "GemFramework",
-  "license":"proprietary",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Vahit Şerif Sağlam",
+      "email": "vahit.serif119@gmail.com"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Gem\\Components\\": "Application/Components/",
       "Gem\\Manager\\": "Application/Manager/",
       "Gem\\Controllers\\": "Application/Http/Controllers/",
       "Gem\\Models\\": "Application/Database/Models/",
-      "Gem\\Events\\":"Application/Event/Events/",
-      "Gem\\Listeners\\":"Application/Event/Listeners/",
-      "Gem\\Routes\\":"Application/Routes",
+      "Gem\\Events\\": "Application/Event/Events/",
+      "Gem\\Listeners\\": "Application/Event/Listeners/",
+      "Gem\\Routes\\": "Application/Routes",
       "Gem\\System\\": "System/",
       "Gem\\Console\\": "Application/Console/"
     },
@@ -22,8 +28,13 @@
   "require": {
     "php": ">=5.4",
     "phpmailer/phpmailer": "~5.2",
-    "twig/twig" : "~1.0",
+    "twig/twig": "~1.0",
     "particle/validator": "dev-master",
-    "symfony/finder": "2.7.*"
+    "symfony/finder": "2.7.*",
+    "symfony/console": "2.7.*",
+    "symfony/process": "2.7.*",
+    "symfony/event-dispatcher": "2.7.*",
+    "symfony/dependency-injection": "2.7.*",
+    "symfony/http-kernel": "2.7.*"
   }
 }

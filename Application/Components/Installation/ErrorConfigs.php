@@ -8,6 +8,10 @@
 
     use Gem\Components\Helpers\Config;
 
+    /**
+     * Class ErrorConfigs
+     * @package Gem\Components\Installation
+     */
     class ErrorConfigs
     {
 
