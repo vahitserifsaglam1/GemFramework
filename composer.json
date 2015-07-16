@@ -34,7 +34,6 @@
     "symfony/console": "2.7.*",
     "symfony/process": "2.7.*",
     "symfony/event-dispatcher": "2.7.*",
-    "symfony/dependency-injection": "2.7.*",
-    "symfony/http-kernel": "2.7.*"
+    "robmorgan/phinx": "0.4.4"
   }
 }
