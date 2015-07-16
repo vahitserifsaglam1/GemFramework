@@ -12,7 +12,7 @@
     use Symfony\Component\Console\Output\OutputInterface;
     use Symfony\Component\Console\Input\InputInterface;
 
-    class Maker extends Command
+    class MakeMvc extends Command
     {
 
         /**
