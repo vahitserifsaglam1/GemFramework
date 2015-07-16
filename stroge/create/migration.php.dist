@@ -16,6 +16,7 @@
         /**
          * Yükleme İşlemleri burada gerçekleşir
          */
+
         public function up()
         {
 
