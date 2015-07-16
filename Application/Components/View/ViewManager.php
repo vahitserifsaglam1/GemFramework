@@ -18,12 +18,22 @@
 
         use Parser, Builder;
 
+        /**
+         * Autoload ın yapılıp yapılmayacağını kontrol eder
+         *
+         * @var bool
+         */
         protected $autoload;
         protected $fileName;
         protected $params;
         protected $headerBag;
         protected $footerBag;
         protected $debug;
+
+        /**
+         * Sınıfı başlatır ve gerekli ayarlamaları yapar
+         *
+         */
 
         public function __construct()
         {
