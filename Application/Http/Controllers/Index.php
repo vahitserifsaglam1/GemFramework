@@ -8,6 +8,7 @@
 
     namespace Gem\Controllers;
 
+    use Gem\Components\Database\Tools\TablePrint;
     use Gem\Components\Route\Controller;
     use Gem\Components\View;
 
@@ -16,7 +17,6 @@
      *
      * @package Gem\Controllers
      */
-
     class Index extends Controller
     {
         /**
@@ -35,6 +35,15 @@
 
         public function open()
         {
+            $schema = new TablePrint();
+            $schema->create('table')
+                ->int('int', 255)
+                ->varchar('varchar')
+                ->text('text')
+                ->date('date')
+                ->datetime('test')
+                ->fetch();
+
             return view('index');
         }
     }
