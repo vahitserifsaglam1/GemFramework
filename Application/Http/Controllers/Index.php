@@ -35,7 +35,6 @@
 
         public function open()
         {
-            throw new \Exception('aa');
             return view('index');
         }
     }
