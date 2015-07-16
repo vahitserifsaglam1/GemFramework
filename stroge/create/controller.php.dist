@@ -9,7 +9,6 @@
     namespace Gem\Controllers;
 
     use Gem\Components\Route\Controller;
-    use Gem\Components\View;
 
     /**
      * Class IndexController
@@ -17,10 +16,10 @@
      * @package Gem\Controllers
      */
 
-    class Index extends Controller
+    class {{ name }} extends Controller
     {
         /**
-         *  Starter Function
+         *  Başlatıcı Fonksiyon
          */
         public function __construct()
         {

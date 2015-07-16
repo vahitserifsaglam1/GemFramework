@@ -7,8 +7,8 @@
     define('ROUTE', APP . 'Routes/');
     define('MVC', APP . 'Http/');
     define('VIEW', MVC . 'Views/');
-    define('MODEL', MVC . 'Models/');
-    define('CONTROLLER', MVC . 'Controllers');
+    define('MODEL', APP . 'Database/Models/');
+    define('CONTROLLER', MVC . 'Controllers/');
     define('CONFIG_PATH', APP . 'Configs/');
     define('SYSTEM', 'System/');
     define('LANG', APP . 'Language/');

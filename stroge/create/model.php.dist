@@ -1,0 +1,14 @@
+<?php
+    /**
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     * @copyright GemMedya, 2015
+     */
+
+    namespace Gem\Models;
+
+
+    use Gem\Components\Facade\Orm;
+
+    class {{ name }} extends Orm{
+        public $table = '{{ table }}';
+    }
