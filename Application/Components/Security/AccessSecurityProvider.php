@@ -3,10 +3,7 @@
 	  *  Bu Sınıf AccessSecurity Sınıfını kullanıma hazırlar
 	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
 	  */
-	 namespace Gem\Manager\Providers;
-
-	 use Gem\Components\Security\AccessSecurity;
-
+	namespace Gem\Components\Security;
 	 /**
 	  * Class AccessSecurityProvider
 	  * @package Gem\Manager\Providers

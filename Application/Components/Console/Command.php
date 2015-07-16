@@ -80,14 +80,13 @@
         {
             list($name, $arguments, $options) = Parser::parse($this->signature);
             parent::__construct($name);
-
             foreach ($arguments as $argument) {
                 // parametreleri ekliyoruz
-                $this->addArgument($argument);
+                $this->getDefinition()->addArgument($argument);
             }
             foreach ($options as $option) {
                 // ayarları ekliyoruz
-                $this->addOption($option);
+                $this->getDefinition()->addOption($option);
             }
         }
 

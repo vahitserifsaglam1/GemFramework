@@ -31,8 +31,8 @@
          */
 
         'providers' => [
-            'Gem\Manager\Providers\RouteProvider',
-            'Gem\Manager\Providers\EventProvider',
+            \Gem\Components\Route\RouteProvider::class,
+            \Gem\Components\Event\EventProvider::class,
             /**
              *  Buradaki CsrfTokenProvider' ı etkinleştirirseniz her post işleminde csrftoken değerini
              *  araycaktır

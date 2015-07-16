@@ -8,6 +8,7 @@
 
     namespace Gem\Components\Exception;
 
+    use Gem\Components\Helpers\Config;
     use Gem\Components\Exception\GemCustomException;
 
     class ErrorHandler
@@ -25,6 +26,10 @@
          */
         public function handleError($errno, $errstr, $errfile, $errline)
         {
+
+            if ($callback = Config::has('app.log.error')) {
+                $callback($errno, $errstr, $errfile, $errline);
+            }
 
             switch ($errno) {
                 case E_USER_ERROR:

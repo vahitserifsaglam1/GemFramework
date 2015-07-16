@@ -7,6 +7,7 @@
     namespace Gem\Components\Exception;
 
     use Exception;
+    use Gem\Components\Helpers\Config;
 
     /**
      * Class Handler
@@ -30,6 +31,13 @@
         public function handleException(Exception $exception = null)
         {
             $this->exception = $exception;
+
+            // dinleyici varsa dinleyiciyi çalıştırır
+            if ($callback = Config::has('app.log.exception')) {
+                $callback($exception);
+            }
+
+            // içeriği atar
             $this->setContentToView();
 
             return true;

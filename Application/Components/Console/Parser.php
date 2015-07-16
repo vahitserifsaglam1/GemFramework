@@ -66,7 +66,7 @@
 
             foreach ($items as $item) {
                 // eğer -- ile başlıyorsa option olarak algılattırdık
-                if (0 !== strpos($item, "--")) {
+                if (!strstr($item, "--")) {
                     $args[] = static::arg($item);
                 } else {
                     $opt[] = static::opt($item);
@@ -95,16 +95,15 @@
                 $desc = trim($desc);
             }
 
-
             switch (true) {
                 case substr($token, -2) === '?*':
                     return new InputArgument(trim($token, '?*'), InputArgument::IS_ARRAY, $desc);
                     break;
-                case substr($token, -2) === '?':
+                case substr($token, -1) === '?':
                     return new InputArgument(trim($token, '?'), InputArgument::OPTIONAL, $desc);
                     break;
 
-                case substr($token, -2) === '*':
+                case substr($token, -1) === '*':
                     return new InputArgument(trim($token, '*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED,
                         $desc);
                     break;
@@ -143,7 +142,7 @@
 
 
             switch (true) {
-                case substr($token, -2) === '=':
+                case substr($token, -1) === '=':
                     return new InputOption(trim($token, '='), $shortcut, InputOption::VALUE_OPTIONAL, $description);
                 case substr($token, -2) === '=*':
                     return new InputOption(trim($token, '=*'), $shortcut,

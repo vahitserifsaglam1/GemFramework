@@ -48,5 +48,19 @@
             return $this->logFile;;
         }
 
+        /**
+         * İçeriği log a yazar
+         * @param string $logString
+         * @return $this
+         */
+        protected function writeToLog($logString = '')
+        {
+            if (!$this->exists($this->getLogFile())) {
+                $this->touch($this->getLogFile());
+            }
+
+            $this->write($this->getLogFile(), $logString, true);
+            return $this;
+        }
 
     }

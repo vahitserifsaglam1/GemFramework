@@ -3,7 +3,7 @@
 	  *  Bu Dosya GemFramework' event sınıfını kullanıma hazırlar
 	  * @author vahitserifsaglam <vahit.serif119@gmail.com>
 	  */
-	 namespace Gem\Manager\Providers;
+	namespace Gem\Components\Event;
 
 	 use Gem\Components\Application;
 

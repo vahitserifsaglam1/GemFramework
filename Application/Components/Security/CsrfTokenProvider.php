@@ -1,8 +1,7 @@
 <?php
-namespace Gem\Manager\Providers;
+    namespace Gem\Components\Security;
 
 use Gem\Components\Facade\Request;
-use Gem\Components\Security\CsrfToken;
 use Gem\Components\Security\CsrfTokenCryptMethods\Md5Crypt;
 
 /**

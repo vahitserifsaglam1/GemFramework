@@ -10,7 +10,7 @@
     use Symfony\Component\Console\Output\OutputInterface;
     use Symfony\Component\Console\Input\InputInterface;
 
-    class TestCommand extends Command
+    class Maker extends Command
     {
 
         /**
@@ -18,22 +18,21 @@
          *
          * @var string
          */
-        protected $signature = 'test';
+        protected $signature = 'make:mvc { type? } { name? }';
 
         /**
          * Komut açıklaması
          *
          * @var string
          */
-        protected $description = 'Test Komutu';
+        protected $description = 'İçerik ve bazı şeyler oluşturur';
 
         /**
          * Komut adı
          *
          * @var string
          */
-        protected $name = 'test';
-
+        protected $name;
 
         /**
          * @param InputInterface $input
@@ -42,6 +41,18 @@
 
         public function handle(InputInterface $input, OutputInterface $output)
         {
+            $type = $this->argument('type');
+            if ($this->argument('name')) {
+                $name = $this->argument('name');
+            } else {
+                $name = 'Index';
+            }
+
+            if (is_callable([$this, $type])) {
+                $this->$type($name);
+            } else {
+                $this->error(sprintf('%s adında bir olay bulunamadı', $type));
+            }
 
         }
     }

@@ -18,6 +18,7 @@
     use Gem\Components\Installation\AllConfigsLoader;
     use Gem\Components\Installation\AliasAndProviders;
     use Gem\Components\Installation\ErrorConfigs;
+    use Gem\System\SystemManager;
 
     /**
      * @class Application
@@ -34,6 +35,7 @@
 
         private $bootstraps = [
             AllConfigsLoader::class,
+            SystemManager::class,
             AliasAndProviders::class,
             ErrorConfigs::class,
         ];

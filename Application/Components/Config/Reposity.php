@@ -24,8 +24,11 @@
          */
         public function has($name = '')
         {
-            if (isset($this->cache[$name])) {
-                return true;
+            $get = $this->get($name);
+            if (null !== $get) {
+                return $get;
+            } else {
+                return false;
             }
         }
 

@@ -27,7 +27,6 @@
             $this->runBootstrap();
             include APP . 'Helpers/helpers.php';
             $this->application = new Application('GemFramework2Build', 1);
-            include SYSTEM . 'Start.php';
 
             /**
              *
