@@ -1,5 +1,10 @@
 <?php
 
+    /**
+     * @author vahitserifsaglam <vahit.serif119@gmail.com>
+     * @copyright GemMedya, 2015
+     */
+
     namespace Gem\Components;
 
     use Gem\Components\Helpers\Config;
@@ -15,8 +20,28 @@
 
     class Twig extends ViewManager implements ShouldBeView
     {
+
+        /**
+         * Ayarlar saklanır
+         *
+         * @var array
+         */
+
         private $configs;
+
+        /**
+         * Twig objesi tutulur
+         *
+         * @var Twig_Environment
+         */
         private $twig;
+
+        /**
+         * Sınıf başlatılır ve gerekli ayarlar yapılır
+         *
+         * @param string $name
+         * @param array $parametres
+         */
 
         public function __construct($name = '', $parametres = [])
         {
@@ -98,6 +123,8 @@
         }
 
         /**
+         * Çağrılabilmesi için dosya ismini oluşturur
+         *
          * @param string $fileName
          * @return string
          */
