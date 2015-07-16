@@ -13,6 +13,7 @@
     use Gem\Components\Database\Tools\TablePrint;
     use Gem\Components\Route\Controller;
     use Gem\Components\View;
+    use Gem\Components\Database\Tools\Backup\Load;
 
     /**
      * Class IndexController
@@ -37,10 +38,6 @@
 
         public function open()
         {
-
-            $base = new Base();
-            $backup = new Backup($base->getConnection());
-            $backup->backup('*');
             return view('index');
         }
     }

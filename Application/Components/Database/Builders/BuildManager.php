@@ -14,7 +14,7 @@
         /**
          * @var \PDO
          */
-        private $connection;
+        protected $connection;
         private $query;
         private $page;
         private $params = [];

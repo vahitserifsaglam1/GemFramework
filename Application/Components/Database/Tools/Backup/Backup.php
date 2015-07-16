@@ -6,6 +6,7 @@
      */
     namespace Gem\Components\Database\Tools\Backup;
 
+    use Gem\Components\Database\Base;
     use Gem\Components\Database\Builders\BuildManager;
     use Gem\Components\Database\Mode\Insert;
     use Gem\Components\Filesystem;
@@ -20,11 +21,10 @@
 
 
         /**
-         * @param $connection Database\Base sınıfına ait bir instance
+         * @param Base $connection Database\Base sınıfına ait bir instance
          */
-        public function __construct($connection)
+        public function __construct(Base $connection)
         {
-
             parent::__construct($connection);
         }
 
@@ -47,34 +47,46 @@
                 $tables = explode(',', $tables);
             }
 
-            $content = null;
             $generateArray = [];
 
             foreach ($tables as $table) {
-
-                $content .= sprintf('DROP TABLE %s', $table);
-                $this->setQuery(sprintf('SHOW CREATE TABLE %s', $table));
-                $fetch = (array)$this->fetch();
+                $content = sprintf('DROP TABLE IF EXISTS `%s`', $table);
+                $this->setQuery(sprintf('SHOW CREATE TABLE `%s`', $table));
+                $fetch = (array)$this->fetch(true)[0];
                 $this->setQuery(sprintf('SELECT * FROM %s', $table));
-                $fetchTable = (array)$this->fetch();
-                $generateArray[] = [
-                    'createTable' => $fetch['Create Table'],
-                    'params' => $fetchTable,
-                    'content' => $content,
-                    'table' => $fetch['Table']
-                ];
+                if ($fetchTable = $this->fetch()) {
+                    $fetchTable = (array)$fetchTable;
+                    $generateArray[] = [
+                        'createTable' => $fetch['Create Table'],
+                        'params' => $fetchTable,
+                        'content' => $content,
+                        'table' => $table
+                    ];
+                }
             }
 
-            $content = json_encode($generateArray);
-            $fileName = sprintf('%s%s%s%s', DATABASE, 'Backup/', $name, ".php");
+            if (count($generateArray)) {
+                $backupPath = DATABASE . 'Backup/';
 
-            $file = Filesystem::getInstance();
-            if (!$file->exists($fileName)) {
-                $file->touch($fileName);
-                return $file->write($fileName, $content);
-            } else {
-                return false;
+                $content = json_encode($generateArray);
+                $fileName = sprintf('%s%s%s', $backupPath, $name, ".php");
+                $file = Filesystem::getInstance();
+
+                if (!$file->exists($backupPath)) {
+                    $file->mkdir($backupPath);
+                }
+
+                $file->chmod($backupPath, 0777);
+
+                if (!$file->exists($fileName)) {
+                    $file->touch($fileName);
+                    $file->chmod($fileName, 0777);
+                    return $file->write($fileName, $content);
+                } else {
+                    return false;
+                }
             }
+
         }
 
         /**
@@ -99,6 +111,7 @@
 
             $this->setQuery("SHOW TABLES");
             $fetchAll = $this->fetchAll();
+
             $tables = [];
             foreach ($fetchAll as $table) {
                 $tables[] = $table[0];
