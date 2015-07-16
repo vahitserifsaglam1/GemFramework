@@ -29,7 +29,7 @@
 
             if (null !== $app) {
                 if (file_exists($app->getCachedConfig())) {
-                    $items = require $items;
+                    $items = require $app->getCachedConfig();
                 }
             }
 

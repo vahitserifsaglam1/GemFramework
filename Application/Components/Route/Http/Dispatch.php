@@ -9,6 +9,7 @@
     use Gem\Components\Http\Response\ShouldBeResponse;
     use Gem\Components\Route\Http\Dispatchers\CallableDispatcher;
     use Gem\Components\Route\Http\Dispatchers\ControllerDispatcher;
+    use Gem\Components\View\ShouldBeView;
 
     class Dispatch
     {
@@ -163,12 +164,19 @@
         private function response($response = '')
         {
 
+            // eğer view objesi döndüyse response e döndür
+            if ($response instanceof ShouldBeView) {
+                $response = response($response->execute());
+            }
+
+            // response içeriğini yazdır
             if ($response instanceof ShouldBeResponse) {
                 $response->execute();
             }
         }
 
         /**
+         * giriş yetkisinin olup olmadığını kontrol ediyoruz
          * @return bool
          */
         private function accessChecker()

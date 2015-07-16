@@ -14,6 +14,7 @@
         public function __construct()
         {
             ini_set('display_errors', 'On');
+            error_reporting(E_ALL);
             set_exception_handler(Config::get('app.exception.handler'));
             set_error_handler(Config::get('app.error.handler'));
         }

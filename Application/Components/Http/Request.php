@@ -153,4 +153,14 @@
         {
             return forever($name, $value);
         }
+
+        /**
+         * @param string $name
+         * @param array $params
+         * @return \Gem\Components\View
+         */
+        public function view($name, $params = [])
+        {
+            return view($name, $params);
+        }
     }
