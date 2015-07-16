@@ -44,6 +44,6 @@
          */
         private function runBootstrap()
         {
-            include SYSTEM . 'Bootstrap/bootstrap.php';
+            include 'System/Bootstrap/bootstrap.php';
         }
     }

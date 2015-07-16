@@ -18,7 +18,7 @@
      *   |  ****************
      */
     App::miss(function (Request $request) {
-        $request->redirect('404');
+        response(view('404'))->execute();
     });
 
     /**

@@ -8,6 +8,6 @@
     use Gem\Components\Facade\Route;
     use Gem\Components\Route\Http\ControllerManager;
 
-    Route::get('/:sayfa', function (ControllerManager $manager) {
+    Route::get('/', function (ControllerManager $manager) {
        return $manager->setController('Index::open');
     });
