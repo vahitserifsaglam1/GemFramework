@@ -8,6 +8,8 @@
 
     namespace Gem\Controllers;
 
+    use Gem\Components\Database\Base;
+    use Gem\Components\Database\Tools\Backup\Backup;
     use Gem\Components\Database\Tools\TablePrint;
     use Gem\Components\Route\Controller;
     use Gem\Components\View;
@@ -35,6 +37,10 @@
 
         public function open()
         {
+
+            $base = new Base();
+            $backup = new Backup($base->getConnection());
+            $backup->backup('*');
             return view('index');
         }
     }

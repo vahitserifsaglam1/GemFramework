@@ -4,7 +4,7 @@
      *
      * @author vahitserifsaglam <vahit.serif119@gmail.com>
      */
-    namespace Gem\Components\Database\Tools;
+    namespace Gem\Components\Database\Tools\Backup;
 
     use Gem\Components\Database\Builders\BuildManager;
     use Gem\Components\Database\Mode\Insert;
