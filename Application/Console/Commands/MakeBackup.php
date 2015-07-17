@@ -87,4 +87,33 @@
                 $this->error('%s adında bir komut bulunamadı', $command);
             }
         }
+
+        /**
+         * Yedeklenen backup dosyasını siler
+         *
+         * @param string $name
+         */
+
+        public function forget($name = '')
+        {
+
+            if ('' === $name) {
+                $confirm = 'Bu işlem ile tüm veritabanı yedekleriniz silinecektir, Onaylıyormusunuz?[y/N]';
+            } else {
+                $confirm = sprintf('Bu işlem ile %s yedeğiniz silinecektir, Onaylıyormusunız ?[y/N]');
+            }
+
+            if ($this->confirm($confirm)) {
+                $return = $this->load->forget($name);
+                foreach ($return as $key => $response) {
+
+                    if (true === $response) {
+                        $this->info(sprintf('%s isimi yedeğiniz başarıyla silindi', $key));
+                    } else {
+                        $this->error(sprintf('%s isimli yedeğiniz silinirken bir hata oluştu', $key));
+                    }
+
+                }
+            }
+        }
     }

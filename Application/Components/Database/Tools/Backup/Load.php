@@ -11,6 +11,7 @@
     use Gem\Components\Filesystem;
     use Symfony\Component\Finder\Finder;
     use Gem\Components\Database\Mode\Insert;
+    use Symfony\Component\Finder\SplFileInfo;
 
     class Load extends BuildManager
     {
@@ -50,7 +51,7 @@
                 $return[] = $this->execute($name);
             } else {
 
-                $list = Finder::create()->files()->name('*.backup')->in(DATABASE . 'Backup/');
+                $list = $this->listBackupDir();
 
                 foreach ($list as $file) {
                     if ($file instanceof \SplFileInfo) {
@@ -118,6 +119,15 @@
             return true;
         }
 
+        /**
+         * Klasörün içeriğini döndürür
+         *
+         * @return Finder
+         */
+        private function listBackupDir()
+        {
+            return Finder::create()->files()->name('*.backup')->in(DATABASE . 'Backup/');
+        }
 
         /**
          * Tablo yapısını oluşturur
@@ -130,6 +140,40 @@
             $this->setQuery($createTable);
             return $this->run(true);
         }
+
+
+        /**
+         * $name 'e girilen isme göre dosyayı siler, eğer boş girilirse dosyayı temizler
+         *
+         * @param string $name
+         * @return array
+         */
+        public function forget($name = '')
+        {
+            $return = [];
+
+            if ('' === $name) {
+                $path = $this->generatePath($name);
+
+                if ($this->file->exists($path)) {
+                    $return[] = $this->file->delete($path);
+                } else {
+                    $return[] = false;
+                }
+            } else {
+                $list = $this->listBackupDir();
+
+                foreach ($list as $file) {
+                    if ($file instanceof SplFileInfo) {
+                        $return[] = $this->file->delete($file->getRealPath());
+                    }
+                }
+
+                return $return;
+            }
+
+        }
+
         /**
          * Backup dosyasının yolunu oluşturur
          *
