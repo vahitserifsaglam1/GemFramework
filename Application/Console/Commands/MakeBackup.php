@@ -24,7 +24,7 @@
          * @var string
          */
 
-        protected $signature = 'make:backup { function? } { params? }';
+        protected $signature = 'make:backup { function? } { params? } { tables? }';
 
 
         /**
@@ -76,7 +76,7 @@
         {
             $this->base = new Base();
             $this->load = new Load($this->base);
-            $this->backup = new Backup($this->base->getConnection());
+            $this->backup = new Backup($this->base);
 
             $command = $this->argument('function') ? $this->argument('function') : 'create';
             $param = $this->argument('params') ? $this->argument('params') : '';
@@ -98,12 +98,12 @@
         {
 
             if ('' === $name) {
-                $confirm = 'Bu işlem ile tüm veritabanı yedekleriniz silinecektir, Onaylıyormusunuz?[y/N]';
+                $confirm = 'Bu işlem ile tüm veritabanı yedekleriniz silinecektir, Onaylıyormusunuz?[yes|no]';
             } else {
-                $confirm = sprintf('Bu işlem ile %s yedeğiniz silinecektir, Onaylıyormusunız ?[y/N]');
+                $confirm = sprintf('Bu işlem ile %s yedeğiniz silinecektir, Onaylıyormusunız ?[yes|no]', $name);
             }
 
-            if ($this->confirm($confirm)) {
+            if ($this->confirm($confirm, true)) {
                 $return = $this->load->forget($name);
                 foreach ($return as $key => $response) {
 
@@ -113,6 +113,42 @@
                         $this->error(sprintf('%s isimli yedeğiniz silinirken bir hata oluştu', $key));
                     }
 
+                }
+            }
+        }
+
+        /**
+         * Yeni bir veritabanı yedeği oluşturur
+         *
+         * @param string $name
+         */
+        public function create($name = '')
+        {
+            $tables = $this->argument('tables') ? $this->argument('tables') : '*';
+            $return = $this->backup->backup($tables, $name);
+
+            if (true === $return) {
+                $this->info(sprintf('%s isimi veritabanı yedeğiniz %s yolunda oluşturuldu', $name,
+                    $this->load->generatePath($name)));
+            } else {
+                $this->error(sprintf('%s isimli yedek oluşturulamadı, olası sebep: dosya zaten var', $name));
+            }
+
+        }
+
+
+        /**
+         * yedekleri yükler
+         *
+         * @param string $name
+         */
+        public function load($name = '')
+        {
+            $load = $this->load->get($name);
+
+            foreach ($load as $key => $return) {
+                if (true === $return) {
+                    $this->info(sprintf('%s isimi veritabanı yedeğiniz başarılı bir şekilde yüklenmiştir', $key));
                 }
             }
         }

@@ -48,14 +48,15 @@
         {
             $return = [];
             if ('' !== $name) {
-                $return[] = $this->execute($name);
+                $return[$name] = $this->execute($name);
             } else {
 
                 $list = $this->listBackupDir();
 
                 foreach ($list as $file) {
                     if ($file instanceof \SplFileInfo) {
-                        $return[] = $this->execute(first(explode('.', $file->getFilename())));
+                        $name = first(explode('.', $file->getFilename()));
+                        $return[$name] = $this->execute($name);
                     }
                 }
             }
@@ -151,26 +152,26 @@
         public function forget($name = '')
         {
             $return = [];
-
-            if ('' === $name) {
+            if ('' !== $name) {
                 $path = $this->generatePath($name);
 
                 if ($this->file->exists($path)) {
-                    $return[] = $this->file->delete($path);
+                    $return[$name] = $this->file->delete($path);
                 } else {
-                    $return[] = false;
+                    $return[$name] = false;
                 }
             } else {
                 $list = $this->listBackupDir();
 
                 foreach ($list as $file) {
                     if ($file instanceof SplFileInfo) {
-                        $return[] = $this->file->delete($file->getRealPath());
+                        $return[first(explode('.', $file->getFilename()))] = $this->file->delete($file->getRealPath());
                     }
                 }
 
-                return $return;
             }
+
+            return $return;
 
         }
 
@@ -180,7 +181,7 @@
          * @param string $nane
          * @return string
          */
-        private function generatePath($nane = '')
+        public function generatePath($nane = '')
         {
             return DATABASE . 'Backup/' . $nane . '.php';
         }

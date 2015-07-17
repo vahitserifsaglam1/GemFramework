@@ -5,12 +5,11 @@
      */
 
     namespace Gem\Components\Console;
-
-    use Gem\Components\App;
     use Gem\Components\Application;
     use Symfony\Component\Console\Command\Command as SymfonyCommand;
     use Symfony\Component\Console\Input\InputInterface;
     use Symfony\Component\Console\Output\OutputInterface;
+    use Symfony\Component\Console\Question\ChoiceQuestion;
 
     class Command extends SymfonyCommand
     {
@@ -201,5 +200,60 @@
         {
             $this->output->writeln("<error>$string</error>");
         }
+
+        /**
+         * Kullanıcıdan sorunun doğrulanmasını ister
+         *
+         * @param  string $question
+         * @param  bool $default
+         * @return bool
+         */
+        public function confirm($question, $default = false)
+        {
+            return $this->output->confirm($question, $default);
+        }
+
+        /**
+         * Kullanıcıya soru sorar
+         *
+         * @param  string $question
+         * @param  string $default
+         * @return string
+         */
+        public function ask($question, $default = null)
+        {
+            return $this->output->ask($question, $default);
+        }
+
+        /**
+         * Prompt the user for input with auto completion.
+         *
+         * @param  string $question
+         * @param  array $choices
+         * @param  string $default
+         * @return string
+         */
+        public function anticipate($question, array $choices, $default = null)
+        {
+            return $this->askWithCompletion($question, $choices, $default);
+        }
+
+        /**
+         * Kullanıcıya Seçim yapma seçenei verir
+         *
+         * @param  string $question
+         * @param  array $choices
+         * @param  string $default
+         * @param  mixed $attempts
+         * @param  bool $multiple
+         * @return bool
+         */
+        public function choice($question, array $choices, $default = null, $attempts = null, $multiple = null)
+        {
+            $question = new ChoiceQuestion($question, $choices, $default);
+            $question->setMaxAttempts($attempts)->setMultiselect($multiple);
+            return $this->output->askQuestion($question);
+        }
+
 
     }
