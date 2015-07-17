@@ -11,12 +11,33 @@
 
     use Exception;
 
+    /**
+     * Class Cache
+     * @package Gem\Components
+     */
+
     class Cache extends Filesystem
     {
+        /**
+         * Zaman aşımı süresini ayarlar
+         *
+         * @var int
+         */
 
         private $time = 3600;
 
+        /**
+         * Kaydedilecek yer
+         *
+         * @var string
+         */
         private $cacheFolder = 'stroge/cache';
+
+        /**
+         * Kaydedilirken kullanılacak uzantı
+         *
+         * @var string
+         */
         private $cacheExt = '.cache';
 
         public function __construct()

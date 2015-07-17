@@ -11,6 +11,8 @@
     use Gem\Components\Database\Base;
     use Gem\Components\Database\Tools\Backup\Backup;
     use Gem\Components\Database\Tools\TablePrint;
+    use Gem\Components\MemCache\MemCache;
+    use Gem\Components\Redis;
     use Gem\Components\Route\Controller;
     use Gem\Components\View;
     use Gem\Components\Database\Tools\Backup\Load;
@@ -38,6 +40,8 @@
 
         public function open()
         {
+
+            // Application/Http/Views/index.php
             return view('index');
         }
     }
